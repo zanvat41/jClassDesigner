@@ -17,13 +17,37 @@
         <property name="NEW_ICON"	    value="New.png"></property>
         <property name="LOAD_ICON"	    value="Load.png"></property>
         <property name="SAVE_ICON"	    value="Save.png"></property>
+        <property name="SAVE_AS_ICON"	    value="SaveAs.png"></property>
+        <property name="PHOTO_ICON"	    value="photo.png"></property>
+        <property name="CODE_ICON"	    value="code.png"></property>
         <property name="EXIT_ICON"          value="Exit.png"></property> 
+        <property name="SELECT_ICON"	    value="Select"></property>
+        <property name="RESIZE_ICON"	    value="Resize"></property>
+        <property name="ADD_CLASS_ICON"	    value="Add Class"></property>
+        <property name="ADD_INTERFACE_ICON"	    value="Add Interface"></property>
+        <property name="REMOVE_ICON"	    value="Remove"></property>
+        <property name="UNDO_ICON"	    value="Undo"></property>
+        <property name="REDO_ICON"          value="Redo"></property> 
+        <property name="ZOOM_IN_ICON"	    value="Zoom In"></property>
+        <property name="ZOOM_OUT_ICON"          value="Zoom Out"></property> 
         
         <!-- TOOLTIPS FOR BUTTONS -->
         <property name="NEW_TOOLTIP"		value="Create a New Pose"></property>
         <property name="LOAD_TOOLTIP"		value="Load an Existing Pose"></property>
         <property name="SAVE_TOOLTIP"		value="Save this Pose"></property>
+        <property name="SAVE_AS_TOOLTIP"		value="Save this Pose As"></property>
+        <property name="PHOTO_TOOLTIP"		value="Take a snapshot"></property>
+        <property name="CODE_TOOLTIP"		value="Get the code"></property>
         <property name="EXIT_TOOLTIP"		value="Exit the Application"></property>
+        <property name="SELECT_TOOLTIP"		value="Select a class or interface"></property>
+        <property name="RESIZE_TOOLTIP"		value="Resize a class or interface"></property>
+        <property name="ADD_CLASS_TOOLTIP"		value="Add a class"></property>
+        <property name="ADD_INTERFACE_TOOLTIP"		value="Add an interface"></property>
+        <property name="REMOVE_TOOLTIP"		value="Remove a class or interface"></property>
+        <property name="UNDO_TOOLTIP"		value="Undo last operation"></property>
+        <property name="REDO_TOOLTIP"		value="Redo last operation"></property>
+        <property name="ZOOM_IN_TOOLTIP"		value="Zoom in"></property>
+        <property name="ZOOM_OUT_TOOLTIP"		value="Zoom out"></property>
         
         <!-- ERROR MESSAGES -->
         <property name="CLOSE_BUTTON_TEXT"              value="Close"></property>
