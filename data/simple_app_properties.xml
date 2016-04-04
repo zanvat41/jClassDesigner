@@ -11,7 +11,7 @@
         <property name="APP_TITLE"	    value="Pose Maker"></property>
 	<property name="APP_LOGO"	    value="shaa.jpg"></property>
 	<property name="APP_PATH_CSS"	    value="css/"></property>
-	<property name="APP_CSS"	    value="pm_style.css"></property>
+	<property name="APP_CSS"	    value="jd_style.css"></property>
         
         <!-- PROGRAM ICON FILES -->
         <property name="NEW_ICON"	    value="New.png"></property>
