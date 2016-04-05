@@ -3,12 +3,17 @@ package jd.gui;
 import java.io.IOException;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -73,41 +78,56 @@ public class Workspace extends AppWorkspaceComponent {
     // HAS ALL THE CONTROLS FOR EDITING
     VBox editToolbar;
     
+    
     // FIRST ROW
     HBox row1Box;
     Button selectionToolButton;
     Button removeButton;
     Button rectButton;
     Button ellipseButton;
+    TextField nameArea;
+    Label nameLabel;
     
     // SECOND ROW
     HBox row2Box;
     Button moveToBackButton;
     Button moveToFrontButton;
+    TextField packageArea;
+    Label packageLabel;
 
     // THIRD ROW
-    VBox row3Box;
+    HBox row3Box;
     Label backgroundColorLabel;
     ColorPicker backgroundColorPicker;
+    Label parentLabel;
+    ChoiceBox parentChoice;
 
     // FORTH ROW
-    VBox row4Box;
+    HBox row4Box;
     Label fillColorLabel;
     ColorPicker fillColorPicker;
+    Label varLabel;
+    Button addVar;
+    Button delVar;
     
     // FIFTH ROW
     VBox row5Box;
     Label outlineColorLabel;
     ColorPicker outlineColorPicker;
+    GridPane varGrid;
         
     // SIXTH ROW
-    VBox row6Box;
+    HBox row6Box;
     Label outlineThicknessLabel;
     Slider outlineThicknessSlider;
+    Label metLabel;
+    Button addMet;
+    Button delMet;
     
     // SEVENTH ROW
     HBox row7Box;
     Button snapshotButton;
+    GridPane metGrid;
     
     // THIS IS WHERE WE'LL RENDER OUR DRAWING
     Pane canvas;
@@ -165,47 +185,105 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// ROW 1
 	row1Box = new HBox();
-	selectionToolButton = gui.initChildButton(row1Box, SELECTION_TOOL_ICON.toString(), SELECTION_TOOL_TOOLTIP.toString(), true);
-	removeButton = gui.initChildButton(row1Box, REMOVE_ICON.toString(), REMOVE_TOOLTIP.toString(), true);
-	rectButton = gui.initChildButton(row1Box, RECTANGLE_ICON.toString(), RECTANGLE_TOOLTIP.toString(), false);
-	ellipseButton = gui.initChildButton(row1Box, ELLIPSE_ICON.toString(), ELLIPSE_TOOLTIP.toString(), false);
+	//selectionToolButton = gui.initChildButton(row1Box, SELECTION_TOOL_ICON.toString(), SELECTION_TOOL_TOOLTIP.toString(), true);
+	//removeButton = gui.initChildButton(row1Box, REMOVE_ICON.toString(), REMOVE_TOOLTIP.toString(), true);
+	//rectButton = gui.initChildButton(row1Box, RECTANGLE_ICON.toString(), RECTANGLE_TOOLTIP.toString(), false);
+	//ellipseButton = gui.initChildButton(row1Box, ELLIPSE_ICON.toString(), ELLIPSE_TOOLTIP.toString(), false);
+        
+        nameLabel = new Label("Class Name: ");
+        row1Box.getChildren().add(nameLabel);
+        nameArea = new TextField();
+        row1Box.getChildren().add(nameArea);
+        
 
 	// ROW 2
 	row2Box = new HBox();
-	moveToBackButton = gui.initChildButton(row2Box, MOVE_TO_BACK_ICON.toString(), MOVE_TO_BACK_TOOLTIP.toString(), true);
-	moveToFrontButton = gui.initChildButton(row2Box, MOVE_TO_FRONT_ICON.toString(), MOVE_TO_FRONT_TOOLTIP.toString(), true);
+	//moveToBackButton = gui.initChildButton(row2Box, MOVE_TO_BACK_ICON.toString(), MOVE_TO_BACK_TOOLTIP.toString(), true);
+	//moveToFrontButton = gui.initChildButton(row2Box, MOVE_TO_FRONT_ICON.toString(), MOVE_TO_FRONT_TOOLTIP.toString(), true);
+        packageLabel = new Label("Package:                ");
+        row2Box.getChildren().add(packageLabel);
+        packageArea = new TextField();
+        row2Box.getChildren().add(packageArea);
+        
 
 	// ROW 3
-	row3Box = new VBox();
-	backgroundColorLabel = new Label("Background Color");
-	backgroundColorPicker = new ColorPicker(Color.valueOf(WHITE_HEX));
-	row3Box.getChildren().add(backgroundColorLabel);
-	row3Box.getChildren().add(backgroundColorPicker);
+	row3Box = new HBox();
+	//backgroundColorLabel = new Label("Background Color");
+	//backgroundColorPicker = new ColorPicker(Color.valueOf(WHITE_HEX));
+	/*row3Box.getChildren().add(backgroundColorLabel);
+	row3Box.getChildren().add(backgroundColorPicker);*/
+        parentLabel = new Label("Parent:                ");
+        row3Box.getChildren().add(parentLabel);
+        parentChoice = new ChoiceBox();
+        row3Box.getChildren().add(parentChoice);
+        
 
 	// ROW 4
-	row4Box = new VBox();
-	fillColorLabel = new Label("Fill Color");
+	row4Box = new HBox();
+	/*fillColorLabel = new Label("Fill Color");
 	fillColorPicker = new ColorPicker(Color.valueOf(WHITE_HEX));
 	row4Box.getChildren().add(fillColorLabel);
-	row4Box.getChildren().add(fillColorPicker);
+	row4Box.getChildren().add(fillColorPicker);*/
+        varLabel = new Label("Variables:  ");
+        row4Box.getChildren().add(varLabel);
+        addVar = new Button("+");
+        delVar = new Button("-");
+        row4Box.getChildren().add(addVar);
+        row4Box.getChildren().add(delVar);
 	
 	// ROW 5
 	row5Box = new VBox();
-	outlineColorLabel = new Label("Outline Color");
+	/*outlineColorLabel = new Label("Outline Color");
 	outlineColorPicker = new ColorPicker(Color.valueOf(BLACK_HEX));
 	row5Box.getChildren().add(outlineColorLabel);
-	row5Box.getChildren().add(outlineColorPicker);
+	row5Box.getChildren().add(outlineColorPicker);*/
+        varGrid = new GridPane();
+        varGrid.setGridLinesVisible(true);
+        varGrid.setHgap(10);
+        varGrid.setVgap(10);
+        Text nameText = new Text("Name");
+        Text typeText = new Text("Type");
+        Text staticText = new Text("Static");
+        Text accessText = new Text("Access");
+        varGrid.add(nameText, 0, 0);
+        varGrid.add(typeText, 1, 0);
+        varGrid.add(staticText, 2, 0);
+        varGrid.add(accessText, 3, 0);
+        row5Box.getChildren().add(varGrid);
 	
 	// ROW 6
-	row6Box = new VBox();
-	outlineThicknessLabel = new Label("Outline Thickness");
+	row6Box = new HBox();
+	/*outlineThicknessLabel = new Label("Outline Thickness");
 	outlineThicknessSlider = new Slider(0, 10, 1);
 	row6Box.getChildren().add(outlineThicknessLabel);
-	row6Box.getChildren().add(outlineThicknessSlider);
+	row6Box.getChildren().add(outlineThicknessSlider);*/
+        metLabel = new Label("Methods:   ");
+        row6Box.getChildren().add(metLabel);
+        addMet = new Button("+");
+        delMet = new Button("-");
+        row6Box.getChildren().add(addMet);
+        row6Box.getChildren().add(delMet);
 	
 	// ROW 7
 	row7Box = new HBox();
-	snapshotButton = gui.initChildButton(row7Box, SNAPSHOT_ICON.toString(), SNAPSHOT_TOOLTIP.toString(), false);
+	//snapshotButton = gui.initChildButton(row7Box, SNAPSHOT_ICON.toString(), SNAPSHOT_TOOLTIP.toString(), false);
+        metGrid = new GridPane();
+        metGrid.setGridLinesVisible(true);
+        metGrid.setHgap(10);
+        metGrid.setVgap(10);
+        Text nameText1 = new Text("Name");
+        Text returnText1 = new Text("Return");
+        Text staticText1 = new Text("Static");
+        Text abstractText1 = new Text("Abstract");
+        Text accessText1 = new Text("Access");
+        Text argText1 = new Text("arg1");
+        metGrid.add(nameText1, 0, 0);
+        metGrid.add(returnText1, 1, 0);
+        metGrid.add(staticText1, 2, 0);
+        metGrid.add(abstractText1, 3, 0);
+        metGrid.add(accessText1, 4, 0);
+        metGrid.add(argText1, 5, 0);
+        row7Box.getChildren().add(metGrid);
 	
 	// NOW ORGANIZE THE EDIT TOOLBAR
 	editToolbar.getChildren().add(row1Box);
@@ -215,6 +293,7 @@ public class Workspace extends AppWorkspaceComponent {
 	editToolbar.getChildren().add(row5Box);
 	editToolbar.getChildren().add(row6Box);
 	editToolbar.getChildren().add(row7Box);
+        
 	
 	// WE'LL RENDER OUR STUFF HERE IN THE CANVAS
 	canvas = new Pane();
@@ -225,12 +304,12 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// AND MAKE SURE THE DATA MANAGER IS IN SYNCH WITH THE PANE
 	DataManager data = (DataManager)app.getDataComponent();
-	data.setShapes(canvas.getChildren());
+	//data.setShapes(canvas.getChildren());
 
 	// AND NOW SETUP THE WORKSPACE
 	workspace = new BorderPane();
-	((BorderPane)workspace).setLeft(editToolbar);
 	((BorderPane)workspace).setCenter(canvas);
+        ((BorderPane)workspace).setRight(editToolbar);
     }
     
     public void setDebugText(String text) {
@@ -325,22 +404,31 @@ public class Workspace extends AppWorkspaceComponent {
 	canvas.getStyleClass().add(CLASS_RENDER_CANVAS);
 	
 	// COLOR PICKER STYLE
-	fillColorPicker.getStyleClass().add(CLASS_BUTTON);
-	outlineColorPicker.getStyleClass().add(CLASS_BUTTON);
-	backgroundColorPicker.getStyleClass().add(CLASS_BUTTON);
+	//fillColorPicker.getStyleClass().add(CLASS_BUTTON);
+	//outlineColorPicker.getStyleClass().add(CLASS_BUTTON);
+	//backgroundColorPicker.getStyleClass().add(CLASS_BUTTON);
 	
 	editToolbar.getStyleClass().add(CLASS_EDIT_TOOLBAR);
 	row1Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
+        nameLabel.getStyleClass().add(CLASS_HEADING_LABEL);
 	row2Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
+        packageLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
 	row3Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
-	backgroundColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
+	//backgroundColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
+        parentLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
 	
 	row4Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
-	fillColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
+        varLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
+        addVar.getStyleClass().add(CLASS_FILE_BUTTON);
+        delVar.getStyleClass().add(CLASS_FILE_BUTTON);
+	//fillColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
 	row5Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
-	outlineColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
+	//outlineColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
 	row6Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
-	outlineThicknessLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
+        metLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
+        addMet.getStyleClass().add(CLASS_FILE_BUTTON);
+        delMet.getStyleClass().add(CLASS_FILE_BUTTON);
+	//outlineThicknessLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
 	row7Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
     }
 
@@ -388,5 +476,9 @@ public class Workspace extends AppWorkspaceComponent {
 	    outlineColorPicker.setValue(strokeColor);
 	    outlineThicknessSlider.setValue(lineThickness);	    
 	}
+    }
+
+    public Pane getCanvas() {
+	return canvas;
     }
 }

@@ -31,14 +31,17 @@
 }
 
 .edit_toolbar_row {
-    -fx-padding: 0px;
+    /*-fx-padding: 0px;
     -fx-spacing: 10;
     -fx-background-color: #ddddff;
     -fx-background-radius: 5.0;
     -fx-padding: 15;
     -fx-spacing: 10;
     -fx-border-width: 2px;
-    -fx-border-color: #7777dd;
+    -fx-border-color: #7777dd;*/
+   -fx-background-color: #ddddff;
+   -fx-spacing: 10;
+   -fx-padding: 15;
 }
 
 .color_chooser_pane {
@@ -61,4 +64,21 @@
     -fx-spacing: 10;
     -fx-border-width: 2px;
     -fx-border-color: #7777dd;
+}
+
+// CSS CLASS FOR CANVAS
+.render_canvas {
+    -fx-background-color:#ffffcc;
+}
+
+// CSS CLASS FOR LABELS HEADING LARGE SECTIONS IN THE GUI
+.heading_label {
+    -fx-font-size: 20pt;
+    -fx-font-weight: bold;
+}
+
+// CSS CLASS FOR LABELS HEADING SUBSECTIONS IN THE GUI
+.subheading_label {
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
 }

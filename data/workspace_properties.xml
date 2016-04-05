@@ -8,7 +8,6 @@
     <property_list>
         <!-- PROGRAM ICON FILES -->
 	<property name="SELECTION_TOOL_ICON"	value="SelectionTool.png"></property>
-	<property name="REMOVE_ICON"		value="Remove.png"></property>
         <property name="RECTANGLE_ICON"		value="Rect.png"></property>
 	<property name="ELLIPSE_ICON"		value="Ellipse.png"></property>
 	<property name="MOVE_TO_FRONT_ICON"	value="MoveToFront.png"></property>

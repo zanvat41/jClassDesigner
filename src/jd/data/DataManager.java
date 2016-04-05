@@ -88,7 +88,7 @@ public class DataManager implements AppDataComponent {
 	highlightedEffect = dropShadowEffect;
     }
     
-    public ObservableList<Node> getShapes() {
+    /*public ObservableList<Node> getShapes() {
 	return shapes;
     }
 
@@ -115,7 +115,7 @@ public class DataManager implements AppDataComponent {
     public void setBackgroundColor(Color initBackgroundColor) {
 	backgroundColor = initBackgroundColor;
 	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	//Pane canvas = workspace.getCanvas();
+	Pane canvas = workspace.getCanvas();
 	BackgroundFill fill = new BackgroundFill(backgroundColor, null, null);
 	Background background = new Background(fill);
 	//canvas.setBackground(background);
@@ -171,7 +171,7 @@ public class DataManager implements AppDataComponent {
 	    shapes.remove(selectedShape);
 	    shapes.add(selectedShape);
 	}
-    }
+    }*/
  
     /**
      * This function clears out the HTML tree and reloads it with the minimal
@@ -188,11 +188,11 @@ public class DataManager implements AppDataComponent {
 	currentFillColor = Color.web(WHITE_HEX);
 	currentOutlineColor = Color.web(BLACK_HEX);
 	
-	shapes.clear();
+	//shapes.clear();
 	//((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
     }
 
-    public void selectSizedShape() {
+    /*public void selectSizedShape() {
 	if (selectedShape != null)
 	    unhighlightShape(selectedShape);
 	selectedShape = newShape;
@@ -293,5 +293,5 @@ public class DataManager implements AppDataComponent {
 
     public void removeShape(Shape shapeToRemove) {
 	shapes.remove(shapeToRemove);
-    }
+    }*/
 }
