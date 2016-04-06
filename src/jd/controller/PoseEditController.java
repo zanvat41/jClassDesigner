@@ -2,18 +2,32 @@ package jd.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 import jd.data.DataManager;
 import jd.gui.Workspace;
 import saf.AppTemplate;
+import saf.controller.AppFileController;
 
 /**
  * This class responds to interactions with other UI pose editing controls.
@@ -26,9 +40,35 @@ public class PoseEditController {
         
     DataManager dataManager;
     
+    private double bX, bY; // Starting point for drawing
+    private double eX, eY; // Ending point for drawing
+    private double bX1, bY1; // Starting point for selecting
+    private double bX2, bY2; // Starting point for selecting and dragging
+    private double eX1, eY1; // Ending point for selecting and dragging
+    private double scX, scY;
+    
+    private Node selectedItem = null;
+    private Node lastItem = null;
+    
+    private boolean selected = false;
+    
+    private boolean enabled = true;
+    
+    private Effect highlightedEffect;
+    
     public PoseEditController(AppTemplate initApp) {
 	app = initApp;
 	dataManager = (DataManager)app.getDataComponent();
+        
+        // THIS IS FOR THE SELECTED SHAPE
+	DropShadow dropShadowEffect = new DropShadow();
+	dropShadowEffect.setOffsetX(0.0f);
+	dropShadowEffect.setOffsetY(0.0f);
+	dropShadowEffect.setSpread(1.0);
+	dropShadowEffect.setColor(Color.YELLOW);
+	dropShadowEffect.setBlurType(BlurType.GAUSSIAN);
+	dropShadowEffect.setRadius(15);
+	highlightedEffect = dropShadowEffect;
     }
     
     /*public void processSelectSelectionTool() {
@@ -136,4 +176,162 @@ public class PoseEditController {
 	    ioe.printStackTrace();
 	}
     }*/
+
+    
+    public void handleAddClassRequest() {
+        if(enabled) {                
+            BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            Pane canvas = (Pane) jdWorkspace.getCenter();
+
+            // THEN DRAW
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    bX = mouseEvent.getX();
+                    bY = mouseEvent.getY();
+                    drawClassPane(bX, bY);
+                }
+            }); 
+        }
+    }
+
+    private void drawClassPane(double X, double Y) {
+        // MARK THE FILE AS EDITED
+        /*AppFileController afc = new AppFileController(app);
+        afc.markAsEdited(app.getGUI());
+        rect = new Rectangle(bX, bY, eX - bX, eY - bY);
+        rect.setFill(fill);
+        rect.setStroke(outline);
+        rect.setStrokeWidth(thickness);
+        canvas.getChildren().add(rect);
+        shapes.add(rect);
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        workspace.refreshButtons(selected);*/
+        //Text test = new Text("hi");
+        VBox vb = new VBox();
+        FlowPane namePane = new FlowPane();
+        namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        namePane.setMinSize(150, 50);
+        namePane.setPrefSize(150, 50);
+        //namePane.setMaxSize(150, 50);
+        vb.getChildren().add(namePane);
+        FlowPane varPane = new FlowPane();
+        //varPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        //varPane.setMinSize(150, 50);
+        vb.getChildren().add(varPane);
+        FlowPane metPane = new FlowPane();
+        //metPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        //metPane.setMinSize(150, 50);
+        vb.getChildren().add(metPane);
+        vb.setLayoutX(X);
+        vb.setLayoutY(Y);
+        //canvas.getChildren().add(vb);
+        dataManager.addClassPane(vb);
+        selectedItem = vb;
+        if(selected){
+            // Disselect the previous selected item
+            lastItem.setEffect(null);
+        }
+        selectedItem.setEffect(highlightedEffect);
+        lastItem = selectedItem;
+        selected = true;
+        dataManager.setSelected(selectedItem);
+    }
+    
+    public void handleSelectRequest() {
+        if(enabled) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = new AppFileController(app);
+            
+            BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+  
+            Pane canvas = (Pane) jdWorkspace.getCenter();
+
+        
+            // THEN SELECT THE SHAPE
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                    public void handle(MouseEvent mouseEvent) {
+                    scX = mouseEvent.getSceneX();
+                    scY = mouseEvent.getSceneY();
+                    bX1 = mouseEvent.getX();
+                    bY1 = mouseEvent.getY();
+                    select();
+                    if(selected) {
+                        bX2 = selectedItem.getTranslateX();
+                        bY2 = selectedItem.getTranslateY();
+                    }
+                }
+            });
+        
+            // DRAG AND DROP TO RELOCATE THE SHAPE
+            canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (selected) {
+                        // Mark as edited
+                        afc.markAsEdited(app.getGUI());
+                        double offsetX = mouseEvent.getSceneX() - scX;
+                        double offsetY = mouseEvent.getSceneY() - scY;
+                        double newTranslateX = bX2 + offsetX;
+                        double newTranslateY = bY2 + offsetY;
+                        if(selectedItem.isPressed()) {
+                            selectedItem.setTranslateX(newTranslateX);
+                            selectedItem.setTranslateY(newTranslateY);
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    private void select() {
+        boolean contains = false;
+        Workspace workspace = (Workspace) app.getWorkspaceComponent();
+        ObservableList<Node> panes = dataManager.getPanes();
+        for (Iterator<Node> it = panes.iterator(); it.hasNext();) {
+            Node s = it.next();
+            if(s.isPressed()) {
+                selectedItem = s;
+                contains = true;
+            }
+        }
+        if (contains) {
+            if(selected){
+                // Disselect the previous selected item
+                lastItem.setEffect(null);
+            }
+            selectedItem.setEffect(highlightedEffect);
+            lastItem = selectedItem;
+            selected = true;
+        } else {
+            if(selected) {
+                lastItem.setEffect(null);
+                selectedItem = null;
+                lastItem = null;
+                selected = false;
+            }
+        }
+        if(selected) {
+            dataManager.setSelected(selectedItem);
+        } else {
+            dataManager.setSelected(null);
+        }
+        //workspace.refreshButtons(selected);
+    }
+
+    public void handleNameUpdate(VBox selectedPane, String name) {
+        //FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+        //Text nameText = new Text(name);
+        //nameText.setLayoutX(namePane.getLayoutX());
+        //nameText.setLayoutY(namePane.getLayoutY());
+        //namePane.getChildren().clear();
+        //namePane.getChildren().add(nameText);
+        dataManager.editName(name);
+    }
+
+    public void handlePackageUpdate(VBox selectedPane, String text) {
+        dataManager.editPackage(text);
+    }
+    
 }

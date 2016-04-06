@@ -8,7 +8,7 @@
 -->
 <properties>
     <property_list>
-        <property name="APP_TITLE"	    value="Pose Maker"></property>
+        <property name="APP_TITLE"	    value="jClass Designer"></property>
 	<property name="APP_LOGO"	    value="shaa.jpg"></property>
 	<property name="APP_PATH_CSS"	    value="css/"></property>
 	<property name="APP_CSS"	    value="jd_style.css"></property>

@@ -3,15 +3,20 @@ package jd.data;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import jd.gui.Workspace;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
@@ -25,8 +30,14 @@ import saf.AppTemplate;
 public class DataManager implements AppDataComponent {
     // FIRST THE THINGS THAT HAVE TO BE SAVED TO FILES
     
-    // THESE ARE THE SHAPES TO DRAW
-    ObservableList<Node> shapes;
+    // THESE ARE THE PANES TO DRAW
+    ObservableList<Node> panes;
+    
+    // THE NAMES OF THE PANES
+    ArrayList<String> names;
+    
+    // THE PACKAGES OF THE CLASSES / INTERFACES
+    ArrayList<String> packages;
     
     // THE BACKGROUND COLOR
     Color backgroundColor;
@@ -37,7 +48,7 @@ public class DataManager implements AppDataComponent {
     Shape newShape;
 
     // THIS IS THE SHAPE CURRENTLY SELECTED
-    Shape selectedShape;
+    Node selectedItem;
 
     // FOR FILL AND OUTLINE
     Color currentFillColor;
@@ -47,6 +58,9 @@ public class DataManager implements AppDataComponent {
 
     // THIS IS A SHARED REFERENCE TO THE APPLICATION
     AppTemplate app;
+    
+    // THIS IS THE WORKSPACE
+    Workspace ws;
     
     // USE THIS WHEN THE SHAPE IS SELECTED
     Effect highlightedEffect;
@@ -67,11 +81,15 @@ public class DataManager implements AppDataComponent {
     public DataManager(AppTemplate initApp) throws Exception {
 	// KEEP THE APP FOR LATER
 	app = initApp;
-
+        
 	// NO SHAPE STARTS OUT AS SELECTED
 	newShape = null;
-	selectedShape = null;
+	selectedItem = null;
 
+        // INITIALIZE THE LISTS
+        names = new ArrayList();
+        packages = new ArrayList();
+        
 	// INIT THE COLORS
 	currentFillColor = Color.web(WHITE_HEX);
 	currentOutlineColor = Color.web(BLACK_HEX);
@@ -182,7 +200,7 @@ public class DataManager implements AppDataComponent {
     public void reset() {
 	//setState(SELECTING_SHAPE);
 	newShape = null;
-	selectedShape = null;
+	selectedItem = null;
 
 	// INIT THE COLORS
 	currentFillColor = Color.web(WHITE_HEX);
@@ -294,4 +312,78 @@ public class DataManager implements AppDataComponent {
     public void removeShape(Shape shapeToRemove) {
 	shapes.remove(shapeToRemove);
     }*/
+
+    public void setPanes(ObservableList<Node> initPanes) {
+	panes = initPanes;
+    }
+    
+    public ObservableList<Node> getPanes() {
+	return panes;
+    }
+    
+    public void addClassPane(VBox vb) {
+        panes.add(vb);
+        initialName("");
+        initialPackage("");
+    }    
+    
+    public void setSelected(Node n) {
+        selectedItem = n;
+        if(selectedItem != null) {
+            reloadEditPane();
+        }
+    }
+    
+    public Node getSelected() {
+        return selectedItem;
+    }
+    
+    public void editName(String name) {
+        int i = panes.indexOf(selectedItem);
+        names.set(i, name);
+        VBox selectedPane = (VBox) selectedItem;
+        FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+        Text nameText = new Text(names.get(i));
+        //nameText.setLayoutX(namePane.getLayoutX());
+        //nameText.setLayoutY(namePane.getLayoutY());
+        namePane.getChildren().clear();
+        namePane.getChildren().add(nameText);
+    }
+
+    private void initialName(String name) {
+        names.add(name);
+    }
+    
+    public ArrayList<String> getNames() {
+        return names;
+    }
+
+    public void editPackage(String pname) {
+        int i = panes.indexOf(selectedItem);
+        packages.set(i, pname);
+        //VBox selectedPane = (VBox) selectedItem;
+        //FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+        //Text nameText = new Text(packages.get(i));
+        //nameText.setLayoutX(namePane.getLayoutX());
+        //nameText.setLayoutY(namePane.getLayoutY());
+        //namePane.getChildren().clear();
+        //namePane.getChildren().add(nameText);
+    }
+
+    private void initialPackage(String pname) {
+        packages.add(pname);
+    }
+    
+    public ArrayList<String> getPackages() {
+        return packages;
+    }
+
+    
+    
+    private void reloadEditPane() {
+        int i = panes.indexOf(selectedItem);
+        ws = (Workspace) app.getWorkspaceComponent();
+        ws.reloadNameText(names.get(i));
+        ws.reloadPackageText(packages.get(i));
+    }
 }

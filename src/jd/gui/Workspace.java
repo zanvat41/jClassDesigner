@@ -34,7 +34,6 @@ import static jd.PropertyType.SELECTION_TOOL_ICON;
 import static jd.PropertyType.SELECTION_TOOL_TOOLTIP;
 import static jd.PropertyType.SNAPSHOT_ICON;
 import static jd.PropertyType.SNAPSHOT_TOOLTIP;
-import jd.controller.CanvasController;
 import jd.controller.PoseEditController;
 import jd.data.DataManager;
 import static jd.data.DataManager.BLACK_HEX;
@@ -132,8 +131,7 @@ public class Workspace extends AppWorkspaceComponent {
     // THIS IS WHERE WE'LL RENDER OUR DRAWING
     Pane canvas;
     
-    // HERE ARE THE CONTROLLERS
-    CanvasController canvasController;
+    // HERE IS THE CONTROLLER
     PoseEditController poseEditController;    
 
     // HERE ARE OUR DIALOGS
@@ -158,7 +156,10 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// KEEP THE GUI FOR LATER
 	gui = app.getGUI();
-
+        
+        // KEEP THE CONTROLLER FOR LATER
+        poseEditController = new PoseEditController(app);
+        
 	layoutGUI();
 	//setupHandlers();
     }
@@ -276,7 +277,7 @@ public class Workspace extends AppWorkspaceComponent {
         Text staticText1 = new Text("Static");
         Text abstractText1 = new Text("Abstract");
         Text accessText1 = new Text("Access");
-        Text argText1 = new Text("arg1");
+        Text argText1 = new Text("Arg1");
         metGrid.add(nameText1, 0, 0);
         metGrid.add(returnText1, 1, 0);
         metGrid.add(staticText1, 2, 0);
@@ -298,18 +299,49 @@ public class Workspace extends AppWorkspaceComponent {
 	// WE'LL RENDER OUR STUFF HERE IN THE CANVAS
 	canvas = new Pane();
 	debugText = new Text();
-	canvas.getChildren().add(debugText);
+	//canvas.getChildren().add(debugText);
 	debugText.setX(100);
 	debugText.setY(100);
 	
 	// AND MAKE SURE THE DATA MANAGER IS IN SYNCH WITH THE PANE
 	DataManager data = (DataManager)app.getDataComponent();
-	//data.setShapes(canvas.getChildren());
+	data.setPanes(canvas.getChildren());
 
 	// AND NOW SETUP THE WORKSPACE
 	workspace = new BorderPane();
 	((BorderPane)workspace).setCenter(canvas);
         ((BorderPane)workspace).setRight(editToolbar);
+        
+        // THEN SET UP SOME CONTROLS
+        gui.addClassButton.setOnAction(e -> {
+            poseEditController.handleAddClassRequest();
+        });
+        
+        gui.selectButton.setOnAction(e -> {
+            poseEditController.handleSelectRequest();
+        });
+        
+        
+        nameArea.textProperty().addListener(e -> {
+            // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
+            VBox selectedPane = null;
+            if(VBox.class.isInstance(data.getSelected())) {
+                selectedPane = (VBox) data.getSelected();
+                poseEditController.handleNameUpdate(selectedPane, nameArea.getText());
+            }
+            //poseEditController.handleNameUpdate(, attributeName, attributeTextField.getText());
+	});
+        
+        packageArea.textProperty().addListener(e -> {
+            // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
+            VBox selectedPane = null;
+            if(VBox.class.isInstance(data.getSelected())) {
+                selectedPane = (VBox) data.getSelected();
+                poseEditController.handlePackageUpdate(selectedPane, packageArea.getText());
+            }
+            //poseEditController.handleNameUpdate(, attributeName, attributeTextField.getText());
+	});
+        
     }
     
     public void setDebugText(String text) {
@@ -480,5 +512,13 @@ public class Workspace extends AppWorkspaceComponent {
 
     public Pane getCanvas() {
 	return canvas;
+    }
+    
+    public void reloadNameText(String name) {
+        nameArea.setText(name);
+    }
+
+    public void reloadPackageText(String pname) {
+        packageArea.setText(pname);
     }
 }
