@@ -331,6 +331,10 @@ public class DataManager implements AppDataComponent {
         selectedItem = n;
         if(selectedItem != null) {
             reloadEditPane();
+        } else {
+            ws = (Workspace) app.getWorkspaceComponent();
+            ws.reloadNameText("");
+            ws.reloadPackageText("");
         }
     }
     
@@ -339,15 +343,24 @@ public class DataManager implements AppDataComponent {
     }
     
     public void editName(String name) {
-        int i = panes.indexOf(selectedItem);
-        names.set(i, name);
-        VBox selectedPane = (VBox) selectedItem;
-        FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
-        Text nameText = new Text(names.get(i));
-        //nameText.setLayoutX(namePane.getLayoutX());
-        //nameText.setLayoutY(namePane.getLayoutY());
-        namePane.getChildren().clear();
-        namePane.getChildren().add(nameText);
+        int index = panes.indexOf(selectedItem);
+        boolean existed = false;
+        for(int i = 0; i < names.size(); i ++) {
+            if(names.get(i).equals(name) && packages.get(i).equals(packages.get(index))) {
+                if(i != index)
+                    existed = true;
+            }
+        }
+        if(!existed) {
+            names.set(index, name);
+            VBox selectedPane = (VBox) selectedItem;
+            FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+            Text nameText = new Text(names.get(index));
+            //nameText.setLayoutX(namePane.getLayoutX());
+            //nameText.setLayoutY(namePane.getLayoutY());
+            namePane.getChildren().clear();
+            namePane.getChildren().add(nameText);
+        }
     }
 
     private void initialName(String name) {
@@ -359,8 +372,16 @@ public class DataManager implements AppDataComponent {
     }
 
     public void editPackage(String pname) {
-        int i = panes.indexOf(selectedItem);
-        packages.set(i, pname);
+        int index = panes.indexOf(selectedItem);
+        boolean existed = false;
+        for(int i = 0; i < names.size(); i ++) {
+            if(packages.get(i).equals(pname) && names.get(i).equals(names.get(index))) {
+                if(i != index)
+                    existed = true;
+            }
+        }
+        if(!existed)
+            packages.set(index, pname);
         //VBox selectedPane = (VBox) selectedItem;
         //FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
         //Text nameText = new Text(packages.get(i));
