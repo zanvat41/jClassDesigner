@@ -28,6 +28,9 @@
     -fx-padding: 10 20 10 20;
     -fx-width: 30px;
     -fx-height: 30px;   
+    -fx-spacing: 10;
+    -fx-padding: 15;
+     
 }
 
 .edit_toolbar_row {
