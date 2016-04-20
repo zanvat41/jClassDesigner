@@ -89,8 +89,8 @@ public class FileManager implements AppFileComponent {
             String Package = dataManager.getPackage(i);
 	    //Draggable draggableShape = ((Draggable)shape);
 	    //String type = draggableShape.getShapeType();
-	    //double x = draggableShape.getX();
-	    //double y = draggableShape.getY();
+	    double x = pane.getLayoutX();
+	    double y = pane.getLayoutY();
 	    //double width = draggableShape.getWidth();
 	    //double height = draggableShape.getHeight();
 	    //JsonObject fillColorJson = makeJsonColorObject((Color)shape.getFill());
@@ -135,14 +135,23 @@ public class FileManager implements AppFileComponent {
 	pw.close();*/
     }
     
-    /*public JsonObject makeJsonColorObject(Color color) {
-	JsonObject colorJson = Json.createObjectBuilder()
+    public JsonObject makeJsonMethodObject(Color color) {
+	JsonObject metJson = Json.createObjectBuilder()
 		.add(JSON_RED, color.getRed())
 		.add(JSON_GREEN, color.getGreen())
 		.add(JSON_BLUE, color.getBlue())
 		.add(JSON_ALPHA, color.getOpacity()).build();
-	return colorJson;
-    }*/
+	return metJson;
+    }
+    
+    public JsonObject makeJsonVarObject(Color color) {
+	JsonObject varJson = Json.createObjectBuilder()
+		.add(JSON_RED, color.getRed())
+		.add(JSON_GREEN, color.getGreen())
+		.add(JSON_BLUE, color.getBlue())
+		.add(JSON_ALPHA, color.getOpacity()).build();
+	return varJson;
+    }
       
     /**
      * This method loads data from a JSON formatted file into the data 
