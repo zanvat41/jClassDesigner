@@ -106,11 +106,11 @@ public class DataManager implements AppDataComponent {
 	highlightedEffect = dropShadowEffect;
     }
     
-    /*public ObservableList<Node> getShapes() {
-	return shapes;
+    public ObservableList<Node> getPanes() {
+	return panes;
     }
 
-    public Color getBackgroundColor() {
+    /*public Color getBackgroundColor() {
 	return backgroundColor;
     }
     
@@ -203,8 +203,8 @@ public class DataManager implements AppDataComponent {
 	selectedItem = null;
 
 	// INIT THE COLORS
-	currentFillColor = Color.web(WHITE_HEX);
-	currentOutlineColor = Color.web(BLACK_HEX);
+	//currentFillColor = Color.web(WHITE_HEX);
+	//currentOutlineColor = Color.web(BLACK_HEX);
 	
 	//shapes.clear();
 	//((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
@@ -317,10 +317,6 @@ public class DataManager implements AppDataComponent {
 	panes = initPanes;
     }
     
-    public ObservableList<Node> getPanes() {
-	return panes;
-    }
-    
     public void addClassPane(VBox vb) {
         panes.add(vb);
         initialName("");
@@ -399,7 +395,13 @@ public class DataManager implements AppDataComponent {
         return packages;
     }
 
+    public String getPackage(int i) {
+        return packages.get(i);
+    }
     
+    public String getName(int i) {
+        return names.get(i);
+    }
     
     private void reloadEditPane() {
         int i = panes.indexOf(selectedItem);

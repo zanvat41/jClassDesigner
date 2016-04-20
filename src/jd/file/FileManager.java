@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javax.json.Json;
@@ -24,6 +25,7 @@ import javax.json.JsonValue;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
+import jd.data.DataManager;
 import saf.components.AppDataComponent;
 import saf.components.AppFileComponent;
 
@@ -43,8 +45,8 @@ public class FileManager implements AppFileComponent {
     static final String JSON_BLUE = "blue";
     static final String JSON_ALPHA = "alpha";
     static final String JSON_SHAPES = "shapes";
-    static final String JSON_SHAPE = "shape";
-    static final String JSON_TYPE = "type";
+    static final String JSON_PACKAGE = "package";
+    static final String JSON_NAME = "name";
     static final String JSON_X = "x";
     static final String JSON_Y = "y";
     static final String JSON_WIDTH = "width";
@@ -74,42 +76,42 @@ public class FileManager implements AppFileComponent {
     @Override
     public void saveData(AppDataComponent data, String filePath) throws IOException {
 	// GET THE DATA
-	/*DataManager dataManager = (DataManager)data;
+	DataManager dataManager = (DataManager)data;
 	
-	// FIRST THE BACKGROUND COLOR
-	Color bgColor = dataManager.getBackgroundColor();
-	JsonObject bgColorJson = makeJsonColorObject(bgColor);
 
 	// NOW BUILD THE JSON OBJCTS TO SAVE
+        
 	JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-	ObservableList<Node> shapes = dataManager.getShapes();
-	for (Node node : shapes) {
-	    Shape shape = (Shape)node;
-	    Draggable draggableShape = ((Draggable)shape);
-	    String type = draggableShape.getShapeType();
-	    double x = draggableShape.getX();
-	    double y = draggableShape.getY();
-	    double width = draggableShape.getWidth();
-	    double height = draggableShape.getHeight();
-	    JsonObject fillColorJson = makeJsonColorObject((Color)shape.getFill());
-	    JsonObject outlineColorJson = makeJsonColorObject((Color)shape.getStroke());
-	    double outlineThickness = shape.getStrokeWidth();
+	ObservableList<Node> panes = dataManager.getPanes();
+	for (int i = 0; i < panes.size(); i++) {
+	    VBox pane = (VBox) panes.get(i);
+            String name = dataManager.getName(i);
+            String Package = dataManager.getPackage(i);
+	    //Draggable draggableShape = ((Draggable)shape);
+	    //String type = draggableShape.getShapeType();
+	    //double x = draggableShape.getX();
+	    //double y = draggableShape.getY();
+	    //double width = draggableShape.getWidth();
+	    //double height = draggableShape.getHeight();
+	    //JsonObject fillColorJson = makeJsonColorObject((Color)shape.getFill());
+	    //JsonObject outlineColorJson = makeJsonColorObject((Color)shape.getStroke());
+	    //double outlineThickness = shape.getStrokeWidth();
 	    
-	    JsonObject shapeJson = Json.createObjectBuilder()
-		    .add(JSON_TYPE, type)
-		    .add(JSON_X, x)
-		    .add(JSON_Y, y)
-		    .add(JSON_WIDTH, width)
-		    .add(JSON_HEIGHT, height)
-		    .add(JSON_FILL_COLOR, fillColorJson)
-		    .add(JSON_OUTLINE_COLOR, outlineColorJson)
-		    .add(JSON_OUTLINE_THICKNESS, outlineThickness).build();
-	    arrayBuilder.add(shapeJson);
+	    JsonObject paneJson = Json.createObjectBuilder()
+                    .add(JSON_NAME, name)
+		    .add(JSON_PACKAGE, Package).build();
+		    //.add(JSON_Y, y)
+		    //.add(JSON_WIDTH, width)
+		    //.add(JSON_HEIGHT, height)
+		    //.add(JSON_FILL_COLOR, fillColorJson)
+		    //.add(JSON_OUTLINE_COLOR, outlineColorJson)
+		    //.add(JSON_OUTLINE_THICKNESS, outlineThickness).build();
+	    arrayBuilder.add(paneJson);
 	}
-	JsonArray shapesArray = arrayBuilder.build();
+	JsonArray panesArray = arrayBuilder.build();
 	
 	// THEN PUT IT ALL TOGETHER IN A JsonObject
-	JsonObject dataManagerJSO = Json.createObjectBuilder()
+	/*JsonObject dataManagerJSO = Json.createObjectBuilder()
 		.add(JSON_BG_COLOR, bgColorJson)
 		.add(JSON_SHAPES, shapesArray)
 		.build();
@@ -133,14 +135,14 @@ public class FileManager implements AppFileComponent {
 	pw.close();*/
     }
     
-    public JsonObject makeJsonColorObject(Color color) {
+    /*public JsonObject makeJsonColorObject(Color color) {
 	JsonObject colorJson = Json.createObjectBuilder()
 		.add(JSON_RED, color.getRed())
 		.add(JSON_GREEN, color.getGreen())
 		.add(JSON_BLUE, color.getBlue())
 		.add(JSON_ALPHA, color.getOpacity()).build();
 	return colorJson;
-    }
+    }*/
       
     /**
      * This method loads data from a JSON formatted file into the data 
@@ -178,11 +180,11 @@ public class FileManager implements AppFileComponent {
 	}*/
     }
     
-    public double getDataAsDouble(JsonObject json, String dataName) {
+    /*public double getDataAsDouble(JsonObject json, String dataName) {
 	JsonValue value = json.get(dataName);
 	JsonNumber number = (JsonNumber)value;
 	return number.bigDecimalValue().doubleValue();	
-    }
+    }*/
     
     /*public Shape loadShape(JsonObject jsonShape) {
 	// FIRST BUILD THE PROPER SHAPE TYPE
@@ -215,7 +217,7 @@ public class FileManager implements AppFileComponent {
 	return shape;
     }*/
     
-    public Color loadColor(JsonObject json, String colorToGet) {
+    /*public Color loadColor(JsonObject json, String colorToGet) {
 	JsonObject jsonColor = json.getJsonObject(colorToGet);
 	double red = getDataAsDouble(jsonColor, JSON_RED);
 	double green = getDataAsDouble(jsonColor, JSON_GREEN);
@@ -223,7 +225,7 @@ public class FileManager implements AppFileComponent {
 	double alpha = getDataAsDouble(jsonColor, JSON_ALPHA);
 	Color loadedColor = new Color(red, green, blue, alpha);
 	return loadedColor;
-    }
+    }*/
 
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
     private JsonObject loadJSONFile(String jsonFilePath) throws IOException {
