@@ -11,13 +11,13 @@ import java.util.ArrayList;
  */
 public class jdVar {
     boolean isStatic;
-    boolean isAbstract;
+    String type;
     String name;
     String access;
     
     jdVar() {
         isStatic = false;
-        isAbstract = false;
+        type = "";
         name = "";
         access = "";
     }
@@ -30,12 +30,12 @@ public class jdVar {
         isStatic = value;
     }
     
-    public boolean getAbstract() {
-        return isAbstract;
+    public String getType() {
+        return type;
     }
     
-    public void setAbstract(boolean value) {
-        isAbstract = value;
+    public void setType(String value) {
+        type = value;
     }
     
     public String getName() {

@@ -18,6 +18,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import jd.gui.Workspace;
+import jd.jdMet;
+import jd.jdVar;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
 
@@ -38,6 +40,13 @@ public class DataManager implements AppDataComponent {
     
     // THE PACKAGES OF THE CLASSES / INTERFACES
     ArrayList<String> packages;
+    
+    // THE VARIABLES
+    ArrayList<ArrayList<jdVar>> vars;
+    
+    // THE METHODS
+    ArrayList<ArrayList<jdMet>> mets;
+    
     
     // THE BACKGROUND COLOR
     Color backgroundColor;
@@ -89,6 +98,8 @@ public class DataManager implements AppDataComponent {
         // INITIALIZE THE LISTS
         names = new ArrayList();
         packages = new ArrayList();
+        vars = new ArrayList();
+        mets = new ArrayList();
         
 	// INIT THE COLORS
 	currentFillColor = Color.web(WHITE_HEX);
@@ -321,6 +332,8 @@ public class DataManager implements AppDataComponent {
         panes.add(vb);
         initialName("");
         initialPackage("");
+        mets.add(new ArrayList());
+        vars.add(new ArrayList());
     }    
     
     public void setSelected(Node n) {
@@ -401,6 +414,14 @@ public class DataManager implements AppDataComponent {
     
     public String getName(int i) {
         return names.get(i);
+    }
+    
+    public ArrayList<jdMet> getMets(int i) {
+        return mets.get(i);
+    }
+    
+    public ArrayList<jdVar> getVars(int i) {
+        return vars.get(i);
     }
     
     private void reloadEditPane() {

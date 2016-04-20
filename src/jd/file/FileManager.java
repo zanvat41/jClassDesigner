@@ -26,6 +26,8 @@ import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
 import jd.data.DataManager;
+import jd.jdMet;
+import jd.jdVar;
 import saf.components.AppDataComponent;
 import saf.components.AppFileComponent;
 
@@ -39,18 +41,20 @@ import saf.components.AppFileComponent;
  */
 public class FileManager implements AppFileComponent {
     // FOR JSON LOADING
-    static final String JSON_BG_COLOR = "background_color";
-    static final String JSON_RED = "red";
-    static final String JSON_GREEN = "green";
-    static final String JSON_BLUE = "blue";
-    static final String JSON_ALPHA = "alpha";
-    static final String JSON_SHAPES = "shapes";
+    static final String JSON_ACCESS = "Access";
+    static final String JSON_STATIC = "Static";
+    static final String JSON_ABSTRACT = "Abstract";
+    static final String JSON_TYPE = "type";
+    static final String JSON_ARGS = "args";
+    static final String JSON_PANES = "panes";
     static final String JSON_PACKAGE = "package";
     static final String JSON_NAME = "name";
     static final String JSON_X = "x";
     static final String JSON_Y = "y";
-    static final String JSON_WIDTH = "width";
-    static final String JSON_HEIGHT = "height";
+    static final String JSON_TX = "tx";
+    static final String JSON_TY = "ty";
+    static final String JSON_METHOD = "methods";
+    static final String JSON_VAR = "vars";
     static final String JSON_FILL_COLOR = "fill_color";
     static final String JSON_OUTLINE_COLOR = "outline_color";
     static final String JSON_OUTLINE_THICKNESS = "outline_thickness";
@@ -91,29 +95,30 @@ public class FileManager implements AppFileComponent {
 	    //String type = draggableShape.getShapeType();
 	    double x = pane.getLayoutX();
 	    double y = pane.getLayoutY();
+            double tx = pane.getTranslateX();
+            double ty = pane.getLayoutY();
 	    //double width = draggableShape.getWidth();
 	    //double height = draggableShape.getHeight();
-	    //JsonObject fillColorJson = makeJsonColorObject((Color)shape.getFill());
-	    //JsonObject outlineColorJson = makeJsonColorObject((Color)shape.getStroke());
+	    //JsonObject varJson = makeJsonVarObject(dataManager.getVars(i));
+	    //JsonObject metJson = makeJsonMetObject(dataManager.getMets(i));
 	    //double outlineThickness = shape.getStrokeWidth();
 	    
 	    JsonObject paneJson = Json.createObjectBuilder()
                     .add(JSON_NAME, name)
-		    .add(JSON_PACKAGE, Package).build();
-		    //.add(JSON_Y, y)
-		    //.add(JSON_WIDTH, width)
-		    //.add(JSON_HEIGHT, height)
-		    //.add(JSON_FILL_COLOR, fillColorJson)
-		    //.add(JSON_OUTLINE_COLOR, outlineColorJson)
-		    //.add(JSON_OUTLINE_THICKNESS, outlineThickness).build();
+		    .add(JSON_PACKAGE, Package)
+                    .add(JSON_X, x)
+		    .add(JSON_Y, y)
+                    .add(JSON_TX, tx)
+                    .add(JSON_TY, ty)
+		    .add(JSON_VAR, buildVarArray(dataManager.getVars(i)))
+		    .add(JSON_METHOD, buildMetArray(dataManager.getMets(i))).build();
 	    arrayBuilder.add(paneJson);
 	}
 	JsonArray panesArray = arrayBuilder.build();
 	
 	// THEN PUT IT ALL TOGETHER IN A JsonObject
-	/*JsonObject dataManagerJSO = Json.createObjectBuilder()
-		.add(JSON_BG_COLOR, bgColorJson)
-		.add(JSON_SHAPES, shapesArray)
+	JsonObject dataManagerJSO = Json.createObjectBuilder()
+		.add(JSON_PANES, panesArray)
 		.build();
 	
 	// AND NOW OUTPUT IT TO A JSON FILE WITH PRETTY PRINTING
@@ -132,26 +137,96 @@ public class FileManager implements AppFileComponent {
 	String prettyPrinted = sw.toString();
 	PrintWriter pw = new PrintWriter(filePath);
 	pw.write(prettyPrinted);
-	pw.close();*/
+	pw.close();
     }
     
-    public JsonObject makeJsonMethodObject(Color color) {
+    private JsonArray buildVarArray(ArrayList<jdVar> vars) {
+       JsonArrayBuilder jvb = Json.createArrayBuilder();
+       
+       	for (int i = 0; i < vars.size(); i++) {
+	    jdVar var = vars.get(i);
+            String name = var.getName();
+            String access = var.getAccess();
+            String type = var.getType();
+            boolean isStatic = var.getStatic();
+            String st;
+            if(isStatic) 
+                st = "true";
+            else
+                st = "false";
+
+	    JsonObject varJson = Json.createObjectBuilder()
+                    .add(JSON_NAME, name)
+		    .add(JSON_ACCESS, access)
+                    .add(JSON_TYPE, type)
+		    .add(JSON_STATIC, st).build();
+            
+	    jvb.add(varJson);
+	}
+        
+       JsonArray jA = jvb.build();
+       return jA;
+    }
+    
+    private JsonArray buildMetArray(ArrayList<jdMet> mets) {
+       JsonArrayBuilder jmb = Json.createArrayBuilder();
+       
+       	for (int i = 0; i < mets.size(); i++) {
+	    jdMet met = mets.get(i);
+            String name = met.getName();
+            String access = met.getAccess();
+            String rt = met.getRT();
+            
+            boolean isStatic = met.getStatic();
+            String st;
+            if(isStatic) 
+                st = "true";
+            else
+                st = "false";
+            
+            boolean isAbstract = met.getAbstract();
+            String ab;
+            if(isAbstract) 
+                ab = "true";
+            else
+                ab = "false";
+
+	    JsonObject metJson = Json.createObjectBuilder()
+                    .add(JSON_NAME, name)
+		    .add(JSON_ACCESS, access)
+                    .add(JSON_TYPE, rt)
+                    .add(JSON_ABSTRACT, ab)
+		    .add(JSON_STATIC, st)
+                    .add(JSON_ARGS, buildArgArray(met.getArgs())).build();
+            
+	    jmb.add(metJson);
+	}
+        
+       JsonArray jA = jmb.build();
+       return jA;
+    }
+    
+    private JsonArray buildArgArray(ArrayList<String> args) {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+        for (String a : args) {
+           jab.add(a);
+        }
+        JsonArray jA = jab.build();
+        return jA;
+    }
+    
+    
+    /*public JsonObject makeJsonMetObject(ArrayList<jdMet> mets) {
 	JsonObject metJson = Json.createObjectBuilder()
-		.add(JSON_RED, color.getRed())
-		.add(JSON_GREEN, color.getGreen())
-		.add(JSON_BLUE, color.getBlue())
-		.add(JSON_ALPHA, color.getOpacity()).build();
+		.add(JSON_ALPHA, "Hello").build();
 	return metJson;
     }
     
-    public JsonObject makeJsonVarObject(Color color) {
+    public JsonObject makeJsonVarObject(ArrayList<jdVar> vars) {
 	JsonObject varJson = Json.createObjectBuilder()
-		.add(JSON_RED, color.getRed())
-		.add(JSON_GREEN, color.getGreen())
-		.add(JSON_BLUE, color.getBlue())
-		.add(JSON_ALPHA, color.getOpacity()).build();
+		.add(JSON_NAME, "Hello").build();
 	return varJson;
-    }
+    }*/
       
     /**
      * This method loads data from a JSON formatted file into the data 
