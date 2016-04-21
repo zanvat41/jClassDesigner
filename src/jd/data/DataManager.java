@@ -44,6 +44,12 @@ public class DataManager implements AppDataComponent {
     // THE PARENTS
     ArrayList<String> parents;
     
+    // THE INTERFACES THAT THE CLASS IMPLEMENT
+    ArrayList<String> ipms;
+    
+    // THE AGGREGATES
+    ArrayList<ArrayList<String>> aggs;
+    
     // THE VARIABLES
     ArrayList<ArrayList<jdVar>> vars;
     
@@ -97,6 +103,8 @@ public class DataManager implements AppDataComponent {
         names = new ArrayList();
         packages = new ArrayList();
         parents = new ArrayList();
+        ipms = new ArrayList();
+        aggs = new ArrayList();
         vars = new ArrayList();
         mets = new ArrayList();
         
@@ -215,6 +223,8 @@ public class DataManager implements AppDataComponent {
         names.clear();
         packages.clear();
         parents.clear();
+        ipms.clear();
+        aggs.clear();
         vars.clear();
         mets.clear();
 	((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
@@ -332,6 +342,8 @@ public class DataManager implements AppDataComponent {
         initialName("");
         initialPackage("");
         initialParent("");
+        initialIMP("");
+        aggs.add(new ArrayList());
         mets.add(new ArrayList());
         vars.add(new ArrayList());
     }    
@@ -380,12 +392,21 @@ public class DataManager implements AppDataComponent {
         parents.add(parent);
     }
     
+    private void initialIMP(String ipm) {
+        ipms.add(ipm);
+    }
+    
+    
     public ArrayList<String> getNames() {
         return names;
     }
 
     public ArrayList<String> getParents() {
         return parents;
+    }
+    
+    public ArrayList<String> getIpms() {
+        return ipms;
     }
     
     public void editPackage(String pname) {
@@ -399,13 +420,6 @@ public class DataManager implements AppDataComponent {
         }
         if(!existed)
             packages.set(index, pname);
-        //VBox selectedPane = (VBox) selectedItem;
-        //FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
-        //Text nameText = new Text(packages.get(i));
-        //nameText.setLayoutX(namePane.getLayoutX());
-        //nameText.setLayoutY(namePane.getLayoutY());
-        //namePane.getChildren().clear();
-        //namePane.getChildren().add(nameText);
     }
 
     private void initialPackage(String pname) {
@@ -427,12 +441,21 @@ public class DataManager implements AppDataComponent {
         return parents.get(i);
     }
     
+    public String getIpm(int i) {
+        return ipms.get(i);
+    }
+    
+    
     public ArrayList<jdMet> getMets(int i) {
         return mets.get(i);
     }
     
     public ArrayList<jdVar> getVars(int i) {
         return vars.get(i);
+    }
+    
+    public ArrayList<String> getAggs(int i) {
+        return aggs.get(i);
     }
     
     public void addVar(jdVar v, int i) {
@@ -442,6 +465,11 @@ public class DataManager implements AppDataComponent {
     public void addMet(jdMet m, int i) {
         mets.get(i).add(m);
     }
+    
+    public void addAgg(String a, int i) {
+        aggs.get(i).add(a);
+    }
+    
     
     private void reloadEditPane() {
         int i = panes.indexOf(selectedItem);

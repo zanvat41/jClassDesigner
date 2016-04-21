@@ -33,6 +33,7 @@ public class TestSave {
         ArrayList<String> names = dm.getNames();
         ArrayList<String> pks = dm.getPackages();
         ArrayList<String> prts = dm.getParents();
+        ArrayList<String> ipms = dm.getIpms();
         
         //First is the ThreadExample class(The 0th elements in the lists in dm)
         VBox te = new VBox();
@@ -42,6 +43,11 @@ public class TestSave {
         names.set(0, "ThreadExample");
         pks.set(0, "te");
         prts.set(0, "Application");
+        
+        dm.addAgg("CounterTask", 0);
+        dm.addAgg("DateTask", 0);
+        dm.addAgg("PauseHandler", 0);
+        dm.addAgg("StartHandler", 0);
         
         jdVar ST = new jdVar();
         ST.setName("START_TEXT");
@@ -243,6 +249,8 @@ public class TestSave {
         pks.set(1, "te.task");
         prts.set(1, "Task");
 
+        dm.addAgg("ThreadExample", 1);
+        
         jdVar cAP = new jdVar();
         cAP.setName("app");
         cAP.setAccess("private");
@@ -283,6 +291,8 @@ public class TestSave {
         pks.set(2, "te.task");
         prts.set(2, "Task");
 
+        dm.addAgg("ThreadExample", 2);
+        
         jdVar dAP = new jdVar();
         dAP.setName("app");
         dAP.setAccess("private");
@@ -320,7 +330,10 @@ public class TestSave {
         dm.addClassPane(ph);
         names.set(3, "PauseHandler");
         pks.set(3, "te.control");
+        ipms.set(3, "EventHandler");
 
+        dm.addAgg("ThreadExample", 3);
+        
         jdVar pAP = new jdVar();
         pAP.setName("app");
         pAP.setAccess("private");
@@ -353,7 +366,10 @@ public class TestSave {
         dm.addClassPane(sh);
         names.set(4, "StartHandler");
         pks.set(4, "te.control");
-
+        ipms.set(4, "EventHandler");
+        
+        dm.addAgg("ThreadExample", 4);
+        
         jdVar sAP = new jdVar();
         sAP.setName("app");
         sAP.setAccess("private");
@@ -383,42 +399,49 @@ public class TestSave {
         stage.setLayoutX(400);
         stage.setLayoutY(600);
         dm.addClassPane(stage);
+        dm.addAgg("ThreadExample", 5);
         names.set(5, "Stage");
 
         VBox bdp = new VBox();
         bdp.setLayoutX(400);
         bdp.setLayoutY(700);
         dm.addClassPane(bdp);
+        dm.addAgg("ThreadExample", 6);
         names.set(6, "BorderPane");
         
         VBox flp = new VBox();
         flp.setLayoutX(400);
         flp.setLayoutY(800);
         dm.addClassPane(flp);
+        dm.addAgg("ThreadExample", 7);
         names.set(7, "FlowPane");
         
         VBox button = new VBox();
         button.setLayoutX(400);
         button.setLayoutY(900);
         dm.addClassPane(button);
+        dm.addAgg("ThreadExample", 8);
         names.set(8, "Button");
         
         VBox scp = new VBox();
         scp.setLayoutX(600);
         scp.setLayoutY(600);
         dm.addClassPane(scp);
+        dm.addAgg("ThreadExample", 9);
         names.set(9, "ScrollPane");
         
         VBox ta = new VBox();
         ta.setLayoutX(600);
         ta.setLayoutY(700);
         dm.addClassPane(ta);
+        dm.addAgg("ThreadExample", 10);
         names.set(10, "TextArea");
         
         VBox td = new VBox();
         td.setLayoutX(600);
         td.setLayoutY(800);
         dm.addClassPane(td);
+        dm.addAgg("ThreadExample", 11);
         names.set(11, "Thread");
 
         // Finally test saveData

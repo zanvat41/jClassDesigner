@@ -5,10 +5,25 @@
             "name":"ThreadExample",
             "package":"te",
             "parent":"Application",
+            "implement":"",
             "x":0.0,
             "y":0.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"CounterTask"
+                },
+                {
+                    "name":"DateTask"
+                },
+                {
+                    "name":"PauseHandler"
+                },
+                {
+                    "name":"StartHandler"
+                }
+            ],
             "vars":[
                 {
                     "name":"START_TEXT",
@@ -206,10 +221,16 @@
             "name":"CounterTask",
             "package":"te.task",
             "parent":"Task",
+            "implement":"",
             "x":200.0,
             "y":0.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
                 {
                     "name":"app",
@@ -250,10 +271,16 @@
             "name":"DateTask",
             "package":"te.task",
             "parent":"Task",
+            "implement":"",
             "x":400.0,
             "y":0.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
                 {
                     "name":"app",
@@ -294,10 +321,16 @@
             "name":"PauseHandler",
             "package":"te.control",
             "parent":"",
+            "implement":"EventHandler",
             "x":0.0,
             "y":600.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
                 {
                     "name":"app",
@@ -333,10 +366,16 @@
             "name":"StartHandler",
             "package":"te.control",
             "parent":"",
+            "implement":"EventHandler",
             "x":200.0,
             "y":600.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
                 {
                     "name":"app",
@@ -372,10 +411,16 @@
             "name":"Stage",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":400.0,
             "y":600.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[
@@ -385,10 +430,16 @@
             "name":"BorderPane",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":400.0,
             "y":700.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[
@@ -398,10 +449,16 @@
             "name":"FlowPane",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":400.0,
             "y":800.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[
@@ -411,10 +468,16 @@
             "name":"Button",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":400.0,
             "y":900.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[
@@ -424,10 +487,16 @@
             "name":"ScrollPane",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":600.0,
             "y":600.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[
@@ -437,10 +506,16 @@
             "name":"TextArea",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":600.0,
             "y":700.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[
@@ -450,10 +525,16 @@
             "name":"Thread",
             "package":"",
             "parent":"",
+            "implement":"",
             "x":600.0,
             "y":800.0,
             "tx":0.0,
             "ty":0.0,
+            "aggregates":[
+                {
+                    "name":"ThreadExample"
+                }
+            ],
             "vars":[
             ],
             "methods":[

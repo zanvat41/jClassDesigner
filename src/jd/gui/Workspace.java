@@ -6,6 +6,7 @@ import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -129,6 +130,7 @@ public class Workspace extends AppWorkspaceComponent {
     GridPane metGrid;
     
     // THIS IS WHERE WE'LL RENDER OUR DRAWING
+    ScrollPane SP;
     Pane canvas;
     
     // HERE IS THE CONTROLLER
@@ -272,9 +274,15 @@ public class Workspace extends AppWorkspaceComponent {
 	editToolbar.getChildren().add(row6Box);
 	editToolbar.getChildren().add(row7Box);
         
-	
+	workspace = new BorderPane();
+        
 	// WE'LL RENDER OUR STUFF HERE IN THE CANVAS
 	canvas = new Pane();
+        SP = new ScrollPane();
+        //System.out.println(workspace.getMinWidth());
+        canvas.setMinSize(3000, 3000);
+        SP.setContent(canvas);
+                
 	debugText = new Text();
 	//canvas.getChildren().add(debugText);
 	debugText.setX(100);
@@ -285,9 +293,11 @@ public class Workspace extends AppWorkspaceComponent {
 	data.setPanes(canvas.getChildren());
 
 	// AND NOW SETUP THE WORKSPACE
-	workspace = new BorderPane();
-	((BorderPane)workspace).setCenter(canvas);
+        //canvas.setMinSize(workspace.getWidth() - editToolbar.getWidth(), workspace.getHeight() - editToolbar.getHeight());
+	((BorderPane)workspace).setCenter(SP);
         ((BorderPane)workspace).setRight(editToolbar);
+        
+        //canvas.setMinSize(workspace.getWidth() - editToolbar.getWidth(), workspace.getHeight() - editToolbar.getHeight());
         
         // THEN SET UP SOME CONTROLS
         gui.addClassButton.setOnAction(e -> {
@@ -320,12 +330,8 @@ public class Workspace extends AppWorkspaceComponent {
 	});
         
     }
-    
-    public void setDebugText(String text) {
-	debugText.setText(text);
-    }
-    
-    
+
+
     /*private void setupHandlers() {
 	// MAKE THE EDIT CONTROLLER
 	poseEditController = new PoseEditController(app);

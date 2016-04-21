@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -181,7 +182,8 @@ public class PoseEditController {
     public void handleAddClassRequest() {
         if(enabled) {                
             BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
-            Pane canvas = (Pane) jdWorkspace.getCenter();
+            ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+            Pane canvas = (Pane) SP.getContent();
 
             // THEN DRAW
             canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -244,8 +246,8 @@ public class PoseEditController {
             AppFileController afc = new AppFileController(app);
             
             BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
-  
-            Pane canvas = (Pane) jdWorkspace.getCenter();
+            ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+            Pane canvas = (Pane) SP.getContent();
 
         
             // THEN SELECT THE SHAPE

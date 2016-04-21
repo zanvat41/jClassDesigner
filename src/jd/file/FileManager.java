@@ -56,8 +56,8 @@ public class FileManager implements AppFileComponent {
     static final String JSON_METHOD = "methods";
     static final String JSON_VAR = "vars";
     static final String JSON_PARENT = "parent";
-    static final String JSON_OUTLINE_COLOR = "outline_color";
-    static final String JSON_OUTLINE_THICKNESS = "outline_thickness";
+    static final String JSON_IMPLEMENT = "implement";
+    static final String JSON_AGGREGATE = "aggregates";
     
     static final String DEFAULT_DOCTYPE_DECLARATION = "<!doctype html>\n";
     static final String DEFAULT_ATTRIBUTE_VALUE = "";
@@ -90,6 +90,7 @@ public class FileManager implements AppFileComponent {
             String name = dataManager.getName(i);
             String Package = dataManager.getPackage(i);
             String parent = dataManager.getParent(i);
+            String ipm = dataManager.getIpm(i);
 	    double x = pane.getLayoutX();
 	    double y = pane.getLayoutY();
             double tx = pane.getTranslateX();
@@ -99,10 +100,12 @@ public class FileManager implements AppFileComponent {
                     .add(JSON_NAME, name)
 		    .add(JSON_PACKAGE, Package)
                     .add(JSON_PARENT, parent)
+                    .add(JSON_IMPLEMENT, ipm)
                     .add(JSON_X, x)
 		    .add(JSON_Y, y)
                     .add(JSON_TX, tx)
                     .add(JSON_TY, ty)
+                    .add(JSON_AGGREGATE, buildAggArray(dataManager.getAggs(i)))
 		    .add(JSON_VAR, buildVarArray(dataManager.getVars(i)))
 		    .add(JSON_METHOD, buildMetArray(dataManager.getMets(i))).build();
 	    arrayBuilder.add(paneJson);
@@ -131,6 +134,22 @@ public class FileManager implements AppFileComponent {
 	PrintWriter pw = new PrintWriter(filePath);
 	pw.write(prettyPrinted);
 	pw.close();
+    }
+    
+    
+    private JsonArray buildAggArray(ArrayList<String> aggs) {
+       JsonArrayBuilder jab = Json.createArrayBuilder();
+       
+       	for (int i = 0; i < aggs.size(); i++) {
+	    String agg = aggs.get(i);
+	    JsonObject varJson = Json.createObjectBuilder()
+                    .add(JSON_NAME, agg)
+                    .build();
+            
+	    jab.add(varJson);
+	}
+       JsonArray jA = jab.build();
+       return jA;
     }
     
     private JsonArray buildVarArray(ArrayList<jdVar> vars) {
@@ -264,10 +283,67 @@ public class FileManager implements AppFileComponent {
         dm.getPackages().set(i, pkg);
         String parent = json.getString(JSON_PARENT);
         dm.getParents().set(i, parent);
+        String ipm = json.getString(JSON_IMPLEMENT);
+        dm.getIpms().set(i, parent);
+        
+        // Second the aggregates
+        JsonArray jsonAggArray = json.getJsonArray(JSON_AGGREGATE);
+        for(int j = 0; j < jsonAggArray.size(); j++) {
+            JsonObject jsonAgg = jsonAggArray.getJsonObject(j);
+            String aggName = jsonAgg.getString(JSON_NAME);
+            dm.addAgg(aggName, i);
+        }
         
         // Then the variables
+        JsonArray jsonVarArray = json.getJsonArray(JSON_VAR);
+        for(int j = 0; j < jsonVarArray.size(); j++) {
+            JsonObject jsonVar = jsonVarArray.getJsonObject(j);
+            String varName = jsonVar.getString(JSON_NAME);
+            String varType = jsonVar.getString(JSON_TYPE);
+            String varAccess = jsonVar.getString(JSON_ACCESS);
+            String varStatic = jsonVar.getString(JSON_STATIC);
+            jdVar newVar = new jdVar();
+            newVar.setName(varName);
+            newVar.setType(varType);
+            newVar.setAccess(varAccess);
+            if(varStatic.equals("true"))
+                newVar.setStatic(true);
+            else
+                newVar.setStatic(false);
+            dm.addVar(newVar, i);
+        }
         
         // Finally the methods
+        JsonArray jsonMetArray = json.getJsonArray(JSON_METHOD);
+        for(int j = 0; j < jsonMetArray.size(); j++) {
+            JsonObject jsonMet = jsonMetArray.getJsonObject(j);
+            String metName = jsonMet.getString(JSON_NAME);
+            String metType = jsonMet.getString(JSON_TYPE);
+            String metAccess = jsonMet.getString(JSON_ACCESS);
+            String metStatic = jsonMet.getString(JSON_STATIC);
+            String metAbstract = jsonMet.getString(JSON_ABSTRACT);
+            jdMet newMet = new jdMet();
+            newMet.setName(metName);
+            newMet.setRt(metType);
+            newMet.setAccess(metAccess);
+            if(metStatic.equals("true"))
+                newMet.setStatic(true);
+            else
+                newMet.setStatic(false);
+            if(metAbstract.equals("true"))
+                newMet.setAbstract(true);
+            else
+                newMet.setAbstract(false);
+            JsonArray jsonArgArray = jsonMet.getJsonArray(JSON_ARGS);
+            for(int k = 0; k < jsonArgArray.size(); j++) { 
+                String argName = jsonArgArray.getString(k);
+                newMet.addArg(argName);
+            }
+            
+            dm.addMet(newMet, i);
+        }
+        
+        
     }
     
     
@@ -351,4 +427,5 @@ public class FileManager implements AppFileComponent {
 	// NO USE OF THIS METHOD SINCE IT NEVER IMPORTS
 	// EXPORTED WEB PAGES
     }
+
 }
