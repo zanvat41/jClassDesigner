@@ -335,15 +335,14 @@ public class FileManager implements AppFileComponent {
             else
                 newMet.setAbstract(false);
             JsonArray jsonArgArray = jsonMet.getJsonArray(JSON_ARGS);
-            for(int k = 0; k < jsonArgArray.size(); j++) { 
+            for(int k = 0; k < jsonArgArray.size(); k++) { 
                 String argName = jsonArgArray.getString(k);
                 newMet.addArg(argName);
+                //System.out.println(argName);
             }
             
             dm.addMet(newMet, i);
-        }
-        
-        
+        }  
     }
     
     

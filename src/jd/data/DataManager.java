@@ -219,7 +219,9 @@ public class DataManager implements AppDataComponent {
 	//setState(SELECTING_SHAPE);
 	selectedItem = null;
 	
-	panes.clear();
+        if(panes != null) {
+            panes.clear();
+        }
         names.clear();
         packages.clear();
         parents.clear();
@@ -227,7 +229,9 @@ public class DataManager implements AppDataComponent {
         aggs.clear();
         vars.clear();
         mets.clear();
-	((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
+        if(app.getWorkspaceComponent() != null) {
+            ((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
+        }
     }
 
     /*public void selectSizedShape() {
