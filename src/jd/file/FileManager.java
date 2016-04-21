@@ -207,19 +207,6 @@ public class FileManager implements AppFileComponent {
         JsonArray jA = jab.build();
         return jA;
     }
-    
-    
-    /*public JsonObject makeJsonMetObject(ArrayList<jdMet> mets) {
-	JsonObject metJson = Json.createObjectBuilder()
-		.add(JSON_ALPHA, "Hello").build();
-	return metJson;
-    }
-    
-    public JsonObject makeJsonVarObject(ArrayList<jdVar> vars) {
-	JsonObject varJson = Json.createObjectBuilder()
-		.add(JSON_NAME, "Hello").build();
-	return varJson;
-    }*/
       
     /**
      * This method loads data from a JSON formatted file into the data 
@@ -238,30 +225,51 @@ public class FileManager implements AppFileComponent {
     @Override
     public void loadData(AppDataComponent data, String filePath) throws IOException {
 	// CLEAR THE OLD DATA OUT
-	/*DataManager dataManager = (DataManager)data;
+	DataManager dataManager = (DataManager)data;
 	dataManager.reset();
 	
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
 	
-	// LOAD THE BACKGROUND COLOR
-	Color bgColor = loadColor(json, JSON_BG_COLOR);
-	dataManager.setBackgroundColor(bgColor);
-	
 	// AND NOW LOAD ALL THE SHAPES
-	JsonArray jsonShapeArray = json.getJsonArray(JSON_SHAPES);
-	for (int i = 0; i < jsonShapeArray.size(); i++) {
-	    JsonObject jsonShape = jsonShapeArray.getJsonObject(i);
-	    Shape shape = loadShape(jsonShape);
-	    dataManager.addShape(shape);
-	}*/
+	JsonArray jsonPaneArray = json.getJsonArray(JSON_PANES);
+	for (int i = 0; i < jsonPaneArray.size(); i++) {
+	    JsonObject jsonPane = jsonPaneArray.getJsonObject(i);
+	    VBox vb = loadPane(jsonPane);
+	    dataManager.addClassPane(vb);
+            getPaneInfo(jsonPane, dataManager, i);
+	}
     }
     
-    /*public double getDataAsDouble(JsonObject json, String dataName) {
+    private VBox loadPane(JsonObject jsonPane) {
+        VBox vb = new VBox();
+        vb.setLayoutX(getDataAsDouble(jsonPane, JSON_X));
+        vb.setLayoutY(getDataAsDouble(jsonPane, JSON_Y));
+        vb.setTranslateX(getDataAsDouble(jsonPane, JSON_TX));
+        vb.setTranslateY(getDataAsDouble(jsonPane, JSON_TY));  
+        return vb;
+    }
+    
+    public double getDataAsDouble(JsonObject json, String dataName) {
 	JsonValue value = json.get(dataName);
 	JsonNumber number = (JsonNumber)value;
 	return number.bigDecimalValue().doubleValue();	
-    }*/
+    }
+    
+    private void getPaneInfo(JsonObject json, DataManager dm, int i) {
+        // First get name, package and parent
+        String name = json.getString(JSON_NAME);
+        dm.getNames().set(i, name);
+        String pkg = json.getString(JSON_PACKAGE);
+        dm.getPackages().set(i, pkg);
+        String parent = json.getString(JSON_PARENT);
+        dm.getParents().set(i, parent);
+        
+        // Then the variables
+        
+        // Finally the methods
+    }
+    
     
     /*public Shape loadShape(JsonObject jsonShape) {
 	// FIRST BUILD THE PROPER SHAPE TYPE

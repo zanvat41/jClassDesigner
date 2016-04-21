@@ -54,10 +54,6 @@ public class DataManager implements AppDataComponent {
     // THE BACKGROUND COLOR
     Color backgroundColor;
     
-    // AND NOW THE EDITING DATA
-
-    // THIS IS THE SHAPE CURRENTLY BEING SIZED BUT NOT YET ADDED
-    Shape newShape;
 
     // THIS IS THE SHAPE CURRENTLY SELECTED
     Node selectedItem;
@@ -94,8 +90,7 @@ public class DataManager implements AppDataComponent {
 	// KEEP THE APP FOR LATER
 	app = initApp;
         
-	// NO SHAPE STARTS OUT AS SELECTED
-	newShape = null;
+	// NO PANE STARTS OUT AS SELECTED
 	selectedItem = null;
 
         // INITIALIZE THE LISTS
@@ -214,15 +209,15 @@ public class DataManager implements AppDataComponent {
     @Override
     public void reset() {
 	//setState(SELECTING_SHAPE);
-	newShape = null;
 	selectedItem = null;
-
-	// INIT THE COLORS
-	//currentFillColor = Color.web(WHITE_HEX);
-	//currentOutlineColor = Color.web(BLACK_HEX);
 	
-	//shapes.clear();
-	//((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
+	panes.clear();
+        names.clear();
+        packages.clear();
+        parents.clear();
+        vars.clear();
+        mets.clear();
+	((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
     }
 
     /*public void selectSizedShape() {

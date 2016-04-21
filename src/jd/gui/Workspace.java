@@ -186,11 +186,6 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// ROW 1
 	row1Box = new HBox();
-	//selectionToolButton = gui.initChildButton(row1Box, SELECTION_TOOL_ICON.toString(), SELECTION_TOOL_TOOLTIP.toString(), true);
-	//removeButton = gui.initChildButton(row1Box, REMOVE_ICON.toString(), REMOVE_TOOLTIP.toString(), true);
-	//rectButton = gui.initChildButton(row1Box, RECTANGLE_ICON.toString(), RECTANGLE_TOOLTIP.toString(), false);
-	//ellipseButton = gui.initChildButton(row1Box, ELLIPSE_ICON.toString(), ELLIPSE_TOOLTIP.toString(), false);
-        
         nameLabel = new Label("Class Name: ");
         row1Box.getChildren().add(nameLabel);
         nameArea = new TextField();
@@ -199,8 +194,6 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// ROW 2
 	row2Box = new HBox();
-	//moveToBackButton = gui.initChildButton(row2Box, MOVE_TO_BACK_ICON.toString(), MOVE_TO_BACK_TOOLTIP.toString(), true);
-	//moveToFrontButton = gui.initChildButton(row2Box, MOVE_TO_FRONT_ICON.toString(), MOVE_TO_FRONT_TOOLTIP.toString(), true);
         packageLabel = new Label("Package:                ");
         row2Box.getChildren().add(packageLabel);
         packageArea = new TextField();
@@ -209,10 +202,6 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// ROW 3
 	row3Box = new HBox();
-	//backgroundColorLabel = new Label("Background Color");
-	//backgroundColorPicker = new ColorPicker(Color.valueOf(WHITE_HEX));
-	/*row3Box.getChildren().add(backgroundColorLabel);
-	row3Box.getChildren().add(backgroundColorPicker);*/
         parentLabel = new Label("Parent:                ");
         row3Box.getChildren().add(parentLabel);
         parentChoice = new ChoiceBox();
@@ -221,10 +210,6 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// ROW 4
 	row4Box = new HBox();
-	/*fillColorLabel = new Label("Fill Color");
-	fillColorPicker = new ColorPicker(Color.valueOf(WHITE_HEX));
-	row4Box.getChildren().add(fillColorLabel);
-	row4Box.getChildren().add(fillColorPicker);*/
         varLabel = new Label("Variables:  ");
         row4Box.getChildren().add(varLabel);
         addVar = new Button("+");
@@ -234,10 +219,6 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// ROW 5
 	row5Box = new VBox();
-	/*outlineColorLabel = new Label("Outline Color");
-	outlineColorPicker = new ColorPicker(Color.valueOf(BLACK_HEX));
-	row5Box.getChildren().add(outlineColorLabel);
-	row5Box.getChildren().add(outlineColorPicker);*/
         varGrid = new GridPane();
         varGrid.setGridLinesVisible(true);
         varGrid.setHgap(10);
@@ -254,10 +235,6 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// ROW 6
 	row6Box = new HBox();
-	/*outlineThicknessLabel = new Label("Outline Thickness");
-	outlineThicknessSlider = new Slider(0, 10, 1);
-	row6Box.getChildren().add(outlineThicknessLabel);
-	row6Box.getChildren().add(outlineThicknessSlider);*/
         metLabel = new Label("Methods:   ");
         row6Box.getChildren().add(metLabel);
         addMet = new Button("+");
