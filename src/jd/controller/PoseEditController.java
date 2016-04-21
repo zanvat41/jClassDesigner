@@ -321,12 +321,6 @@ public class PoseEditController {
     }
 
     public void handleNameUpdate(VBox selectedPane, String name) {
-        //FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
-        //Text nameText = new Text(name);
-        //nameText.setLayoutX(namePane.getLayoutX());
-        //nameText.setLayoutY(namePane.getLayoutY());
-        //namePane.getChildren().clear();
-        //namePane.getChildren().add(nameText);
         dataManager.editName(name);
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author 哲
+ * @author:Zhe Lin
  */
 public class jdVar {
     boolean isStatic;
@@ -15,7 +15,7 @@ public class jdVar {
     String name;
     String access;
     
-    jdVar() {
+    public jdVar() {
         isStatic = false;
         type = "";
         name = "";

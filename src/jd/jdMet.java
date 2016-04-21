@@ -17,7 +17,7 @@ public class jdMet {
     String access;
     ArrayList<String> args;
     
-    jdMet() {
+    public jdMet() {
         isStatic = false;
         isAbstract = false;
         name = "";

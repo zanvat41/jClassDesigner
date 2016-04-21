@@ -499,7 +499,7 @@ public class Workspace extends AppWorkspaceComponent {
 	backgroundColorPicker.setValue(dataManager.getBackgroundColor());*/
     }
     
-    public void loadSelectedShapeSettings(Shape shape) {
+    /*public void loadSelectedShapeSettings(Shape shape) {
 	if (shape != null) {
 	    Color fillColor = (Color)shape.getFill();
 	    Color strokeColor = (Color)shape.getStroke();
@@ -508,7 +508,7 @@ public class Workspace extends AppWorkspaceComponent {
 	    outlineColorPicker.setValue(strokeColor);
 	    outlineThicknessSlider.setValue(lineThickness);	    
 	}
-    }
+    }*/
 
     public Pane getCanvas() {
 	return canvas;

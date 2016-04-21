@@ -41,6 +41,9 @@ public class DataManager implements AppDataComponent {
     // THE PACKAGES OF THE CLASSES / INTERFACES
     ArrayList<String> packages;
     
+    // THE PARENTS
+    ArrayList<String> parents;
+    
     // THE VARIABLES
     ArrayList<ArrayList<jdVar>> vars;
     
@@ -98,6 +101,7 @@ public class DataManager implements AppDataComponent {
         // INITIALIZE THE LISTS
         names = new ArrayList();
         packages = new ArrayList();
+        parents = new ArrayList();
         vars = new ArrayList();
         mets = new ArrayList();
         
@@ -332,6 +336,7 @@ public class DataManager implements AppDataComponent {
         panes.add(vb);
         initialName("");
         initialPackage("");
+        initialParent("");
         mets.add(new ArrayList());
         vars.add(new ArrayList());
     }    
@@ -376,10 +381,18 @@ public class DataManager implements AppDataComponent {
         names.add(name);
     }
     
+    private void initialParent(String parent) {
+        parents.add(parent);
+    }
+    
     public ArrayList<String> getNames() {
         return names;
     }
 
+    public ArrayList<String> getParents() {
+        return parents;
+    }
+    
     public void editPackage(String pname) {
         int index = panes.indexOf(selectedItem);
         boolean existed = false;
@@ -415,6 +428,9 @@ public class DataManager implements AppDataComponent {
     public String getName(int i) {
         return names.get(i);
     }
+    public String getParent(int i) {
+        return parents.get(i);
+    }
     
     public ArrayList<jdMet> getMets(int i) {
         return mets.get(i);
@@ -422,6 +438,14 @@ public class DataManager implements AppDataComponent {
     
     public ArrayList<jdVar> getVars(int i) {
         return vars.get(i);
+    }
+    
+    public void addVar(jdVar v, int i) {
+        vars.get(i).add(v);
+    }
+    
+    public void addMet(jdMet m, int i) {
+        mets.get(i).add(m);
     }
     
     private void reloadEditPane() {

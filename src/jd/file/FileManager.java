@@ -55,7 +55,7 @@ public class FileManager implements AppFileComponent {
     static final String JSON_TY = "ty";
     static final String JSON_METHOD = "methods";
     static final String JSON_VAR = "vars";
-    static final String JSON_FILL_COLOR = "fill_color";
+    static final String JSON_PARENT = "parent";
     static final String JSON_OUTLINE_COLOR = "outline_color";
     static final String JSON_OUTLINE_THICKNESS = "outline_thickness";
     
@@ -82,30 +82,23 @@ public class FileManager implements AppFileComponent {
 	// GET THE DATA
 	DataManager dataManager = (DataManager)data;
 	
-
 	// NOW BUILD THE JSON OBJCTS TO SAVE
-        
 	JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 	ObservableList<Node> panes = dataManager.getPanes();
 	for (int i = 0; i < panes.size(); i++) {
 	    VBox pane = (VBox) panes.get(i);
             String name = dataManager.getName(i);
             String Package = dataManager.getPackage(i);
-	    //Draggable draggableShape = ((Draggable)shape);
-	    //String type = draggableShape.getShapeType();
+            String parent = dataManager.getParent(i);
 	    double x = pane.getLayoutX();
 	    double y = pane.getLayoutY();
             double tx = pane.getTranslateX();
-            double ty = pane.getLayoutY();
-	    //double width = draggableShape.getWidth();
-	    //double height = draggableShape.getHeight();
-	    //JsonObject varJson = makeJsonVarObject(dataManager.getVars(i));
-	    //JsonObject metJson = makeJsonMetObject(dataManager.getMets(i));
-	    //double outlineThickness = shape.getStrokeWidth();
+            double ty = pane.getTranslateY();
 	    
 	    JsonObject paneJson = Json.createObjectBuilder()
                     .add(JSON_NAME, name)
 		    .add(JSON_PACKAGE, Package)
+                    .add(JSON_PARENT, parent)
                     .add(JSON_X, x)
 		    .add(JSON_Y, y)
                     .add(JSON_TX, tx)
