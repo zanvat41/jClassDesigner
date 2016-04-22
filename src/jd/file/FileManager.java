@@ -301,7 +301,7 @@ public class FileManager implements AppFileComponent {
         String parent = json.getString(JSON_PARENT);
         dm.getParents().set(i, parent);
         String ipm = json.getString(JSON_IMPLEMENT);
-        dm.getIpms().set(i, parent);
+        dm.getIpms().set(i, ipm);
         dm.setSelected(dm.getPanes().get(i));
         dm.editName(name);
         dm.editPackage(pkg);
@@ -409,6 +409,10 @@ public class FileManager implements AppFileComponent {
         ObservableList panes = dataManager.getPanes();
         ArrayList<String> pkgs = dataManager.getPackages();
         ArrayList<String> names = dataManager.getNames();
+        ArrayList<String> parents = dataManager.getParents();
+        ArrayList<String> ipms = dataManager.getIpms();
+        
+        
         int paneNumber = panes.size();
         String dash = "\\";
         //PrintWriter pw = new PrintWriter(path);
@@ -424,11 +428,59 @@ public class FileManager implements AppFileComponent {
           else
               finalPath = finalPath + dash;
           String name = names.get(i);
+          String name1 = name;
+          if(name.contains("{abstract}"))
+              name1 = name1.replace("{abstract", "");
+          else if(name.contains("{interface}"))
+              name1 = name1.replace("{interface}", "");
           if(!name.isEmpty()){
             File pkgFolder = new File(finalPath);
             pkgFolder.mkdir();
-            finalPath = finalPath + name + ".java";
+            finalPath = finalPath + name1 + ".java";
             PrintWriter pw = new PrintWriter(finalPath);
+            
+            // Check if it is in a package
+            if(!pkg.isEmpty())
+                pw.println("package " + pkgs.get(i) +";");
+            
+            pw.print("public ");
+            
+            // Check if it's an abstract class, interface or normal class
+            if(name.contains("{abstract}"))
+                pw.print("abstract class ");
+            else if(name.contains("{interface}"))
+                pw.print("interface "); 
+            else
+                pw.print("class ");
+            
+            pw.print(name1 + " ");
+            
+            //System.out.println(ipms);
+            
+            //Check if it extends a class or not
+            if(!parents.get(i).isEmpty())
+                pw.print("extends " + parents.get(i) + " ");
+            
+            //Check if it implements an interface or not
+            if(!ipms.get(i).isEmpty())
+                pw.print("implements " + ipms.get(i) + " ");
+            
+                
+            pw.println("{");
+            
+            //Then the arguments
+            ArrayList<jdVar> varList = dataManager.getVars(i);
+            for(int j = 0; j < varList.size(); j++) {
+                jdVar var = varList.get(j);
+                
+                
+            }
+            
+            
+            //Finally the methods
+            
+            
+            pw.println("}");
             pw.close();
           }
         }
