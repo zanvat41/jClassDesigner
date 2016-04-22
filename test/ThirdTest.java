@@ -3,28 +3,50 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jd.test_bed;
 
 import java.util.ArrayList;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javax.json.JsonObject;
 import jd.data.DataManager;
 import jd.file.FileManager;
 import jd.jClassDesigner;
 import jd.jdLine;
 import jd.jdMet;
 import jd.jdVar;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import saf.AppTemplate;
+import saf.components.AppDataComponent;
 import static saf.settings.AppStartupConstants.PATH_WORK;
 
 /**
  *
- * @author:Zhe Lin
+ * @author 哲
  */
-public class TestSave {
-    public static void main(String[] args) throws Exception {
+public class ThirdTest {
+    DataManager dm;
+    
+    public ThirdTest() {
+    }
+    
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() throws Exception {
         jClassDesigner jd = new jClassDesigner();
-        DataManager dm = new DataManager((AppTemplate)jd);
+        dm = new DataManager((AppTemplate)jd);
         //DataManager dm = (DataManager) jd.getDataComponent();
         FileManager fm = new FileManager();
         Pane canvas = new Pane();
@@ -470,9 +492,82 @@ public class TestSave {
         names.set(12, "Application");
         pks.set(12, "javafx.application");
         
+        // And an abstract class
+        VBox intf = new VBox();
+        appl.setLayoutX(600);
+        appl.setLayoutY(1000);
+        dm.addClassPane(intf);
+        names.set(13, "AbstractThread{abstract}");
+        dm.setID(13, true);
+        
+        // And an interface
+        VBox intf1 = new VBox();
+        appl.setLayoutX(700);
+        appl.setLayoutY(1000);
+        dm.addClassPane(intf1);
+        names.set(14, "{interface}anInterface");
+        dm.setID(14, true);
+        
         // Finally test saveData
-        fm.saveData(dm, PATH_WORK + "DesignSaveTest");
+        fm.saveData(dm, PATH_WORK + "JTEST3");
         
+        dm.setTest(true);
+        fm.loadData(dm, PATH_WORK + "JTEST3");
         
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    @Test
+    public void testLocation() throws Exception {
+        int x = (int) dm.getPanes().get(1).getLayoutX();
+        int y = (int) dm.getPanes().get(1).getLayoutY();
+        assertEquals(200, x);
+        assertEquals(0, y);
+    }
+
+    @Test
+    public void testVar() throws Exception {
+        jdVar var = dm.getVars(0).get(2);
+        String name = var.getName();
+        String type = var.getType();
+        assertEquals("window", name);
+        assertEquals("Stage", type);
+    }
+    
+    @Test
+    public void testMet() throws Exception {
+        jdMet met1 = dm.getMets(0).get(0);
+        String name1 = met1.getName();
+        ArrayList<String> args = met1.getArgs();
+        String type1 = args.get(0);
+        assertEquals("start", name1);
+        assertEquals("Stage", type1);
+        
+        jdMet met2 = dm.getMets(1).get(0);
+        String name2 = met2.getName();
+        ArrayList<String> args2 = met2.getArgs();
+        String type2 = args2.get(0);
+        assertEquals("CounterTask", name2);
+        assertEquals("ThreadExample", type2);
+    }
+    
+    @Test
+    public void testLine() throws Exception {
+        jdLine line = dm.getLines(0).get(0);
+        int bX = (int) line.getBX();
+        int bY = (int) line.getBY();
+        int mX = (int) line.getMX();
+        int mY = (int) line.getMY();
+        int eX = (int) line.getEX();
+        int eY = (int) line.getEY();
+        assertEquals(200, bX);
+        assertEquals(100, bY);
+        assertEquals(200, mX);
+        assertEquals(200, mY);
+        assertEquals(600, eX);
+        assertEquals(900, eY);
     }
 }

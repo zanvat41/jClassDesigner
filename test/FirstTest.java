@@ -438,13 +438,15 @@ public class FirstTest {
         dm.addClassPane(stage);
         dm.addAgg("ThreadExample", 5);
         names.set(5, "Stage");
-
+        pks.set(5, "javafx.stage");
+        
         VBox bdp = new VBox();
         bdp.setLayoutX(400);
         bdp.setLayoutY(700);
         dm.addClassPane(bdp);
         dm.addAgg("ThreadExample", 6);
         names.set(6, "BorderPane");
+        pks.set(6, "javafx.scene.layout");
         
         VBox flp = new VBox();
         flp.setLayoutX(400);
@@ -452,6 +454,7 @@ public class FirstTest {
         dm.addClassPane(flp);
         dm.addAgg("ThreadExample", 7);
         names.set(7, "FlowPane");
+        pks.set(7, "javafx.scene.layout");
         
         VBox button = new VBox();
         button.setLayoutX(400);
@@ -459,6 +462,7 @@ public class FirstTest {
         dm.addClassPane(button);
         dm.addAgg("ThreadExample", 8);
         names.set(8, "Button");
+        pks.set(8, "javafx.scene.control");
         
         VBox scp = new VBox();
         scp.setLayoutX(600);
@@ -466,6 +470,7 @@ public class FirstTest {
         dm.addClassPane(scp);
         dm.addAgg("ThreadExample", 9);
         names.set(9, "ScrollPane");
+        pks.set(9, "javafx.scene.control");
         
         VBox ta = new VBox();
         ta.setLayoutX(600);
@@ -473,6 +478,7 @@ public class FirstTest {
         dm.addClassPane(ta);
         dm.addAgg("ThreadExample", 10);
         names.set(10, "TextArea");
+        pks.set(10, "javafx.scene.control");
         
         VBox td = new VBox();
         td.setLayoutX(600);
@@ -480,12 +486,13 @@ public class FirstTest {
         dm.addClassPane(td);
         dm.addAgg("ThreadExample", 11);
         names.set(11, "Thread");
-
+        
         VBox appl = new VBox();
         appl.setLayoutX(600);
         appl.setLayoutY(900);
         dm.addClassPane(appl);
         names.set(12, "Application");
+        pks.set(12, "javafx.application");
         
         // Finally test saveData
         fm.saveData(dm, PATH_WORK + "JTEST1");
