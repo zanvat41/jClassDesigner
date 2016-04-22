@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,7 @@ import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
 import jd.data.DataManager;
+import jd.jdLine;
 import jd.jdMet;
 import jd.jdVar;
 import saf.components.AppDataComponent;
@@ -61,6 +63,9 @@ public class FileManager implements AppFileComponent {
     static final String JSON_PARENT = "parent";
     static final String JSON_IMPLEMENT = "implement";
     static final String JSON_AGGREGATE = "aggregates";
+    static final String JSON_USE = "uses";
+    static final String JSON_LINE = "lines";
+    static final String JSON_ID = "inDesign";
     
     static final String DEFAULT_DOCTYPE_DECLARATION = "<!doctype html>\n";
     static final String DEFAULT_ATTRIBUTE_VALUE = "";
@@ -94,6 +99,7 @@ public class FileManager implements AppFileComponent {
             String Package = dataManager.getPackage(i);
             String parent = dataManager.getParent(i);
             String ipm = dataManager.getIpm(i);
+            boolean id = dataManager.getID(i);
 	    double x = pane.getLayoutX();
 	    double y = pane.getLayoutY();
             double tx = pane.getTranslateX();
@@ -104,11 +110,14 @@ public class FileManager implements AppFileComponent {
 		    .add(JSON_PACKAGE, Package)
                     .add(JSON_PARENT, parent)
                     .add(JSON_IMPLEMENT, ipm)
+                    .add(JSON_ID, id)
                     .add(JSON_X, x)
 		    .add(JSON_Y, y)
                     .add(JSON_TX, tx)
                     .add(JSON_TY, ty)
                     .add(JSON_AGGREGATE, buildAggArray(dataManager.getAggs(i)))
+                    .add(JSON_USE, buildUseArray(dataManager.getUses(i)))
+                    .add(JSON_LINE, buildLineArray(dataManager.getLines(i)))
 		    .add(JSON_VAR, buildVarArray(dataManager.getVars(i)))
 		    .add(JSON_METHOD, buildMetArray(dataManager.getMets(i))).build();
 	    arrayBuilder.add(paneJson);
@@ -140,6 +149,36 @@ public class FileManager implements AppFileComponent {
     }
     
     
+    private JsonArray buildLineArray(ArrayList<jdLine> lines) {
+       JsonArrayBuilder jvb = Json.createArrayBuilder();
+       
+       	for (int i = 0; i < lines.size(); i++) {
+	    jdLine line = lines.get(i);
+            String type = line.getType();
+            double bX = line.getBX();
+            double bY = line.getBY();
+            double mX = line.getMX();
+            double mY = line.getMY();
+            double eX = line.getEX();
+            double eY = line.getEY();
+
+	    JsonObject varJson = Json.createObjectBuilder()
+                    .add(JSON_TYPE, type)
+                    .add("bX", bX)
+                    .add("bY", bY)
+                    .add("mX", mX)
+                    .add("mY", mY)
+                    .add("eX", eX)
+                    .add("eY", eY)
+                    .build();
+	    jvb.add(varJson);
+	}
+        
+       JsonArray jA = jvb.build();
+       return jA;
+    }
+    
+    
     private JsonArray buildAggArray(ArrayList<String> aggs) {
        JsonArrayBuilder jab = Json.createArrayBuilder();
        
@@ -147,6 +186,22 @@ public class FileManager implements AppFileComponent {
 	    String agg = aggs.get(i);
 	    JsonObject varJson = Json.createObjectBuilder()
                     .add(JSON_NAME, agg)
+                    .build();
+            
+	    jab.add(varJson);
+	}
+       JsonArray jA = jab.build();
+       return jA;
+    }
+    
+    
+    private JsonArray buildUseArray(ArrayList<String> uses) {
+       JsonArrayBuilder jab = Json.createArrayBuilder();
+       
+       	for (int i = 0; i < uses.size(); i++) {
+	    String use = uses.get(i);
+	    JsonObject varJson = Json.createObjectBuilder()
+                    .add(JSON_NAME, use)
                     .build();
             
 	    jab.add(varJson);
@@ -293,7 +348,7 @@ public class FileManager implements AppFileComponent {
     }
     
     private void getPaneInfo(JsonObject json, DataManager dm, int i) {
-        // First get name, package and parent
+        // First get name, package, parent, interface, in design
         String name = json.getString(JSON_NAME);
         dm.getNames().set(i, name);
         String pkg = json.getString(JSON_PACKAGE);
@@ -302,10 +357,13 @@ public class FileManager implements AppFileComponent {
         dm.getParents().set(i, parent);
         String ipm = json.getString(JSON_IMPLEMENT);
         dm.getIpms().set(i, ipm);
-        dm.setSelected(dm.getPanes().get(i));
-        dm.editName(name);
-        dm.editPackage(pkg);
-        
+        boolean id = json.getBoolean(JSON_ID);
+        dm.setID(i, id);
+        if(!dm.isTest()) {
+            dm.setSelected(dm.getPanes().get(i));
+            dm.editName(name);
+            dm.editPackage(pkg);
+        }
         // Second the aggregates
         JsonArray jsonAggArray = json.getJsonArray(JSON_AGGREGATE);
         for(int j = 0; j < jsonAggArray.size(); j++) {
@@ -313,6 +371,32 @@ public class FileManager implements AppFileComponent {
             String aggName = jsonAgg.getString(JSON_NAME);
             dm.addAgg(aggName, i);
         }
+        
+        //Then the uses
+        JsonArray jsonUseArray = json.getJsonArray(JSON_USE);
+        for(int j = 0; j < jsonUseArray.size(); j++) {
+            JsonObject jsonUse = jsonUseArray.getJsonObject(j);
+            String useName = jsonUse.getString(JSON_NAME);
+            dm.addUse(useName, i);
+        }
+        
+        //Then the lines
+        JsonArray jsonLineArray = json.getJsonArray(JSON_LINE);
+        for(int j = 0; j < jsonLineArray.size(); j++) {
+            JsonObject jsonLine = jsonLineArray.getJsonObject(j);
+            String lineType = jsonLine.getString(JSON_TYPE);
+
+            jdLine newLine = new jdLine();
+
+            newLine.setType(lineType);
+            newLine.setB(getDataAsDouble(jsonLine, "bX"), getDataAsDouble(jsonLine, "bY"));
+            newLine.setM(getDataAsDouble(jsonLine, "mX"), getDataAsDouble(jsonLine, "mY"));
+            newLine.setE(getDataAsDouble(jsonLine, "eX"), getDataAsDouble(jsonLine, "eY"));
+            dm.addLine(newLine, i);
+        }
+        
+        
+        
         
         // Then the variables
         JsonArray jsonVarArray = json.getJsonArray(JSON_VAR);

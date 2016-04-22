@@ -28,6 +28,7 @@ public class TestLoad {
         FileManager fm = new FileManager();
         ObservableList<Node> Panes = FXCollections.observableArrayList();
         dm.setPanes(Panes);
+        dm.setTest(true);
         fm.loadData(dm, PATH_WORK + "DesignSaveTest");
         int size = Panes.size();
         //System.out.println(size);

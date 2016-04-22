@@ -6,6 +6,7 @@
             "package":"te",
             "parent":"Application",
             "implement":"",
+            "inDesign":true,
             "x":0.0,
             "y":0.0,
             "tx":0.0,
@@ -22,6 +23,19 @@
                 },
                 {
                     "name":"StartHandler"
+                }
+            ],
+            "uses":[
+            ],
+            "lines":[
+                {
+                    "type":"e",
+                    "bX":200.0,
+                    "bY":100.0,
+                    "mX":200.0,
+                    "mY":200.0,
+                    "eX":600.0,
+                    "eY":900.0
                 }
             ],
             "vars":[
@@ -222,6 +236,7 @@
             "package":"te.task",
             "parent":"Task",
             "implement":"",
+            "inDesign":true,
             "x":200.0,
             "y":0.0,
             "tx":0.0,
@@ -230,6 +245,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
                 {
@@ -272,6 +291,7 @@
             "package":"te.task",
             "parent":"Task",
             "implement":"",
+            "inDesign":true,
             "x":400.0,
             "y":0.0,
             "tx":0.0,
@@ -280,6 +300,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
                 {
@@ -322,6 +346,7 @@
             "package":"te.control",
             "parent":"",
             "implement":"EventHandler",
+            "inDesign":true,
             "x":0.0,
             "y":600.0,
             "tx":0.0,
@@ -330,6 +355,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
                 {
@@ -367,6 +396,7 @@
             "package":"te.control",
             "parent":"",
             "implement":"EventHandler",
+            "inDesign":true,
             "x":200.0,
             "y":600.0,
             "tx":0.0,
@@ -375,6 +405,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
                 {
@@ -412,6 +446,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":400.0,
             "y":600.0,
             "tx":0.0,
@@ -420,6 +455,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],
@@ -431,6 +470,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":400.0,
             "y":700.0,
             "tx":0.0,
@@ -439,6 +479,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],
@@ -450,6 +494,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":400.0,
             "y":800.0,
             "tx":0.0,
@@ -458,6 +503,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],
@@ -469,6 +518,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":400.0,
             "y":900.0,
             "tx":0.0,
@@ -477,6 +527,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],
@@ -488,6 +542,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":600.0,
             "y":600.0,
             "tx":0.0,
@@ -496,6 +551,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],
@@ -507,6 +566,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":600.0,
             "y":700.0,
             "tx":0.0,
@@ -515,6 +575,10 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],
@@ -526,6 +590,7 @@
             "package":"",
             "parent":"",
             "implement":"",
+            "inDesign":false,
             "x":600.0,
             "y":800.0,
             "tx":0.0,
@@ -534,6 +599,31 @@
                 {
                     "name":"ThreadExample"
                 }
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"Application",
+            "package":"",
+            "parent":"",
+            "implement":"",
+            "inDesign":false,
+            "x":600.0,
+            "y":900.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
             ],
             "vars":[
             ],

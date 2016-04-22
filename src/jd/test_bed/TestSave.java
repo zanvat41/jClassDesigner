@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import jd.data.DataManager;
 import jd.file.FileManager;
 import jd.jClassDesigner;
+import jd.jdLine;
 import jd.jdMet;
 import jd.jdVar;
 import saf.AppTemplate;
@@ -40,6 +41,7 @@ public class TestSave {
         te.setLayoutX(0);
         te.setLayoutY(0);
         dm.addClassPane(te);
+        dm.setID(0, true);
         names.set(0, "ThreadExample");
         pks.set(0, "te");
         prts.set(0, "Application");
@@ -48,6 +50,13 @@ public class TestSave {
         dm.addAgg("DateTask", 0);
         dm.addAgg("PauseHandler", 0);
         dm.addAgg("StartHandler", 0);
+        
+        jdLine pLine = new jdLine();
+        pLine.setType("e");
+        pLine.setB(200, 100);
+        pLine.setM(200, 200);
+        pLine.setE(600, 900);
+        dm.addLine(pLine, 0);
         
         jdVar ST = new jdVar();
         ST.setName("START_TEXT");
@@ -245,6 +254,7 @@ public class TestSave {
         ct.setLayoutX(200);
         ct.setLayoutY(0);
         dm.addClassPane(ct);
+        dm.setID(1, true);
         names.set(1, "CounterTask");
         pks.set(1, "te.task");
         prts.set(1, "Task");
@@ -287,6 +297,7 @@ public class TestSave {
         dt.setLayoutX(400);
         dt.setLayoutY(0);
         dm.addClassPane(dt);
+        dm.setID(2, true);
         names.set(2, "DateTask");
         pks.set(2, "te.task");
         prts.set(2, "Task");
@@ -328,6 +339,7 @@ public class TestSave {
         ph.setLayoutX(0);
         ph.setLayoutY(600);
         dm.addClassPane(ph);
+        dm.setID(3, true);
         names.set(3, "PauseHandler");
         pks.set(3, "te.control");
         ipms.set(3, "EventHandler");
@@ -364,6 +376,7 @@ public class TestSave {
         sh.setLayoutX(200);
         sh.setLayoutY(600);
         dm.addClassPane(sh);
+        dm.setID(4, true);
         names.set(4, "StartHandler");
         pks.set(4, "te.control");
         ipms.set(4, "EventHandler");
@@ -444,6 +457,12 @@ public class TestSave {
         dm.addAgg("ThreadExample", 11);
         names.set(11, "Thread");
 
+        VBox appl = new VBox();
+        appl.setLayoutX(600);
+        appl.setLayoutY(900);
+        dm.addClassPane(appl);
+        names.set(12, "Application");
+        
         // Finally test saveData
         fm.saveData(dm, PATH_WORK + "DesignSaveTest");
         

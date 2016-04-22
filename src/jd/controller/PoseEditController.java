@@ -242,6 +242,7 @@ public class PoseEditController {
         lastItem = selectedItem;
         selected = true;
         dataManager.setSelected(selectedItem);
+        dataManager.setID(dataManager.getPanes().indexOf(selectedItem), true);
     }
     
     public void handleSelectRequest() {
