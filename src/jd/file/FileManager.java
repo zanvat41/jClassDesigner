@@ -472,7 +472,14 @@ public class FileManager implements AppFileComponent {
             ArrayList<jdVar> varList = dataManager.getVars(i);
             for(int j = 0; j < varList.size(); j++) {
                 jdVar var = varList.get(j);
-                
+                boolean st = var.getStatic();
+                String acc = var.getAccess();
+                String varName = var.getName();
+                String varType = var.getType();
+                pw.print("    " + acc +" ");
+                if(st)
+                    pw.print("static ");
+                pw.println(varType + " " + varName + ";");
                 
             }
             
