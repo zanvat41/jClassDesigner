@@ -381,8 +381,6 @@ public class DataManager implements AppDataComponent {
             VBox selectedPane = (VBox) selectedItem;
             FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
             Text nameText = new Text(names.get(index));
-            //nameText.setLayoutX(namePane.getLayoutX());
-            //nameText.setLayoutY(namePane.getLayoutY());
             namePane.getChildren().clear();
             namePane.getChildren().add(nameText);
         }

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
@@ -262,6 +263,20 @@ public class FileManager implements AppFileComponent {
     
     private VBox loadPane(JsonObject jsonPane) {
         VBox vb = new VBox();
+        FlowPane namePane = new FlowPane();
+        namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        namePane.setMinSize(150, 50);
+        namePane.setPrefSize(150, 50);
+        //namePane.setMaxSize(150, 50);
+        vb.getChildren().add(namePane);
+        FlowPane varPane = new FlowPane();
+        //varPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        //varPane.setMinSize(150, 50);
+        vb.getChildren().add(varPane);
+        FlowPane metPane = new FlowPane();
+        //metPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        //metPane.setMinSize(150, 50);
+        vb.getChildren().add(metPane);
         vb.setLayoutX(getDataAsDouble(jsonPane, JSON_X));
         vb.setLayoutY(getDataAsDouble(jsonPane, JSON_Y));
         vb.setTranslateX(getDataAsDouble(jsonPane, JSON_TX));
@@ -285,6 +300,9 @@ public class FileManager implements AppFileComponent {
         dm.getParents().set(i, parent);
         String ipm = json.getString(JSON_IMPLEMENT);
         dm.getIpms().set(i, parent);
+        dm.setSelected(dm.getPanes().get(i));
+        dm.editName(name);
+        dm.editPackage(pkg);
         
         // Second the aggregates
         JsonArray jsonAggArray = json.getJsonArray(JSON_AGGREGATE);

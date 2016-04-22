@@ -184,7 +184,7 @@ public class PoseEditController {
             BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
             Pane canvas = (Pane) SP.getContent();
-
+            
             // THEN DRAW
             canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
@@ -199,9 +199,9 @@ public class PoseEditController {
 
     private void drawClassPane(double X, double Y) {
         // MARK THE FILE AS EDITED
-        /*AppFileController afc = new AppFileController(app);
+        AppFileController afc = new AppFileController(app);
         afc.markAsEdited(app.getGUI());
-        rect = new Rectangle(bX, bY, eX - bX, eY - bY);
+        /*rect = new Rectangle(bX, bY, eX - bX, eY - bY);
         rect.setFill(fill);
         rect.setStroke(outline);
         rect.setStrokeWidth(thickness);
