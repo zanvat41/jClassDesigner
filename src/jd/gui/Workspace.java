@@ -308,6 +308,10 @@ public class Workspace extends AppWorkspaceComponent {
             poseEditController.handleSelectRequest();
         });
         
+        gui.codeButton.setOnAction(e -> {
+            poseEditController.handleCodeRequest();
+        });
+        
         
         nameArea.textProperty().addListener(e -> {
             // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES

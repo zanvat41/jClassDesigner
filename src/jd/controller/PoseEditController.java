@@ -24,11 +24,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import jd.data.DataManager;
 import jd.gui.Workspace;
+import properties_manager.PropertiesManager;
 import saf.AppTemplate;
 import saf.controller.AppFileController;
+import static saf.settings.AppPropertyType.LOAD_ERROR_MESSAGE;
+import static saf.settings.AppPropertyType.LOAD_ERROR_TITLE;
+import static saf.settings.AppPropertyType.SAVE_WORK_TITLE;
+import static saf.settings.AppPropertyType.WORK_FILE_EXT;
+import static saf.settings.AppPropertyType.WORK_FILE_EXT_DESC;
+import static saf.settings.AppStartupConstants.PATH_WORK;
+import saf.ui.AppMessageDialogSingleton;
 
 /**
  * This class responds to interactions with other UI pose editing controls.
@@ -201,15 +211,6 @@ public class PoseEditController {
         // MARK THE FILE AS EDITED
         AppFileController afc = new AppFileController(app);
         afc.markAsEdited(app.getGUI());
-        /*rect = new Rectangle(bX, bY, eX - bX, eY - bY);
-        rect.setFill(fill);
-        rect.setStroke(outline);
-        rect.setStrokeWidth(thickness);
-        canvas.getChildren().add(rect);
-        shapes.add(rect);
-        Workspace workspace = (Workspace) app.getWorkspaceComponent();
-        workspace.refreshButtons(selected);*/
-        //Text test = new Text("hi");
         VBox vb = new VBox();
         FlowPane namePane = new FlowPane();
         namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
@@ -328,6 +329,27 @@ public class PoseEditController {
 
     public void handlePackageUpdate(VBox selectedPane, String text) {
         dataManager.editPackage(text);
+    }
+
+    public void handleCodeRequest() {
+        // WE'LL NEED THIS TO GET CUSTOM STUFF
+	//PropertiesManager props = PropertiesManager.getPropertiesManager();
+        //FileChooser fc = new FileChooser();
+        DirectoryChooser dc = new DirectoryChooser();
+        dc.setInitialDirectory(new File(PATH_WORK));
+        dc.setTitle("Choose Directory to Save Code");
+        //fc.getExtensionFilters().addAll(
+        //new FileChooser.ExtensionFilter(props.getProperty(WORK_FILE_EXT_DESC), props.getProperty(WORK_FILE_EXT)));
+        File selectedFile = dc.showDialog(app.getGUI().getWindow());
+        if (selectedFile != null) {
+            //saveWork(selectedFile);
+            //System.out.println(selectedFile);
+            saveCode(selectedFile);
+        }
+    }
+
+    private void saveCode(File selectedFile) {
+        
     }
     
 }
