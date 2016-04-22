@@ -1,6 +1,8 @@
 package jd.file;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -362,48 +364,6 @@ public class FileManager implements AppFileComponent {
             dm.addMet(newMet, i);
         }  
     }
-    
-    
-    /*public Shape loadShape(JsonObject jsonShape) {
-	// FIRST BUILD THE PROPER SHAPE TYPE
-	String type = jsonShape.getString(JSON_TYPE);
-	Shape shape;
-	if (type.equals(RECTANGLE)) {
-	    shape = new DraggableRectangle();
-	}
-	else {
-	    shape = new DraggableEllipse();
-	}
-	
-	// THEN LOAD ITS FILL AND OUTLINE PROPERTIES
-	Color fillColor = loadColor(jsonShape, JSON_FILL_COLOR);
-	Color outlineColor = loadColor(jsonShape, JSON_OUTLINE_COLOR);
-	double outlineThickness = getDataAsDouble(jsonShape, JSON_OUTLINE_THICKNESS);
-	shape.setFill(fillColor);
-	shape.setStroke(outlineColor);
-	shape.setStrokeWidth(outlineThickness);
-	
-	// AND THEN ITS DRAGGABLE PROPERTIES
-	double x = getDataAsDouble(jsonShape, JSON_X);
-	double y = getDataAsDouble(jsonShape, JSON_Y);
-	double width = getDataAsDouble(jsonShape, JSON_WIDTH);
-	double height = getDataAsDouble(jsonShape, JSON_HEIGHT);
-	Draggable draggableShape = (Draggable)shape;
-	draggableShape.setLocationAndSize(x, y, width, height);
-	
-	// ALL DONE, RETURN IT
-	return shape;
-    }*/
-    
-    /*public Color loadColor(JsonObject json, String colorToGet) {
-	JsonObject jsonColor = json.getJsonObject(colorToGet);
-	double red = getDataAsDouble(jsonColor, JSON_RED);
-	double green = getDataAsDouble(jsonColor, JSON_GREEN);
-	double blue = getDataAsDouble(jsonColor, JSON_BLUE);
-	double alpha = getDataAsDouble(jsonColor, JSON_ALPHA);
-	Color loadedColor = new Color(red, green, blue, alpha);
-	return loadedColor;
-    }*/
 
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
     private JsonObject loadJSONFile(String jsonFilePath) throws IOException {
@@ -443,6 +403,35 @@ public class FileManager implements AppFileComponent {
 	// NOTE THAT THE Web Page Maker APPLICATION MAKES
 	// NO USE OF THIS METHOD SINCE IT NEVER IMPORTS
 	// EXPORTED WEB PAGES
+    }
+
+    public void exportCode(DataManager dataManager, String path) throws IOException {
+        ObservableList panes = dataManager.getPanes();
+        ArrayList<String> pkgs = dataManager.getPackages();
+        ArrayList<String> names = dataManager.getNames();
+        int paneNumber = panes.size();
+        String dash = "\\";
+        //PrintWriter pw = new PrintWriter(path);
+        for(int i = 0; i < paneNumber; i ++) {
+          String finalPath = path;
+          String pkg = pkgs.get(i);
+          
+        // If there's nested package
+          pkg = pkg.replace(".", dash);
+          
+          if(!pkg.isEmpty())
+            finalPath = finalPath + dash + pkg + dash;
+          else
+              finalPath = finalPath + dash;
+          String name = names.get(i);
+          if(!name.isEmpty()){
+            File pkgFolder = new File(finalPath);
+            pkgFolder.mkdir();
+            finalPath = finalPath + name + ".java";
+            PrintWriter pw = new PrintWriter(finalPath);
+            pw.close();
+          }
+        }
     }
 
 }

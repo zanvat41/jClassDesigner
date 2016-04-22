@@ -1,6 +1,8 @@
 package jd.gui;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ChoiceBox;
@@ -21,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import static jd.PropertyType.ADD_ELEMENT_ERROR_MESSAGE;
 import static jd.PropertyType.ELLIPSE_ICON;
 import static jd.PropertyType.ELLIPSE_TOOLTIP;
 import static jd.PropertyType.MOVE_TO_BACK_ICON;
@@ -309,7 +312,13 @@ public class Workspace extends AppWorkspaceComponent {
         });
         
         gui.codeButton.setOnAction(e -> {
-            poseEditController.handleCodeRequest();
+            try {
+                poseEditController.handleCodeRequest();
+            } catch (IOException ex) {
+                PropertiesManager props = PropertiesManager.getPropertiesManager();
+		AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+		dialog.show("ERROR", "Save code error");
+            }
         });
         
         

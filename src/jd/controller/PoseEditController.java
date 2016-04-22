@@ -1,7 +1,9 @@
 package jd.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -28,6 +30,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import jd.data.DataManager;
+import jd.file.FileManager;
 import jd.gui.Workspace;
 import properties_manager.PropertiesManager;
 import saf.AppTemplate;
@@ -331,25 +334,25 @@ public class PoseEditController {
         dataManager.editPackage(text);
     }
 
-    public void handleCodeRequest() {
-        // WE'LL NEED THIS TO GET CUSTOM STUFF
-	//PropertiesManager props = PropertiesManager.getPropertiesManager();
-        //FileChooser fc = new FileChooser();
+    public void handleCodeRequest() throws IOException {
         DirectoryChooser dc = new DirectoryChooser();
         dc.setInitialDirectory(new File(PATH_WORK));
         dc.setTitle("Choose Directory to Save Code");
-        //fc.getExtensionFilters().addAll(
-        //new FileChooser.ExtensionFilter(props.getProperty(WORK_FILE_EXT_DESC), props.getProperty(WORK_FILE_EXT)));
         File selectedFile = dc.showDialog(app.getGUI().getWindow());
+        //System.out.print(selectedFile.getPath());
         if (selectedFile != null) {
-            //saveWork(selectedFile);
-            //System.out.println(selectedFile);
-            saveCode(selectedFile);
+            FileManager fm = (FileManager) app.getFileComponent();
+            fm.exportCode(dataManager, selectedFile.getPath());
         }
     }
 
-    private void saveCode(File selectedFile) {
-        
-    }
+    /*private void saveCode(File selectedFile) throws FileNotFoundException {
+        int paneNumber = dataManager.getPanes().size();
+        PrintWriter pw = new PrintWriter(selectedFile.getPath());
+        for(int i = 0; i < paneNumber; i ++) {
+            FileManager fm = (FileManager) app.getFileComponent();
+            fm.saveCode(dataManager, selectedFile.getPath());
+        }
+    }*/
     
 }
