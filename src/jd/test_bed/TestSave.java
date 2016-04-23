@@ -470,6 +470,27 @@ public class TestSave {
         names.set(12, "Application");
         pks.set(12, "javafx.application");
         
+        VBox date = new VBox();
+        date.setLayoutX(600);
+        date.setLayoutY(1100);
+        dm.addClassPane(date);
+        names.set(13, "Date");
+        pks.set(13, "java.util");
+        
+        VBox task = new VBox();
+        task.setLayoutX(600);
+        task.setLayoutY(1300);
+        dm.addClassPane(task);
+        names.set(14, "Task");
+        pks.set(14, "javafx.concurrent");
+        
+        VBox intf1 = new VBox();
+        intf1.setLayoutX(600);
+        intf1.setLayoutY(1000);
+        dm.addClassPane(intf1);
+        names.set(15, "{interface}EventHandler");
+        pks.set(15, "javafx.event");
+        
         // Finally test saveData
         fm.saveData(dm, PATH_WORK + "DesignSaveTest");
         

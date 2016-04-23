@@ -443,7 +443,7 @@
         },
         {
             "name":"Stage",
-            "package":"",
+            "package":"javafx.stage",
             "parent":"",
             "implement":"",
             "inDesign":false,
@@ -467,7 +467,7 @@
         },
         {
             "name":"BorderPane",
-            "package":"",
+            "package":"javafx.scene.layout",
             "parent":"",
             "implement":"",
             "inDesign":false,
@@ -491,7 +491,7 @@
         },
         {
             "name":"FlowPane",
-            "package":"",
+            "package":"javafx.scene.layout",
             "parent":"",
             "implement":"",
             "inDesign":false,
@@ -515,7 +515,7 @@
         },
         {
             "name":"Button",
-            "package":"",
+            "package":"javafx.scene.control",
             "parent":"",
             "implement":"",
             "inDesign":false,
@@ -539,7 +539,7 @@
         },
         {
             "name":"ScrollPane",
-            "package":"",
+            "package":"javafx.scene.control",
             "parent":"",
             "implement":"",
             "inDesign":false,
@@ -563,7 +563,7 @@
         },
         {
             "name":"TextArea",
-            "package":"",
+            "package":"javafx.scene.control",
             "parent":"",
             "implement":"",
             "inDesign":false,
@@ -611,12 +611,75 @@
         },
         {
             "name":"Application",
-            "package":"",
+            "package":"javafx.application",
             "parent":"",
             "implement":"",
             "inDesign":false,
             "x":600.0,
             "y":900.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"Date",
+            "package":"java.util",
+            "parent":"",
+            "implement":"",
+            "inDesign":false,
+            "x":600.0,
+            "y":1300.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"Task",
+            "package":"javafx.concurrent",
+            "parent":"",
+            "implement":"",
+            "inDesign":false,
+            "x":0.0,
+            "y":0.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"{interface}EventHandler",
+            "package":"javafx.event",
+            "parent":"",
+            "implement":"",
+            "inDesign":false,
+            "x":600.0,
+            "y":1000.0,
             "tx":0.0,
             "ty":0.0,
             "aggregates":[

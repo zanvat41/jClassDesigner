@@ -486,27 +486,51 @@ public class ThirdTest {
         names.set(11, "Thread");
         
         VBox appl = new VBox();
-        appl.setLayoutX(600);
-        appl.setLayoutY(900);
+        appl.setLayoutX(0);
+        appl.setLayoutY(0);
         dm.addClassPane(appl);
         names.set(12, "Application");
         pks.set(12, "javafx.application");
         
+        VBox date = new VBox();
+        date.setLayoutX(600);
+        date.setLayoutY(1100);
+        dm.addClassPane(date);
+        names.set(13, "Date");
+        pks.set(13, "java.util");
+        
+        
+        VBox task = new VBox();
+        task.setLayoutX(600);
+        task.setLayoutY(1300);
+        dm.addClassPane(task);
+        names.set(14, "Task");
+        pks.set(14, "javafx.concurrent");
+        
+        VBox intf1 = new VBox();
+        intf1.setLayoutX(600);
+        intf1.setLayoutY(1000);
+        dm.addClassPane(intf1);
+        names.set(15, "{interface}EventHandler");
+        pks.set(15, "javafx.event");
+        
         // And an abstract class
         VBox intf = new VBox();
-        appl.setLayoutX(600);
-        appl.setLayoutY(1000);
+        intf.setLayoutX(0);
+        intf.setLayoutY(0);
         dm.addClassPane(intf);
-        names.set(13, "AbstractThread{abstract}");
-        dm.setID(13, true);
+        names.set(16, "AbstractThread{abstract}");
+        pks.set(16, "te");
+        dm.setID(16, true);
         
         // And an interface
-        VBox intf1 = new VBox();
-        appl.setLayoutX(700);
-        appl.setLayoutY(1000);
-        dm.addClassPane(intf1);
-        names.set(14, "{interface}anInterface");
-        dm.setID(14, true);
+        VBox intf2 = new VBox();
+        intf2.setLayoutX(0);
+        intf2.setLayoutY(0);
+        dm.addClassPane(intf2);
+        names.set(17, "{interface}classicInterface");
+        pks.set(17, "te");
+        dm.setID(17, true);
         
         // Finally test saveData
         fm.saveData(dm, PATH_WORK + "JTEST3");

@@ -501,6 +501,7 @@ public class FileManager implements AppFileComponent {
         String dash = "\\";
         //PrintWriter pw = new PrintWriter(path);
         for(int i = 0; i < paneNumber; i ++) {
+          if(dataManager.getID(i)){
           String finalPath = path;
           String pkg = pkgs.get(i);
           
@@ -514,7 +515,7 @@ public class FileManager implements AppFileComponent {
           String name = names.get(i);
           String name1 = name;
           if(name.contains("{abstract}"))
-              name1 = name1.replace("{abstract", "");
+              name1 = name1.replace("{abstract}", "");
           else if(name.contains("{interface}"))
               name1 = name1.replace("{interface}", "");
           if(!name.isEmpty()){
@@ -526,6 +527,18 @@ public class FileManager implements AppFileComponent {
             // Check if it is in a package
             if(!pkg.isEmpty())
                 pw.println("package " + pkgs.get(i) +";");
+            
+            /*int lastDash = path.lastIndexOf('\\');
+            String relPath = path.substring(lastDash + 1, path.length());
+            
+            pw.println("import " + relPath + ".*;");*/
+            
+            // Imports
+            for(int j = 0; j < pkgs.size(); j++) {
+                if(!pkgs.get(j).equals(pkgs.get(i)) && !pkgs.get(j).isEmpty())
+                    pw.println("import " + pkgs.get(j) +".*;");
+            }
+            
             
             pw.print("public ");
             
@@ -569,11 +582,45 @@ public class FileManager implements AppFileComponent {
             
             
             //Finally the methods
+            ArrayList<jdMet> metList = dataManager.getMets(i);
+            for(int j = 0; j < metList.size(); j++) {
+                jdMet met = metList.get(j);
+                boolean st = met.getStatic();
+                boolean ab = met.getAbstract();
+                String acc = met.getAccess();
+                String metName = met.getName();
+                String rt = met.getRT();
+                ArrayList<String> args = met.getArgs();
+                pw.print("    " + acc + " ");
+                if(st)
+                    pw.print("static ");
+                if(ab)
+                    pw.print("abstract ");
+                pw.print(rt + " " + metName + "(");
+                for(int k = 0; k < args.size(); k++) {
+                    pw.print(args.get(k) + " arg" + k);
+                    if(k != args.size() - 1)
+                        pw.print(", ");
+                }
+                pw.println(") {");
+                if(!rt.equals("void") && !rt.isEmpty()){
+                    if(rt.equals("int") || rt.equals("double") || rt.equals("byte") || rt.equals("short") || rt.equals("float"))
+                        pw.println("        return 0;" );
+                    else if(rt.equals("char"))
+                        pw.println("        return '0';" );
+                    else if(rt.equals("boolean"))
+                        pw.println("        return true;" );
+                    else
+                        pw.println("        return null;" );
+                }
+                pw.println("    }");
+            }
             
             
             pw.println("}");
             pw.close();
           }
+        }
         }
     }
 

@@ -615,8 +615,8 @@
             "parent":"",
             "implement":"",
             "inDesign":false,
-            "x":600.0,
-            "y":900.0,
+            "x":0.0,
+            "y":0.0,
             "tx":0.0,
             "ty":0.0,
             "aggregates":[
@@ -680,6 +680,48 @@
             "inDesign":false,
             "x":600.0,
             "y":1000.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"AbstractThread{abstract}",
+            "package":"te",
+            "parent":"",
+            "implement":"",
+            "inDesign":true,
+            "x":0.0,
+            "y":0.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"{interface}classicInterface",
+            "package":"te",
+            "parent":"",
+            "implement":"",
+            "inDesign":true,
+            "x":0.0,
+            "y":0.0,
             "tx":0.0,
             "ty":0.0,
             "aggregates":[
