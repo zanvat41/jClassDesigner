@@ -277,8 +277,8 @@
                 },
                 {
                     "name":"call",
-                    "Access":"protect",
-                    "type":"void",
+                    "Access":"protected",
+                    "type":"Void",
                     "Abstract":"false",
                     "Static":"false",
                     "args":[
@@ -332,8 +332,8 @@
                 },
                 {
                     "name":"call",
-                    "Access":"protect",
-                    "type":"void",
+                    "Access":"protected",
+                    "type":"Void",
                     "Abstract":"false",
                     "Static":"false",
                     "args":[

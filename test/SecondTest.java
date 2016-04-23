@@ -307,8 +307,8 @@ public class SecondTest {
         jdMet ctCall = new jdMet();
         ctCall.setName("call");
         ctCall.setAbstract(false);
-        ctCall.setAccess("protect");
-        ctCall.setRt("void");
+        ctCall.setAccess("protected");
+        ctCall.setRt("Void");
         ctCall.setStatic(false);
         dm.addMet(ctCall, 1);
         
@@ -350,8 +350,8 @@ public class SecondTest {
         jdMet dtCall = new jdMet();
         dtCall.setName("call");
         dtCall.setAbstract(false);
-        dtCall.setAccess("protect");
-        dtCall.setRt("void");
+        dtCall.setAccess("protected");
+        dtCall.setRt("Void");
         dtCall.setStatic(false);
         dm.addMet(dtCall, 2);
         
