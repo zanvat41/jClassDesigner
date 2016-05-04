@@ -347,6 +347,30 @@ public class PoseEditController {
         }
     }
 
+    public void handlePhotoRequest() throws IOException {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(new File(PATH_WORK));
+        fc.setTitle("Choose Directory to Save Photo");
+        fc.getExtensionFilters().addAll(
+	new FileChooser.ExtensionFilter(props.getProperty(WORK_FILE_EXT_DESC), props.getProperty(WORK_FILE_EXT)));
+
+	File selectedFile = fc.showSaveDialog(app.getGUI().getWindow());
+        if (selectedFile != null) {
+            BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+            Pane canvas = (Pane) SP.getContent();
+            SnapshotParameters parameters = new SnapshotParameters();
+            WritableImage wi = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+            WritableImage snapshot = canvas.snapshot(new SnapshotParameters(), wi);
+            String path = selectedFile.getPath();
+            path += ".png";
+            File output = new File(path);
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+        }
+    }
+    
+    
     /*private void saveCode(File selectedFile) throws FileNotFoundException {
         int paneNumber = dataManager.getPanes().size();
         PrintWriter pw = new PrintWriter(selectedFile.getPath());

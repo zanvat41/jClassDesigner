@@ -321,6 +321,11 @@ public class Workspace extends AppWorkspaceComponent {
             }
         });
         
+        gui.photoButton.setOnAction(e -> {
+            poseEditController.handlePhotoRequest();
+        });
+        
+        
         
         nameArea.textProperty().addListener(e -> {
             // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
