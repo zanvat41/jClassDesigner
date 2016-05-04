@@ -204,21 +204,39 @@ public class PoseEditController {
                 public void handle(MouseEvent mouseEvent) {
                     bX = mouseEvent.getX();
                     bY = mouseEvent.getY();
-                    drawClassPane(bX, bY);
+                    drawPane(bX, bY, false);
+                }
+            }); 
+        }
+    }
+    
+        public void handleAddInterfaceRequest() {
+        if(enabled) {                
+            BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+            Pane canvas = (Pane) SP.getContent();
+            
+            // THEN DRAW
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    bX = mouseEvent.getX();
+                    bY = mouseEvent.getY();
+                    drawPane(bX, bY, true);
                 }
             }); 
         }
     }
 
-    private void drawClassPane(double X, double Y) {
+    private void drawPane(double X, double Y, boolean isIF) {
         // MARK THE FILE AS EDITED
         AppFileController afc = new AppFileController(app);
         afc.markAsEdited(app.getGUI());
         VBox vb = new VBox();
         FlowPane namePane = new FlowPane();
         namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
-        namePane.setMinSize(150, 50);
-        namePane.setPrefSize(150, 50);
+        namePane.setMinSize(100, 50);
+        namePane.setPrefSize(100, 50);
         //namePane.setMaxSize(150, 50);
         vb.getChildren().add(namePane);
         FlowPane varPane = new FlowPane();
@@ -242,6 +260,12 @@ public class PoseEditController {
         lastItem = selectedItem;
         selected = true;
         dataManager.setSelected(selectedItem);
+        if(isIF) {
+            //System.out.println(dataManager.getPanes().indexOf(selectedItem));
+            dataManager.editName1("{interface}");
+            Workspace ws = (Workspace) app.getWorkspaceComponent();
+            ws.reloadNameText("{interface}");
+        }
         dataManager.setID(dataManager.getPanes().indexOf(selectedItem), true);
     }
     

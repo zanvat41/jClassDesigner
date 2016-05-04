@@ -307,6 +307,10 @@ public class Workspace extends AppWorkspaceComponent {
             poseEditController.handleAddClassRequest();
         });
         
+        gui.addInterfaceButton.setOnAction(e -> {
+            poseEditController.handleAddInterfaceRequest();
+        });
+        
         gui.selectButton.setOnAction(e -> {
             poseEditController.handleSelectRequest();
         });
@@ -322,7 +326,13 @@ public class Workspace extends AppWorkspaceComponent {
         });
         
         gui.photoButton.setOnAction(e -> {
-            poseEditController.handlePhotoRequest();
+            try {
+                poseEditController.handlePhotoRequest();
+            } catch (IOException ex) {
+                PropertiesManager props = PropertiesManager.getPropertiesManager();
+		AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+		dialog.show("ERROR", "Save photo error");
+            }
         });
         
         
@@ -472,6 +482,8 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
 	DataManager dataManager = (DataManager)app.getDataComponent();
+        reloadNameText("");
+        reloadPackageText("");
 	/*if (dataManager.isInState(PoseMakerState.STARTING_RECTANGLE)) {
 	    selectionToolButton.setDisable(false);
 	    removeButton.setDisable(true);

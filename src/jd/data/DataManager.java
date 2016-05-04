@@ -217,6 +217,16 @@ public class DataManager implements AppDataComponent {
         }
     }
 
+    public void editName1(String name) {
+        int index = panes.indexOf(selectedItem);
+        names.set(index, name);
+        VBox selectedPane = (VBox) selectedItem;
+        FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+        Text nameText = new Text(names.get(index));
+        namePane.getChildren().clear();
+        namePane.getChildren().add(nameText);
+    }
+    
     private void initialName(String name) {
         names.add(name);
     }
