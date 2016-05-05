@@ -191,6 +191,7 @@ public class DataManager implements AppDataComponent {
             ws = (Workspace) app.getWorkspaceComponent();
             ws.reloadNameText("");
             ws.reloadPackageText("");
+            ws.uncheckParentChoice();
         }
     }
     
@@ -200,6 +201,7 @@ public class DataManager implements AppDataComponent {
     
     public void editName(String name) {
         int index = panes.indexOf(selectedItem);
+        String oldName = names.get(index);
         boolean existed = false;
         for(int i = 0; i < names.size(); i ++) {
             if(names.get(i).equals(name) && packages.get(i).equals(packages.get(index))) {
@@ -214,10 +216,12 @@ public class DataManager implements AppDataComponent {
             Text nameText = new Text(names.get(index));
             namePane.getChildren().clear();
             namePane.getChildren().add(nameText);
-        }
-        
+            ws.removeParentChoice(oldName);
+            ws.addParentChoice(name);
+        }        
     }
-
+    
+    // For adding interfaces only (Shows "{interface}" on the boxes)
     public void editName1(String name) {
         int index = panes.indexOf(selectedItem);
         names.set(index, name);
@@ -241,14 +245,6 @@ public class DataManager implements AppDataComponent {
     public ArrayList<String> getNames() {
         return names;
     }
-
-    /*public ArrayList<ArrayList<String>> getParents() {
-        return parents;
-    }*/
-    
-    /*public ArrayList<String> getIpms() {
-        return ipms;
-    }*/
     
     public ArrayList<Boolean> getID() {
         return inDesign;
@@ -291,6 +287,14 @@ public class DataManager implements AppDataComponent {
         parents.get(i).add(p);
     }
     
+    public void removeParent(String p, int i) {
+        for(int j = 0; j < parents.get(i).size(); j++) {
+            if(parents.get(i).get(j).equals(p)) {
+                parents.get(i).remove(j);
+                j = parents.get(i).size() + 1;
+            }
+        }
+    }
     
     public boolean getID(int i) {
         return inDesign.get(i);
@@ -346,6 +350,11 @@ public class DataManager implements AppDataComponent {
         ws = (Workspace) app.getWorkspaceComponent();
         ws.reloadNameText(names.get(i));
         ws.reloadPackageText(packages.get(i));
+        ws.uncheckParentChoice();
+        ArrayList<String> prts = getParents(i);
+        for(int j = 0; j < prts.size(); j++) {
+            ws.checkParentChoice(prts.get(j));
+        }
     }
     
     public boolean isTest() {

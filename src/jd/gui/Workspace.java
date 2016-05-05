@@ -341,80 +341,6 @@ public class Workspace extends AppWorkspaceComponent {
         
     }
 
-
-    /*private void setupHandlers() {
-	// MAKE THE EDIT CONTROLLER
-	poseEditController = new PoseEditController(app);
-	
-	// NOW CONNECT THE BUTTONS TO THEIR HANDLERS
-	selectionToolButton.setOnAction(e->{
-	    poseEditController.processSelectSelectionTool();
-	});
-	removeButton.setOnAction(e->{
-	    poseEditController.processRemoveSelectedShape();
-	});
-	rectButton.setOnAction(e->{
-	    poseEditController.processSelectRectangleToDraw();
-	});
-	ellipseButton.setOnAction(e->{
-	    poseEditController.processSelectEllipseToDraw();
-	});
-	
-	moveToBackButton.setOnAction(e->{
-	    poseEditController.processMoveSelectedShapeToBack();
-	});
-	moveToFrontButton.setOnAction(e->{
-	    poseEditController.processMoveSelectedShapeToFront();
-	});
-
-	backgroundColorPicker.setOnAction(e->{
-	    poseEditController.processSelectBackgroundColor();
-	});
-	fillColorPicker.setOnAction(e->{ 
-	    poseEditController.processSelectFillColor();
-	});
-	outlineColorPicker.setOnAction(e->{
-	    poseEditController.processSelectOutlineColor();
-	});
-	outlineThicknessSlider.valueProperty().addListener(e-> {
-	    poseEditController.processSelectOutlineThickness();
-	});
-	snapshotButton.setOnAction(e->{
-	    poseEditController.processSnapshot();
-	});
-	
-	// MAKE THE CANVAS CONTROLLER	
-	canvasController = new CanvasController(app);
-	canvas.setOnMousePressed(e->{
-	    canvasController.processCanvasMousePress((int)e.getX(), (int)e.getY());
-	});
-	canvas.setOnMouseReleased(e->{
-	    canvasController.processCanvasMouseRelease((int)e.getX(), (int)e.getY());
-	});
-	canvas.setOnMouseDragged(e->{
-	    canvasController.processCanvasMouseDragged((int)e.getX(), (int)e.getY());
-	});
-	canvas.setOnMouseExited(e->{
-	    canvasController.processCanvasMouseExited((int)e.getX(), (int)e.getY());
-	});
-	canvas.setOnMouseMoved(e->{
-	    canvasController.processCanvasMouseMoved((int)e.getX(), (int)e.getY());
-	});
-    }
-    
-    public Pane getCanvas() {
-	return canvas;
-    }
-    
-    public void setImage(ButtonBase button, String fileName) {
-	// LOAD THE ICON FROM THE PROVIDED FILE
-        String imagePath = FILE_PROTOCOL + PATH_IMAGES + fileName;
-        Image buttonImage = new Image(imagePath);
-	
-	// SET THE IMAGE IN THE BUTTON
-        button.setGraphic(new ImageView(buttonImage));	
-    }*/
-
     /**
      * This function specifies the CSS style classes for all the UI components
      * known at the time the workspace is initially constructed. Note that the
@@ -464,48 +390,15 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
 	DataManager dataManager = (DataManager)app.getDataComponent();
-        reloadNameText("");
-        reloadPackageText("");
-        parentChoice = new MenuButton("Parent Choices");
-	/*if (dataManager.isInState(PoseMakerState.STARTING_RECTANGLE)) {
-	    selectionToolButton.setDisable(false);
-	    removeButton.setDisable(true);
-	    rectButton.setDisable(true);
-	    ellipseButton.setDisable(false);
-	}
-	else if (dataManager.isInState(PoseMakerState.STARTING_ELLIPSE)) {
-	    selectionToolButton.setDisable(false);
-	    removeButton.setDisable(true);
-	    rectButton.setDisable(false);
-	    ellipseButton.setDisable(true);
-	}
-	else if (dataManager.isInState(PoseMakerState.SELECTING_SHAPE) 
-		|| dataManager.isInState(PoseMakerState.DRAGGING_SHAPE)
-		|| dataManager.isInState(PoseMakerState.DRAGGING_NOTHING)) {
-	    boolean shapeIsNotSelected = dataManager.getSelectedShape() == null;
-	    selectionToolButton.setDisable(true);
-	    removeButton.setDisable(shapeIsNotSelected);
-	    rectButton.setDisable(false);
-	    ellipseButton.setDisable(false);
-	    moveToFrontButton.setDisable(shapeIsNotSelected);
-	    moveToBackButton.setDisable(shapeIsNotSelected);
-	}
-	
-	removeButton.setDisable(dataManager.getSelectedShape() == null);
-	backgroundColorPicker.setValue(dataManager.getBackgroundColor());*/
+        if(dataManager.getPanes().isEmpty()){
+            reloadNameText("");
+            reloadPackageText("");
+            //System.out.println(dataManager.getPanes().size());
+            parentChoice.getItems().clear();
+            //System.out.println(dataManager.getPanes().size());
+        }
     }
     
-    /*public void loadSelectedShapeSettings(Shape shape) {
-	if (shape != null) {
-	    Color fillColor = (Color)shape.getFill();
-	    Color strokeColor = (Color)shape.getStroke();
-	    double lineThickness = shape.getStrokeWidth();
-	    fillColorPicker.setValue(fillColor);
-	    outlineColorPicker.setValue(strokeColor);
-	    outlineThicknessSlider.setValue(lineThickness);	    
-	}
-    }*/
-
     public Pane getCanvas() {
 	return canvas;
     }
@@ -519,6 +412,37 @@ public class Workspace extends AppWorkspaceComponent {
     }
     
     public void addParentChoice(String pc) {
-        parentChoice.getItems().add(new CheckMenuItem(pc));
+        CheckMenuItem newPC = new CheckMenuItem(pc);
+        newPC.setOnAction(e -> {
+            poseEditController.handleParentChoice(newPC);
+        });
+        if(!pc.replace("{interface}", "").isEmpty())
+            parentChoice.getItems().add(newPC);
+    }
+    
+    public void removeParentChoice(String pc) {
+        for(int i = 0; i < parentChoice.getItems().size(); i++) {
+            if(parentChoice.getItems().get(i).getText().equals(pc)) {
+                parentChoice.getItems().remove(i);
+                i = parentChoice.getItems().size() + 1;
+            }
+        }        
+    }
+    
+    public void uncheckParentChoice() {
+        for(int i = 0; i < parentChoice.getItems().size(); i++) {
+            CheckMenuItem cmi = (CheckMenuItem) parentChoice.getItems().get(i);
+            cmi.setSelected(false);
+        } 
+    }
+
+    public void checkParentChoice(String s) {
+        for(int i = 0; i < parentChoice.getItems().size(); i++) {
+            CheckMenuItem cmi = (CheckMenuItem) parentChoice.getItems().get(i);
+            if(cmi.getText().equals(s)) {
+                cmi.setSelected(true);
+                i = parentChoice.getItems().size();
+            }
+        }     
     }
 }

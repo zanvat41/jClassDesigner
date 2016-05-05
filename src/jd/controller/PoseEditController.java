@@ -12,6 +12,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
@@ -403,5 +404,16 @@ public class PoseEditController {
             fm.saveCode(dataManager, selectedFile.getPath());
         }
     }*/
+
+    public void handleParentChoice(CheckMenuItem pc) {
+        if (selectedItem != null) {
+            int i = dataManager.getPanes().indexOf(selectedItem);
+            if(pc.isSelected()) {
+                dataManager.addParent(pc.getText(), i);
+            } else{
+                dataManager.removeParent(pc.getText(), i);
+            }
+        }
+    }
     
 }
