@@ -1,55 +1,35 @@
 package jd.gui;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Arrays;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import static jd.PropertyType.ADD_ELEMENT_ERROR_MESSAGE;
-import static jd.PropertyType.ELLIPSE_ICON;
-import static jd.PropertyType.ELLIPSE_TOOLTIP;
-import static jd.PropertyType.MOVE_TO_BACK_ICON;
-import static jd.PropertyType.MOVE_TO_BACK_TOOLTIP;
-import static jd.PropertyType.MOVE_TO_FRONT_ICON;
-import static jd.PropertyType.MOVE_TO_FRONT_TOOLTIP;
-import static jd.PropertyType.RECTANGLE_ICON;
-import static jd.PropertyType.RECTANGLE_TOOLTIP;
-import static jd.PropertyType.REMOVE_ICON;
-import static jd.PropertyType.REMOVE_TOOLTIP;
-import static jd.PropertyType.SELECTION_TOOL_ICON;
-import static jd.PropertyType.SELECTION_TOOL_TOOLTIP;
-import static jd.PropertyType.SNAPSHOT_ICON;
-import static jd.PropertyType.SNAPSHOT_TOOLTIP;
 import jd.controller.PoseEditController;
 import jd.data.DataManager;
-import static jd.data.DataManager.BLACK_HEX;
-import static jd.data.DataManager.WHITE_HEX;
 import saf.ui.AppYesNoCancelDialogSingleton;
 import saf.ui.AppMessageDialogSingleton;
 import properties_manager.PropertiesManager;
 import saf.ui.AppGUI;
 import saf.AppTemplate;
 import saf.components.AppWorkspaceComponent;
-import static saf.settings.AppStartupConstants.FILE_PROTOCOL;
-import static saf.settings.AppStartupConstants.PATH_IMAGES;
+
 
 /**
  * This class serves as the workspace component for this application, providing
@@ -103,7 +83,7 @@ public class Workspace extends AppWorkspaceComponent {
     Label backgroundColorLabel;
     ColorPicker backgroundColorPicker;
     Label parentLabel;
-    ChoiceBox parentChoice;
+    MenuButton parentChoice;
 
     // FORTH ROW
     HBox row4Box;
@@ -209,8 +189,10 @@ public class Workspace extends AppWorkspaceComponent {
 	row3Box = new HBox();
         parentLabel = new Label("Parent:                ");
         row3Box.getChildren().add(parentLabel);
-        parentChoice = new ChoiceBox();
+        parentChoice = new MenuButton("Parent Choices");
+        // parentChoice.getItems().add(new CheckMenuItem("DOTA"));
         row3Box.getChildren().add(parentChoice);
+        
         
 
 	// ROW 4
@@ -484,6 +466,7 @@ public class Workspace extends AppWorkspaceComponent {
 	DataManager dataManager = (DataManager)app.getDataComponent();
         reloadNameText("");
         reloadPackageText("");
+        parentChoice = new MenuButton("Parent Choices");
 	/*if (dataManager.isInState(PoseMakerState.STARTING_RECTANGLE)) {
 	    selectionToolButton.setDisable(false);
 	    removeButton.setDisable(true);
@@ -533,5 +516,9 @@ public class Workspace extends AppWorkspaceComponent {
 
     public void reloadPackageText(String pname) {
         packageArea.setText(pname);
+    }
+    
+    public void addParentChoice(String pc) {
+        parentChoice.getItems().add(new CheckMenuItem(pc));
     }
 }

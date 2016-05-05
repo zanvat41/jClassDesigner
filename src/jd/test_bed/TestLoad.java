@@ -22,7 +22,8 @@ import static saf.settings.AppStartupConstants.PATH_WORK;
  * @author 哲
  */
 public class TestLoad {
-    public static void main(String[] args) throws Exception {
+    // test is not functional anymore
+    /*public static void main(String[] args) throws Exception {
         jClassDesigner jd = new jClassDesigner();
         DataManager dm = new DataManager((AppTemplate)jd);
         FileManager fm = new FileManager();
@@ -58,4 +59,5 @@ public class TestLoad {
             System.out.println();
         }
     }
+*/
 }

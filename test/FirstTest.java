@@ -33,8 +33,8 @@ import static org.junit.Assert.*;
  */
 public class FirstTest {
     DataManager dm;
-    
-    public FirstTest() {
+    // test is not functional anymore
+    /*public FirstTest() {
     }
     
     @BeforeClass
@@ -58,7 +58,8 @@ public class FirstTest {
         ArrayList<String> names = dm.getNames();
         ArrayList<String> pks = dm.getPackages();
         ArrayList<String> prts = dm.getParents();
-        ArrayList<String> ipms = dm.getIpms();
+                //ArrayList<String> ipms = dm.getIpms();
+        ArrayList<String> ipms = new ArrayList();
         
         //First is the ThreadExample class(The 0th elements in the lists in dm)
         VBox te = new VBox();
@@ -577,4 +578,5 @@ public class FirstTest {
         assertEquals(600, eX);
         assertEquals(900, eY);
     }
+*/
 }

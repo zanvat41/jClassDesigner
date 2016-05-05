@@ -43,10 +43,10 @@ public class DataManager implements AppDataComponent {
     ArrayList<String> packages;
     
     // THE PARENTS
-    ArrayList<String> parents;
+    ArrayList<ArrayList<String>> parents;
     
     // THE INTERFACES THAT THE CLASS IMPLEMENT
-    ArrayList<String> ipms;
+    //ArrayList<String> ipms;
     
     // THE AGGREGATES
     ArrayList<ArrayList<String>> aggs;
@@ -109,7 +109,7 @@ public class DataManager implements AppDataComponent {
         names = new ArrayList();
         packages = new ArrayList();
         parents = new ArrayList();
-        ipms = new ArrayList();
+        //ipms = new ArrayList();
         aggs = new ArrayList();
         uses = new ArrayList();
         vars = new ArrayList();
@@ -153,7 +153,7 @@ public class DataManager implements AppDataComponent {
         names.clear();
         packages.clear();
         parents.clear();
-        ipms.clear();
+        //ipms.clear();
         aggs.clear();
         uses.clear();
         vars.clear();
@@ -173,9 +173,9 @@ public class DataManager implements AppDataComponent {
         panes.add(vb);
         initialName("");
         initialPackage("");
-        initialParent("");
         initialIMP("");
         inDesign.add(Boolean.FALSE);
+        parents.add(new ArrayList());
         aggs.add(new ArrayList());
         uses.add(new ArrayList());
         mets.add(new ArrayList());
@@ -215,6 +215,7 @@ public class DataManager implements AppDataComponent {
             namePane.getChildren().clear();
             namePane.getChildren().add(nameText);
         }
+        
     }
 
     public void editName1(String name) {
@@ -231,12 +232,9 @@ public class DataManager implements AppDataComponent {
         names.add(name);
     }
     
-    private void initialParent(String parent) {
-        parents.add(parent);
-    }
     
     private void initialIMP(String ipm) {
-        ipms.add(ipm);
+        //ipms.add(ipm);
     }
     
     
@@ -244,13 +242,13 @@ public class DataManager implements AppDataComponent {
         return names;
     }
 
-    public ArrayList<String> getParents() {
+    /*public ArrayList<ArrayList<String>> getParents() {
         return parents;
-    }
+    }*/
     
-    public ArrayList<String> getIpms() {
+    /*public ArrayList<String> getIpms() {
         return ipms;
-    }
+    }*/
     
     public ArrayList<Boolean> getID() {
         return inDesign;
@@ -285,13 +283,14 @@ public class DataManager implements AppDataComponent {
     public String getName(int i) {
         return names.get(i);
     }
-    public String getParent(int i) {
+    public ArrayList<String> getParents(int i) {
         return parents.get(i);
     }
     
-    public String getIpm(int i) {
-        return ipms.get(i);
+    public void addParent(String p, int i) {
+        parents.get(i).add(p);
     }
+    
     
     public boolean getID(int i) {
         return inDesign.get(i);

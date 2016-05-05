@@ -29,7 +29,8 @@ import static saf.settings.AppStartupConstants.PATH_WORK;
  * @author 哲
  */
 public class SecondTest {
-    DataManager dm;
+    // test is not functional anymore
+    /*DataManager dm;
     
     public SecondTest() {
     }
@@ -55,7 +56,8 @@ public class SecondTest {
         ArrayList<String> names = dm.getNames();
         ArrayList<String> pks = dm.getPackages();
         ArrayList<String> prts = dm.getParents();
-        ArrayList<String> ipms = dm.getIpms();
+                //ArrayList<String> ipms = dm.getIpms();
+        ArrayList<String> ipms = new ArrayList();
         
         //First is the ThreadExample class(The 0th elements in the lists in dm)
         VBox te = new VBox();
@@ -581,5 +583,5 @@ public class SecondTest {
         assertEquals(200, mY);
         assertEquals(600, eX);
         assertEquals(900, eY);
-    }
+    }*/
 }

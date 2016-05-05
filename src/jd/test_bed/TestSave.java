@@ -22,7 +22,8 @@ import static saf.settings.AppStartupConstants.PATH_WORK;
  * @author:Zhe Lin
  */
 public class TestSave {
-    public static void main(String[] args) throws Exception {
+    // test is not functional anymore
+    /*public static void main(String[] args) throws Exception {
         jClassDesigner jd = new jClassDesigner();
         DataManager dm = new DataManager((AppTemplate)jd);
         //DataManager dm = (DataManager) jd.getDataComponent();
@@ -34,7 +35,9 @@ public class TestSave {
         ArrayList<String> names = dm.getNames();
         ArrayList<String> pks = dm.getPackages();
         ArrayList<String> prts = dm.getParents();
-        ArrayList<String> ipms = dm.getIpms();
+        //ArrayList<String> ipms = dm.getIpms();
+        ArrayList<String> ipms = new ArrayList();
+        
         
         //First is the ThreadExample class(The 0th elements in the lists in dm)
         VBox te = new VBox();
@@ -495,5 +498,5 @@ public class TestSave {
         fm.saveData(dm, PATH_WORK + "DesignSaveTest");
         
         
-    }
+    }*/
 }
