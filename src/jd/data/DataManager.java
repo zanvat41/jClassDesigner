@@ -213,6 +213,7 @@ public class DataManager implements AppDataComponent {
             names.set(index, name);
             VBox selectedPane = (VBox) selectedItem;
             FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+            //VBox namePane = (VBox) selectedPane.getChildren().get(0);
             Text nameText = new Text(names.get(index));
             namePane.getChildren().clear();
             namePane.getChildren().add(nameText);
@@ -242,6 +243,7 @@ public class DataManager implements AppDataComponent {
         names.set(index, name);
         VBox selectedPane = (VBox) selectedItem;
         FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+        //VBox namePane = (VBox) selectedPane.getChildren().get(0);
         Text nameText = new Text(names.get(index));
         namePane.getChildren().clear();
         namePane.getChildren().add(nameText);

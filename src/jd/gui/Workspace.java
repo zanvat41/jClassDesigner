@@ -1,19 +1,14 @@
 package jd.gui;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -23,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import jd.controller.PoseEditController;
 import jd.data.DataManager;
+import jd.jdVar;
 import saf.ui.AppYesNoCancelDialogSingleton;
 import saf.ui.AppMessageDialogSingleton;
 import properties_manager.PropertiesManager;
@@ -47,8 +43,6 @@ public class Workspace extends AppWorkspaceComponent {
     static final String CLASS_BUTTON = "button";
     static final String CLASS_EDIT_TOOLBAR = "edit_toolbar";
     static final String CLASS_EDIT_TOOLBAR_ROW = "edit_toolbar_row";
-    static final String CLASS_COLOR_CHOOSER_PANE = "color_chooser_pane";
-    static final String CLASS_COLOR_CHOOSER_CONTROL = "color_chooser_control";
     static final String EMPTY_TEXT = "";
     static final int BUTTON_TAG_WIDTH = 75;
 
@@ -80,25 +74,24 @@ public class Workspace extends AppWorkspaceComponent {
 
     // THIRD ROW
     HBox row3Box;
-    Label backgroundColorLabel;
-    ColorPicker backgroundColorPicker;
     Label parentLabel;
     MenuButton parentChoice;
 
     // FORTH ROW
     HBox row4Box;
-    Label fillColorLabel;
-    ColorPicker fillColorPicker;
     Label varLabel;
     Button addVar;
     Button delVar;
     
     // FIFTH ROW
     VBox row5Box;
-    Label outlineColorLabel;
-    ColorPicker outlineColorPicker;
-    GridPane varGrid;
-        
+    // GridPane varGrid;
+    TableView<jdVar> varTable;  
+    TableColumn nameColumn1;
+    TableColumn typeColumn1;
+    TableColumn staticColumn1;
+    TableColumn accessColumn1;
+    
     // SIXTH ROW
     HBox row6Box;
     Label outlineThicknessLabel;
@@ -149,23 +142,9 @@ public class Workspace extends AppWorkspaceComponent {
 	//setupHandlers();
     }
     
-    public ColorPicker getFillColorPicker() {
-	return fillColorPicker;
-    }
-    
-    public ColorPicker getOutlineColorPicker() {
-	return outlineColorPicker;
-    }
-    
-    public ColorPicker getBackgroundColorPicker() {
-	return backgroundColorPicker;
-    }
-    
-    public Slider getOutlineThicknessSlider() {
-	return outlineThicknessSlider;
-    }
-    
     private void layoutGUI() {
+        DataManager data = (DataManager)app.getDataComponent();
+        
 	// THIS WILL GO IN THE LEFT SIDE OF THE WORKSPACE
 	editToolbar = new VBox();
 	
@@ -206,7 +185,7 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// ROW 5
 	row5Box = new VBox();
-        varGrid = new GridPane();
+        /*varGrid = new GridPane();
         varGrid.setGridLinesVisible(true);
         varGrid.setHgap(10);
         varGrid.setVgap(10);
@@ -218,7 +197,20 @@ public class Workspace extends AppWorkspaceComponent {
         varGrid.add(typeText, 1, 0);
         varGrid.add(staticText, 2, 0);
         varGrid.add(accessText, 3, 0);
-        row5Box.getChildren().add(varGrid);
+        row5Box.getChildren().add(varGrid);*/
+        varTable = new TableView();
+        nameColumn1 = new TableColumn("Name");
+        typeColumn1 = new TableColumn("Type");
+        staticColumn1 = new TableColumn("Static");
+        accessColumn1 = new TableColumn("Access");
+        
+        
+        varTable.getColumns().add(nameColumn1);
+        varTable.getColumns().add(typeColumn1);
+        varTable.getColumns().add(staticColumn1);
+        varTable.getColumns().add(accessColumn1);
+        //varTable.setItems(data.getVars(BUTTON_TAG_WIDTH););
+        row5Box.getChildren().add(varTable);
 	
 	// ROW 6
 	row6Box = new HBox();
@@ -274,7 +266,7 @@ public class Workspace extends AppWorkspaceComponent {
 	debugText.setY(100);
 	
 	// AND MAKE SURE THE DATA MANAGER IS IN SYNCH WITH THE PANE
-	DataManager data = (DataManager)app.getDataComponent();
+	//DataManager data = (DataManager)app.getDataComponent();
 	data.setPanes(canvas.getChildren());
 
 	// AND NOW SETUP THE WORKSPACE
@@ -353,33 +345,24 @@ public class Workspace extends AppWorkspaceComponent {
 	// A STYLE CLASS SPECIFIED IN THIS APPLICATION'S
 	// CSS FILE
 	canvas.getStyleClass().add(CLASS_RENDER_CANVAS);
-	
-	// COLOR PICKER STYLE
-	//fillColorPicker.getStyleClass().add(CLASS_BUTTON);
-	//outlineColorPicker.getStyleClass().add(CLASS_BUTTON);
-	//backgroundColorPicker.getStyleClass().add(CLASS_BUTTON);
-	
+		
 	editToolbar.getStyleClass().add(CLASS_EDIT_TOOLBAR);
 	row1Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         nameLabel.getStyleClass().add(CLASS_HEADING_LABEL);
 	row2Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         packageLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
 	row3Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
-	//backgroundColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
         parentLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
 	
 	row4Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         varLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         addVar.getStyleClass().add(CLASS_FILE_BUTTON);
         delVar.getStyleClass().add(CLASS_FILE_BUTTON);
-	//fillColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
 	row5Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
-	//outlineColorLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
 	row6Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         metLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         addMet.getStyleClass().add(CLASS_FILE_BUTTON);
         delMet.getStyleClass().add(CLASS_FILE_BUTTON);
-	//outlineThicknessLabel.getStyleClass().add(CLASS_COLOR_CHOOSER_CONTROL);
 	row7Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
     }
 
