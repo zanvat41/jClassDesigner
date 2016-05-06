@@ -231,7 +231,7 @@ public class PoseEditController {
 
     private void drawPane(double X, double Y, boolean isIF) {
         // MARK THE FILE AS EDITED
-        AppFileController afc = new AppFileController(app);
+        AppFileController afc = app.getGUI().getAFC();
         afc.markAsEdited(app.getGUI());
         VBox vb = new VBox();
         FlowPane namePane = new FlowPane();
@@ -273,7 +273,8 @@ public class PoseEditController {
     public void handleSelectRequest() {
         if(enabled) {
             // MARK THE FILE AS EDITED
-            AppFileController afc = new AppFileController(app);
+            AppFileController afc = app.getGUI().getAFC();
+            afc.markAsEdited(app.getGUI());
             
             BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
             ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
@@ -301,8 +302,6 @@ public class PoseEditController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     if (selected) {
-                        // Mark as edited
-                        afc.markAsEdited(app.getGUI());
                         double offsetX = mouseEvent.getSceneX() - scX;
                         double offsetY = mouseEvent.getSceneY() - scY;
                         double newTranslateX = bX2 + offsetX;
@@ -352,8 +351,13 @@ public class PoseEditController {
         //workspace.refreshButtons(selected);
     }
 
-    public void handleNameUpdate(VBox selectedPane, String name) {
-        dataManager.editName(name);
+    public void handleNameUpdate(String name) {
+        // MARK THE FILE AS EDITED
+        AppFileController afc = app.getGUI().getAFC();
+        afc.markAsEdited(app.getGUI());
+        int i = dataManager.getPanes().indexOf(selectedItem);
+        if(i > -1 && i < dataManager.getNames().size() && !dataManager.getName(i).equals(name))
+            dataManager.editName(name);
     }
 
     public void handlePackageUpdate(VBox selectedPane, String text) {
@@ -407,6 +411,9 @@ public class PoseEditController {
 
     public void handleParentChoice(CheckMenuItem pc) {
         if (selectedItem != null) {
+            // MARK THE FILE AS EDITED
+            AppFileController afc = app.getGUI().getAFC();
+            afc.markAsEdited(app.getGUI());
             int i = dataManager.getPanes().indexOf(selectedItem);
             if(pc.isSelected()) {
                 dataManager.addParent(pc.getText(), i);

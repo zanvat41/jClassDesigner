@@ -218,8 +218,23 @@ public class DataManager implements AppDataComponent {
             namePane.getChildren().add(nameText);
             ws.removeParentChoice(oldName);
             ws.addParentChoice(name);
+            updateParents(oldName, name);
         }        
     }
+    
+    // UPDATES THE PARENT NAMES WHILE A CLASS'S NAME IS BEING EDITED
+    private void updateParents(String oldName, String newName) {
+        for(int i = 0; i < parents.size(); i++) {
+            ArrayList<String> prt = parents.get(i);
+            for(int j = 0; j < prt.size(); j++) {
+                if(prt.get(j).equals(oldName)) {
+                    prt.remove(j);
+                    prt.add(newName);
+                    j = prt.size() + 1;
+                }
+            }
+        }
+    } 
     
     // For adding interfaces only (Shows "{interface}" on the boxes)
     public void editName1(String name) {

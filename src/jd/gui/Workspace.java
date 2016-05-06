@@ -321,10 +321,10 @@ public class Workspace extends AppWorkspaceComponent {
         
         nameArea.textProperty().addListener(e -> {
             // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
-            VBox selectedPane = null;
+            //VBox selectedPane = null;
             if(VBox.class.isInstance(data.getSelected())) {
-                selectedPane = (VBox) data.getSelected();
-                poseEditController.handleNameUpdate(selectedPane, nameArea.getText());
+                //selectedPane = (VBox) data.getSelected();
+                poseEditController.handleNameUpdate(nameArea.getText());
             }
             //poseEditController.handleNameUpdate(, attributeName, attributeTextField.getText());
 	});
