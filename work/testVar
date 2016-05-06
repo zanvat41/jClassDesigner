@@ -5,14 +5,11 @@
             "name":"aaa",
             "package":"",
             "parent":[
-                {
-                    "name":"bbb"
-                }
             ],
             "inDesign":true,
-            "x":797.0,
-            "y":177.0,
-            "tx":-1.0,
+            "x":734.0,
+            "y":158.0,
+            "tx":0.0,
             "ty":0.0,
             "aggregates":[
             ],
@@ -21,18 +18,30 @@
             "lines":[
             ],
             "vars":[
+                {
+                    "name":"asd",
+                    "Access":"public",
+                    "type":"ff",
+                    "Static":"true"
+                },
+                {
+                    "name":"dsa",
+                    "Access":"protected",
+                    "type":"aaa",
+                    "Static":"false"
+                }
             ],
             "methods":[
             ]
         },
         {
-            "name":"bbb",
+            "name":"sss",
             "package":"",
             "parent":[
             ],
             "inDesign":false,
-            "x":1096.0,
-            "y":398.0,
+            "x":1040.0,
+            "y":397.0,
             "tx":0.0,
             "ty":0.0,
             "aggregates":[

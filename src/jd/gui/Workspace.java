@@ -137,7 +137,7 @@ public class Workspace extends AppWorkspaceComponent {
 	gui = app.getGUI();
         
         // KEEP THE CONTROLLER FOR LATER
-        poseEditController = new PoseEditController(app);
+        poseEditController = new PoseEditController(app, app.getGUI().getStage());
         
 	layoutGUI();
 	//setupHandlers();
@@ -336,6 +336,10 @@ public class Workspace extends AppWorkspaceComponent {
             }
             //poseEditController.handleNameUpdate(, attributeName, attributeTextField.getText());
 	});
+        
+        addVar.setOnAction(e -> {
+            poseEditController.handleAddVarRequest();
+        });
         
     }
 

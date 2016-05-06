@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -29,10 +30,13 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import jd.data.DataManager;
 import jd.file.FileManager;
 import jd.gui.Workspace;
+import jd.gui.varDialog;
+import jd.jdVar;
 import properties_manager.PropertiesManager;
 import saf.AppTemplate;
 import saf.controller.AppFileController;
@@ -71,7 +75,9 @@ public class PoseEditController {
     
     private Effect highlightedEffect;
     
-    public PoseEditController(AppTemplate initApp) {
+    varDialog vid;
+    
+    public PoseEditController(AppTemplate initApp, Stage psg) {
 	app = initApp;
 	dataManager = (DataManager)app.getDataComponent();
         
@@ -84,6 +90,8 @@ public class PoseEditController {
 	dropShadowEffect.setBlurType(BlurType.GAUSSIAN);
 	dropShadowEffect.setRadius(15);
 	highlightedEffect = dropShadowEffect;
+        
+        vid = new varDialog(psg);
     }
     
     /*public void processSelectSelectionTool() {
@@ -473,4 +481,33 @@ public class PoseEditController {
         }
     }
 
+    public void handleAddVarRequest() {
+        DataManager dm = (DataManager) app.getDataComponent();
+        int index = dm.getPanes().indexOf(selectedItem);
+        if(index > -1 && index < dm.getPanes().size()){
+            ArrayList<jdVar> list = dm.getVars(index);
+            vid.showAddVarDialog();
+
+            // DID THE USER CONFIRM?
+            if (vid.wasCompleteSelected()) {
+                // GET THE VARIABLE
+                jdVar var = vid.getVar();
+
+                // AND ADD IT AS A ROW TO THE LIST
+                list.add(var);
+
+                // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+                // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+                // THE SAVE BUTTON IS ENABLED
+                AppFileController afc = app.getGUI().getAFC();
+                afc.markAsEdited(app.getGUI());
+
+            }
+            else {
+                // THE USER MUST HAVE PRESSED CANCEL, SO
+                // WE DO NOTHING
+            }
+        }
+    }
+    
 }
