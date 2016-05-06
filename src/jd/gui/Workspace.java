@@ -76,6 +76,7 @@ public class Workspace extends AppWorkspaceComponent {
     HBox row3Box;
     Label parentLabel;
     MenuButton parentChoice;
+    Button external;
 
     // FORTH ROW
     HBox row4Box;
@@ -166,11 +167,13 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// ROW 3
 	row3Box = new HBox();
-        parentLabel = new Label("Parent:                ");
+        parentLabel = new Label("Parent:        ");
         row3Box.getChildren().add(parentLabel);
         parentChoice = new MenuButton("Parent Choices");
+        external = new Button("+External Parent");
         // parentChoice.getItems().add(new CheckMenuItem("DOTA"));
         row3Box.getChildren().add(parentChoice);
+        row3Box.getChildren().add(external);
         
         
 
@@ -310,6 +313,9 @@ public class Workspace extends AppWorkspaceComponent {
         });
         
         
+        external.setOnAction(e -> {
+            poseEditController.handleAddEClassRequest();
+        });
         
         nameArea.textProperty().addListener(e -> {
             // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
@@ -353,6 +359,7 @@ public class Workspace extends AppWorkspaceComponent {
         packageLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
 	row3Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         parentLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
+        external.getStyleClass().add(CLASS_FILE_BUTTON);
 	
 	row4Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         varLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);

@@ -229,6 +229,62 @@ public class PoseEditController {
         }
     }
 
+    public void handleAddEClassRequest() {
+        if(enabled) {                
+            BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+            ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+            Pane canvas = (Pane) SP.getContent();
+            
+            // THEN DRAW
+            canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    bX = mouseEvent.getX();
+                    bY = mouseEvent.getY();
+                    drawEPane(bX, bY, false);
+                }
+            }); 
+        }
+    }    
+        
+    private void drawEPane(double X, double Y, boolean isIF) {
+        // MARK THE FILE AS EDITED
+        AppFileController afc = app.getGUI().getAFC();
+        afc.markAsEdited(app.getGUI());
+        VBox vb = new VBox();
+        vb.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        vb.setPrefSize(100, 50);
+        FlowPane namePane = new FlowPane();
+        Text external = new Text("[EXTERNAL]");
+        vb.getChildren().add(namePane);
+        VBox varPane = new VBox();
+        vb.getChildren().add(varPane);
+        VBox metPane = new VBox();
+        vb.getChildren().add(metPane);
+        VBox exPane = new VBox();
+        exPane.getChildren().add(external);
+        vb.getChildren().add(exPane);
+        vb.setLayoutX(X);
+        vb.setLayoutY(Y);
+        dataManager.addClassPane(vb);
+        selectedItem = vb;
+        if(selected){
+            // Disselect the previous selected item
+            lastItem.setEffect(null);
+        }
+        selectedItem.setEffect(highlightedEffect);
+        lastItem = selectedItem;
+        selected = true;
+        dataManager.setSelected(selectedItem);
+        if(isIF) {
+            dataManager.editName1("{interface}");
+            Workspace ws = (Workspace) app.getWorkspaceComponent();
+            ws.reloadNameText("{interface}");
+        }
+        dataManager.setID(dataManager.getPanes().indexOf(selectedItem), false);
+    }    
+        
+        
     private void drawPane(double X, double Y, boolean isIF) {
         // MARK THE FILE AS EDITED
         AppFileController afc = app.getGUI().getAFC();
@@ -416,5 +472,5 @@ public class PoseEditController {
             }
         }
     }
-    
+
 }

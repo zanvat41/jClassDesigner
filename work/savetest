@@ -1,0 +1,26 @@
+
+{
+    "panes":[
+        {
+            "name":"abc",
+            "package":"",
+            "parent":[
+            ],
+            "inDesign":true,
+            "x":673.0,
+            "y":140.0,
+            "tx":0.0,
+            "ty":0.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        }
+    ]
+}
