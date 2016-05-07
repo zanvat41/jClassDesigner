@@ -344,7 +344,75 @@ public class DataManager implements AppDataComponent {
     
     public void addVar(jdVar v, int i) {
         vars.get(i).add(v);
+
+        // Then shows in the ui
+        VBox selectedPane = (VBox) selectedItem;
+        VBox varPane = (VBox) selectedPane.getChildren().get(1);
+        //VBox namePane = (VBox) selectedPane.getChildren().get(0);
+        String varInfo = "";
+        // First the access
+        if(v.getAccess().equals("public")) {
+            varInfo += "+";
+        } else if(v.getAccess().equals("protected")) {
+            varInfo += "#";
+        } else if(v.getAccess().equals("private")) {
+            varInfo += "-";
+        }
+        // Then the Static
+        if(v.getStatic()) 
+            varInfo += "$";
+        //Then the name
+        varInfo += v.getName();
+        // Then the type
+        if(!v.getType().isEmpty()) {
+            varInfo += " : ";
+            varInfo += v.getType();
+        }
+                
+        Text varText = new Text(varInfo);
+        varPane.getChildren().add(varText);  
     }
+    
+    // i is the index of the class, j is the index of the variable
+    public void changeVar(jdVar v, int i, int j) {
+        // Change the info in the ui
+        VBox selectedPane = (VBox) selectedItem;
+        VBox varPane = (VBox) selectedPane.getChildren().get(1);
+        String varInfo = "";
+        // First the access
+        if(v.getAccess().equals("public")) {
+            varInfo += "+";
+        } else if(v.getAccess().equals("protected")) {
+            varInfo += "#";
+        } else if(v.getAccess().equals("private")) {
+            varInfo += "-";
+        }
+        // Then the Static
+        if(v.getStatic()) 
+            varInfo += "$";
+        //Then the name
+        varInfo += v.getName();
+        // Then the type
+        if(!v.getType().isEmpty()) {
+            varInfo += " : ";
+            varInfo += v.getType();
+        }
+                
+        Text varText = new Text(varInfo);
+        varPane.getChildren().set(j, varText);
+        
+        
+        vars.get(i).set(j, v);
+    }
+    
+    public void delVar(jdVar v, int i) {
+        int index = vars.get(i).indexOf(v);
+        vars.get(i).remove(v);
+        VBox selectedPane = (VBox) selectedItem;
+        VBox varPane = (VBox) selectedPane.getChildren().get(1);
+        varPane.getChildren().remove(index);
+    }
+    
     
     public void addMet(jdMet m, int i) {
         mets.get(i).add(m);

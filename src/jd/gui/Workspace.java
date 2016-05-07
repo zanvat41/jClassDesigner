@@ -471,7 +471,6 @@ public class Workspace extends AppWorkspaceComponent {
         );
         for(jdVar var : vars) {
             varList.add(var);
-            System.out.println(var.getName());
         }
         varTable.setItems(varList);
     }

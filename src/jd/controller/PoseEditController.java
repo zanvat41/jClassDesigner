@@ -265,12 +265,16 @@ public class PoseEditController {
         vb.setPrefSize(100, 50);
         FlowPane namePane = new FlowPane();
         Text external = new Text("[EXTERNAL]");
+        namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(namePane);
         VBox varPane = new VBox();
+        varPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(varPane);
         VBox metPane = new VBox();
+        metPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(metPane);
         VBox exPane = new VBox();
+        exPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         exPane.getChildren().add(external);
         vb.getChildren().add(exPane);
         vb.setLayoutX(X);
@@ -302,10 +306,13 @@ public class PoseEditController {
         vb.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.setPrefSize(100, 50);
         FlowPane namePane = new FlowPane();
+        namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(namePane);
         VBox varPane = new VBox();
+        varPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(varPane);
         VBox metPane = new VBox();
+        metPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(metPane);
         vb.setLayoutX(X);
         vb.setLayoutY(Y);
@@ -486,7 +493,7 @@ public class PoseEditController {
         DataManager dm = (DataManager) app.getDataComponent();
         int index = dm.getPanes().indexOf(selectedItem);
         if(index > -1 && index < dm.getPanes().size()){
-            ArrayList<jdVar> list = dm.getVars(index);
+            //ArrayList<jdVar> list = dm.getVars(index);
             vid.showAddVarDialog();
 
             // DID THE USER CONFIRM?
@@ -495,7 +502,8 @@ public class PoseEditController {
                 jdVar var = vid.getVar();
 
                 // AND ADD IT AS A ROW TO THE LIST
-                list.add(var);
+                //list.add(var);
+                dm.addVar(var, index);
 
                 // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
                 // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
@@ -525,7 +533,8 @@ public class PoseEditController {
                 int i = list.indexOf(itemToEdit);
                 // UPDATE THE SCHEDULE ITEM
                 jdVar var = vid.getVar();
-                list.set(i, var);
+                //list.set(i, var);
+                dm.changeVar(var, index, i);
                 
                 // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
                 // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
@@ -554,7 +563,8 @@ public class PoseEditController {
         
         // IF THE USER SAID YES, THEN REMOVE IT
         if (selection.equals(AppYesNoCancelDialogSingleton.YES) && index > -1 && index < dm.getPanes().size()) { 
-            dm.getVars(index).remove(itemToRemove);
+            //dm.getVars(index).remove(itemToRemove);
+            dm.delVar(itemToRemove, index);
             
             // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
             // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
