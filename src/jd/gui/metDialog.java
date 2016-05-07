@@ -59,6 +59,8 @@ public class metDialog  extends Stage {
     // THIS IS FOR KEEPING TRACK OF WHICH BUTTON THE USER PRESSED
     String selection;
     
+    int argSize;
+    
     // CONSTANTS FOR OUR UI
     public static final String COMPLETE = "Complete";
     public static final String CANCEL = "Cancel";
@@ -81,6 +83,7 @@ public class metDialog  extends Stage {
         // FOR IT WHEN IT IS DISPLAYED
         initModality(Modality.WINDOW_MODAL);
         initOwner(primaryStage);
+        this.argSize = argSize;
         
         // FIRST OUR CONTAINER
         gridPane = new GridPane();
@@ -146,8 +149,18 @@ public class metDialog  extends Stage {
         argLabels = new ArrayList();
         argTFs = new ArrayList();
         for(int i = 0; i < argSize; i++) {
-        
-        
+            String lb = "Arg";
+            int lbi = i + 1;
+            lb += lbi;
+            final int theI = i;
+            Label argLabel = new Label(lb);
+            argLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
+            TextField argTF = new TextField();
+            argTF.textProperty().addListener((observable, oldValue, newValue) -> {
+                met.setArg(newValue, theI);
+            });   
+            argLabels.add(argLabel);
+            argTFs.add(argTF);
         }
         
         
@@ -178,7 +191,13 @@ public class metDialog  extends Stage {
         gridPane.add(abstractBox, 1, 5, 1, 1);
         gridPane.add(accessLabel, 0, 6, 1, 1);
         gridPane.add(accBox, 1, 6, 1, 1);
-
+        for(int i = 0; i < argSize; i++) {
+            //System.out.println(argSize);
+            gridPane.add(argLabels.get(i), 0, i + 7, 1, 1);
+            gridPane.add(argTFs.get(i), 1, i + 7, 1, 1);
+        }
+        
+        
         // AND PUT THE GRID PANE IN THE WINDOW
         dialogScene = new Scene(gridPane);
         //dialogScene.getStylesheets().add(PRIMARY_STYLE_SHEET);
@@ -219,6 +238,9 @@ public class metDialog  extends Stage {
         staticBox.setSelected(met.getStatic());
         accBox.setPromptText(met.getAccess());
         accBox.setValue(met.getAccess());
+        for(int i = 0; i < met.getArgs().size(); i++) {
+            argTFs.get(i).setText((String) met.getArgs().get(i));
+        }
         
         // AND OPEN IT UP
         this.showAndWait();
@@ -234,7 +256,9 @@ public class metDialog  extends Stage {
         abstractBox.setSelected(met.getAbstract());
         accBox.setPromptText(met.getAccess());
         accBox.setValue(met.getAccess());
-        
+        for(int i = 0; i < met.getArgs().size() && i < argTFs.size(); i++) {
+            argTFs.get(i).setText((String) met.getArgs().get(i));
+        }
     }
     
     public boolean wasCompleteSelected() {
@@ -247,14 +271,16 @@ public class metDialog  extends Stage {
         // SET THE DIALOG TITLE
         setTitle(EDIT_MET_TITLE);
         
-        // LOAD THE MET INTO OUR LOCAL OBJECT
-        met = new jdMet();
-        met.setName(itemToEdit.getName());
-        met.setType(itemToEdit.getType());
-        met.setStatic(itemToEdit.getStatic());
-        met.setAbstract(itemToEdit.getAbstract());
-        met.setAccess(itemToEdit.getAccess());
-        
+        if(itemToEdit != null) {
+            // LOAD THE MET INTO OUR LOCAL OBJECT
+            met = new jdMet();
+            met.setName(itemToEdit.getName());
+            met.setType(itemToEdit.getType());
+            met.setStatic(itemToEdit.getStatic());
+            met.setAbstract(itemToEdit.getAbstract());
+            met.setAccess(itemToEdit.getAccess());
+            met.setArgs(itemToEdit.getArgs());
+        }
         // AND THEN INTO OUR GUI
         loadGUIData();
                

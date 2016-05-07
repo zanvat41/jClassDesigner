@@ -71,9 +71,15 @@ public class jdMet {
         return args;
     }
     
+    public void setArgs(ArrayList<String> list) {
+        args = list;
+    }
+    
     public void addArg(String value) {
         args.add(value);
     }
+    
+    
     
     public void removeArg(String value) {
         args.remove(value);
@@ -85,5 +91,18 @@ public class jdMet {
         if(i > -1 && i < args.size())
             arg.set(args.get(i));
         return arg;
+    }
+
+    public void setArg(String newValue, int i) {
+        if(i > -1 && i < args.size()) {
+            args.set(i, newValue);
+        }
+        else {
+            for(int j = 0; j <= i; j++) {
+                args.add("");
+            }
+            args.set(i, newValue);
+        }
+            
     }
 }

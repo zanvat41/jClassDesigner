@@ -343,6 +343,10 @@ public class DataManager implements AppDataComponent {
         return uses.get(i);
     }
     
+    public void addVar1(jdVar v, int i) {
+        vars.get(i).add(v);
+    }
+    
     public void addVar(jdVar v, int i) {
         vars.get(i).add(v);
 
@@ -415,6 +419,10 @@ public class DataManager implements AppDataComponent {
     }
     
     
+    public void addMet1(jdMet m, int i) {
+        mets.get(i).add(m);
+    }
+    
     public void addMet(jdMet m, int i) {
         mets.get(i).add(m);
         
@@ -439,14 +447,21 @@ public class DataManager implements AppDataComponent {
         //Then the arguments
         metInfo += "(";
         for(int j = 0; j < m.getArgs().size(); j++) {
-            metInfo += "arg";
-            int argNum = j+1;
-            metInfo += argNum;
-            metInfo += " : ";
-            metInfo += m.getArgs().get(j);
-            if(j != m.getArgs().size() - 1)
-                metInfo += ", ";
+            String argName = (String) m.getArgs().get(j);
+            if(!argName.isEmpty()) {
+                metInfo += "arg";
+                int argNum = j+1;
+                metInfo += argNum;
+                metInfo += " : ";
+                metInfo += argName;
+                if(j != m.getArgs().size() - 1)
+                    metInfo += ", ";
+            }
         }
+        if(metInfo.endsWith(", ")) {
+            metInfo = metInfo.substring(0, metInfo.length() - 2);
+        }
+        
         metInfo += ")";
         
         // Then the type
@@ -485,14 +500,21 @@ public class DataManager implements AppDataComponent {
         //Then the arguments
         metInfo += "(";
         for(int k = 0; k < m.getArgs().size(); k++) {
-            metInfo += "arg";
-            int argNum = k+1;
-            metInfo += argNum;
-            metInfo += " : ";
-            metInfo += m.getArgs().get(k);
-            if(k != m.getArgs().size() - 1)
-                metInfo += ", ";
+            String argName = (String) m.getArgs().get(k);
+            if(!argName.isEmpty()) {
+                metInfo += "arg";
+                int argNum = k+1;
+                metInfo += argNum;
+                metInfo += " : ";
+                metInfo += argName;
+                if(k != m.getArgs().size() - 1)
+                    metInfo += ", ";
+            }
         }
+        if(metInfo.endsWith(", ")) {
+            metInfo = metInfo.substring(0, metInfo.length() - 2);
+        }
+        
         metInfo += ")";
         
         // Then the type

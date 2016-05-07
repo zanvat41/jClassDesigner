@@ -25,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import jd.controller.PoseEditController;
 import jd.data.DataManager;
+import jd.file.FileManager;
 import jd.jdMet;
 import jd.jdVar;
 import saf.ui.AppYesNoCancelDialogSingleton;
@@ -133,6 +134,8 @@ public class Workspace extends AppWorkspaceComponent {
     
     // FOR DISPLAYING DEBUG STUFF
     Text debugText;
+    
+    int argSize;
 
     /**
      * Constructor for initializing the workspace, note that this constructor
@@ -149,9 +152,11 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// KEEP THE GUI FOR LATER
 	gui = app.getGUI();
-        
+                
         // KEEP THE CONTROLLER FOR LATER
         poseEditController = new PoseEditController(app, app.getGUI().getStage());
+        
+        argSize = 0;
         
 	layoutGUI();
 	//setupHandlers();
@@ -445,6 +450,7 @@ public class Workspace extends AppWorkspaceComponent {
     @Override
     public void reloadWorkspace() {
 	DataManager dataManager = (DataManager)app.getDataComponent();
+        FileManager fileManager = (FileManager) app.getFileComponent();
         if(dataManager.getPanes().isEmpty()){
             reloadNameText("");
             reloadPackageText("");
@@ -452,7 +458,9 @@ public class Workspace extends AppWorkspaceComponent {
             parentChoice.getItems().clear();
             //System.out.println(dataManager.getPanes().size());
             setVarTable(new ArrayList());
+            setMetTable(new ArrayList());
         }
+        resetArgCol(fileManager.getArgSize());
     }
     
     public Pane getCanvas() {
@@ -523,6 +531,7 @@ public class Workspace extends AppWorkspaceComponent {
     }
     
     private void handleAddArg() {
+        argSize ++;
         String argName = "Arg";
         int size = argColumn2.size() + 1;
         argName += size;
@@ -541,5 +550,13 @@ public class Workspace extends AppWorkspaceComponent {
     public int getArgSize() {
         return argColumn2.size();
     }
+    
+    private void resetArgCol(int i) {
+        int remain = i - argSize;
+        for(int j = 0; j < remain; j++) {
+            handleAddArg();
+        }
+    }
+    
     
 }

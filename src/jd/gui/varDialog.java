@@ -220,13 +220,14 @@ public class varDialog  extends Stage {
         // SET THE DIALOG TITLE
         setTitle(EDIT_VAR_TITLE);
         
-        // LOAD THE VAR INTO OUR LOCAL OBJECT
-        var = new jdVar();
-        var.setName(itemToEdit.getName());
-        var.setType(itemToEdit.getType());
-        var.setStatic(itemToEdit.getStatic());
-        var.setAccess(itemToEdit.getAccess());
-        
+        if(itemToEdit != null) {
+            // LOAD THE VAR INTO OUR LOCAL OBJECT
+            var = new jdVar();
+            var.setName(itemToEdit.getName());
+            var.setType(itemToEdit.getType());
+            var.setStatic(itemToEdit.getStatic());
+            var.setAccess(itemToEdit.getAccess());
+        }
         // AND THEN INTO OUR GUI
         loadGUIData();
                

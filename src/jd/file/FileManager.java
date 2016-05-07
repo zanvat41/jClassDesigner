@@ -24,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -76,6 +77,7 @@ public class FileManager implements AppFileComponent {
     static final String DEFAULT_DOCTYPE_DECLARATION = "<!doctype html>\n";
     static final String DEFAULT_ATTRIBUTE_VALUE = "";
     
+    int argSize;
  
     /**
      * This method is for saving user work, which in the case of this
@@ -270,7 +272,8 @@ public class FileManager implements AppFileComponent {
     private JsonArray buildArgArray(ArrayList<String> args) {
         JsonArrayBuilder jab = Json.createArrayBuilder();
         for (String a : args) {
-           jab.add(a);
+            if(!a.isEmpty())
+                jab.add(a);
         }
         JsonArray jA = jab.build();
         return jA;
@@ -295,7 +298,8 @@ public class FileManager implements AppFileComponent {
 	// CLEAR THE OLD DATA OUT
 	DataManager dataManager = (DataManager)data;
 	dataManager.reset();
-	
+	argSize = 0;
+        
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
 	
@@ -312,20 +316,24 @@ public class FileManager implements AppFileComponent {
     
     private VBox loadPane(JsonObject jsonPane) {
         VBox vb = new VBox();
+        vb.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        vb.setPrefSize(100, 50);
         FlowPane namePane = new FlowPane();
+        Text external = new Text("[EXTERNAL]");
         namePane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
-        namePane.setMinSize(150, 50);
-        namePane.setPrefSize(150, 50);
-        //namePane.setMaxSize(150, 50);
         vb.getChildren().add(namePane);
-        FlowPane varPane = new FlowPane();
-        //varPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
-        //varPane.setMinSize(150, 50);
+        VBox varPane = new VBox();
+        varPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(varPane);
-        FlowPane metPane = new FlowPane();
-        //metPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
-        //metPane.setMinSize(150, 50);
+        VBox metPane = new VBox();
+        metPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.getChildren().add(metPane);
+        VBox exPane = new VBox();
+        exPane.setStyle("-fx-border-color: Black; -fx-background-color: White;");
+        exPane.getChildren().add(external);
+        if(!jsonPane.getBoolean(JSON_ID))
+            vb.getChildren().add(exPane);
+        
         vb.setLayoutX(getDataAsDouble(jsonPane, JSON_X));
         vb.setLayoutY(getDataAsDouble(jsonPane, JSON_Y));
         vb.setTranslateX(getDataAsDouble(jsonPane, JSON_TX));
@@ -396,9 +404,7 @@ public class FileManager implements AppFileComponent {
             dm.addLine(newLine, i);
         }
         
-        
-        
-        
+  
         // Then the variables
         JsonArray jsonVarArray = json.getJsonArray(JSON_VAR);
         for(int j = 0; j < jsonVarArray.size(); j++) {
@@ -445,9 +451,14 @@ public class FileManager implements AppFileComponent {
                 newMet.addArg(argName);
                 //System.out.println(argName);
             }
-            
+            if(jsonArgArray.size() > argSize)
+                argSize = jsonArgArray.size();
             dm.addMet(newMet, i);
         }  
+    }
+    
+    public int getArgSize() {
+        return argSize;
     }
 
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
