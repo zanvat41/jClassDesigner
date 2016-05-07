@@ -35,7 +35,9 @@ import javax.imageio.ImageIO;
 import jd.data.DataManager;
 import jd.file.FileManager;
 import jd.gui.Workspace;
+import jd.gui.metDialog;
 import jd.gui.varDialog;
+import jd.jdMet;
 import jd.jdVar;
 import properties_manager.PropertiesManager;
 import saf.AppTemplate;
@@ -77,6 +79,9 @@ public class PoseEditController {
     private Effect highlightedEffect;
     
     varDialog vid;
+    metDialog md;
+    
+    Stage psg;
     
     public PoseEditController(AppTemplate initApp, Stage psg) {
 	app = initApp;
@@ -91,8 +96,10 @@ public class PoseEditController {
 	dropShadowEffect.setBlurType(BlurType.GAUSSIAN);
 	dropShadowEffect.setRadius(15);
 	highlightedEffect = dropShadowEffect;
+        this.psg = psg;
         
         vid = new varDialog(psg);
+        //md = new metDialog(psg);
     }
     
     /*public void processSelectSelectionTool() {
@@ -565,6 +572,94 @@ public class PoseEditController {
         if (selection.equals(AppYesNoCancelDialogSingleton.YES) && index > -1 && index < dm.getPanes().size()) { 
             //dm.getVars(index).remove(itemToRemove);
             dm.delVar(itemToRemove, index);
+            
+            // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+            // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+            // THE SAVE BUTTON IS ENABLED
+            AppFileController afc = app.getGUI().getAFC();
+            afc.markAsEdited(app.getGUI());
+            dm.setSelected(selectedItem);
+        }
+    }
+    
+    public void handleAddMetRequest(Workspace ws) {
+        DataManager dm = (DataManager) app.getDataComponent();
+        md = new metDialog(this.psg, ws.getArgSize());
+        int index = dm.getPanes().indexOf(selectedItem);
+        if(index > -1 && index < dm.getPanes().size()){
+            //ArrayList<jdVar> list = dm.getVars(index);
+            md.showAddMetDialog();
+
+            // DID THE USER CONFIRM?
+            if (md.wasCompleteSelected()) {
+                // GET THE VARIABLE
+                jdMet met = md.getMet();
+
+                // AND ADD IT AS A ROW TO THE LIST
+                //list.add(var);
+                dm.addMet(met, index);
+
+                // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+                // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+                // THE SAVE BUTTON IS ENABLED
+                AppFileController afc = app.getGUI().getAFC();
+                afc.markAsEdited(app.getGUI());
+                dm.setSelected(selectedItem);
+
+            }
+            else {
+                // THE USER MUST HAVE PRESSED CANCEL, SO
+                // WE DO NOTHING
+            }
+        }
+    }
+
+    public void handleEditMetRequest(jdMet itemToEdit, Workspace ws) {
+        DataManager dm = (DataManager) app.getDataComponent();
+        md = new metDialog(this.psg, ws.getArgSize());
+        int index = dm.getPanes().indexOf(selectedItem);
+        if(index > -1 && index < dm.getPanes().size()){
+            ArrayList<jdMet> list = dm.getMets(index);
+            md.showEditMetDialog(itemToEdit);
+            
+                    
+            // DID THE USER CONFIRM?
+            if (md.wasCompleteSelected()) {
+                int i = list.indexOf(itemToEdit);
+                // UPDATE THE SCHEDULE ITEM
+                jdMet met = md.getMet();
+                //list.set(i, var);
+                dm.changeMet(met, index, i);
+                
+                // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+                // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+                // THE SAVE BUTTON IS ENABLED
+                AppFileController afc = app.getGUI().getAFC();
+                afc.markAsEdited(app.getGUI());
+                dm.setSelected(selectedItem);
+            }
+            else {
+                // THE USER MUST HAVE PRESSED CANCEL, SO
+                // WE DO NOTHING
+            } 
+        }
+    }
+
+    public void handleRemoveMetRequest(Workspace ws, jdMet itemToRemove) {
+        // PROMPT THE USER TO SAVE UNSAVED WORK
+        AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
+        yesNoDialog.show("Remove Method", "Are you sure to remove this method?");
+        
+        // AND NOW GET THE USER'S SELECTION
+        String selection = yesNoDialog.getSelection();
+
+        DataManager dm = (DataManager) app.getDataComponent();
+        int index = dm.getPanes().indexOf(selectedItem);
+        
+        // IF THE USER SAID YES, THEN REMOVE IT
+        if (selection.equals(AppYesNoCancelDialogSingleton.YES) && index > -1 && index < dm.getPanes().size()) { 
+            //dm.getVars(index).remove(itemToRemove);
+            dm.delMet(itemToRemove, index);
             
             // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
             // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE

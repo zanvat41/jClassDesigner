@@ -4,6 +4,7 @@
 package jd;
 
 import java.util.ArrayList;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -13,7 +14,7 @@ public class jdMet {
     boolean isStatic;
     boolean isAbstract;
     String name;
-    String rt;
+    String type;
     String access;
     ArrayList<String> args;
     
@@ -21,7 +22,7 @@ public class jdMet {
         isStatic = false;
         isAbstract = false;
         name = "";
-        rt = "";
+        type = "";
         access = "";
         args = new ArrayList<String>();    
     }
@@ -58,12 +59,12 @@ public class jdMet {
         access = value;
     }
     
-    public String getRT() {
-        return rt;
+    public String getType() {
+        return type;
     }
     
-    public void setRt(String value) {
-        rt = value;
+    public void setType(String value) {
+        type = value;
     }
     
     public ArrayList getArgs() {
@@ -76,5 +77,13 @@ public class jdMet {
     
     public void removeArg(String value) {
         args.remove(value);
+    }
+    
+    
+    public SimpleStringProperty getArgPro(int i) {
+        SimpleStringProperty arg = new SimpleStringProperty();
+        if(i > -1 && i < args.size())
+            arg.set(args.get(i));
+        return arg;
     }
 }

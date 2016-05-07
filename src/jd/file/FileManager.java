@@ -236,7 +236,7 @@ public class FileManager implements AppFileComponent {
 	    jdMet met = mets.get(i);
             String name = met.getName();
             String access = met.getAccess();
-            String rt = met.getRT();
+            String rt = met.getType();
             
             boolean isStatic = met.getStatic();
             String st;
@@ -429,7 +429,7 @@ public class FileManager implements AppFileComponent {
             String metAbstract = jsonMet.getString(JSON_ABSTRACT);
             jdMet newMet = new jdMet();
             newMet.setName(metName);
-            newMet.setRt(metType);
+            newMet.setType(metType);
             newMet.setAccess(metAccess);
             if(metStatic.equals("true"))
                 newMet.setStatic(true);
@@ -593,7 +593,7 @@ public class FileManager implements AppFileComponent {
                         boolean ab = met.getAbstract();
                         String acc = met.getAccess();
                         String metName = met.getName();
-                        String rt = met.getRT();
+                        String rt = met.getType();
                         ArrayList<String> args = met.getArgs();
                         pw.print("    " + acc + " ");
                         if(st)

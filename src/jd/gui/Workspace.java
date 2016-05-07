@@ -2,6 +2,7 @@ package jd.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,8 +22,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import jd.controller.PoseEditController;
 import jd.data.DataManager;
+import jd.jdMet;
 import jd.jdVar;
 import saf.ui.AppYesNoCancelDialogSingleton;
 import saf.ui.AppMessageDialogSingleton;
@@ -99,16 +103,22 @@ public class Workspace extends AppWorkspaceComponent {
     
     // SIXTH ROW
     HBox row6Box;
-    Label outlineThicknessLabel;
-    Slider outlineThicknessSlider;
     Label metLabel;
     Button addMet;
     Button delMet;
+    Button addArgCol;
     
     // SEVENTH ROW
     HBox row7Box;
-    Button snapshotButton;
-    GridPane metGrid;
+    //GridPane metGrid;
+    ScrollPane metSP;
+    TableView<jdMet> metTable;  
+    TableColumn nameColumn2;
+    TableColumn typeColumn2;
+    TableColumn staticColumn2;
+    TableColumn abstractColumn2;
+    TableColumn accessColumn2;
+    ArrayList<TableColumn> argColumn2;
     
     // THIS IS WHERE WE'LL RENDER OUR DRAWING
     ScrollPane SP;
@@ -192,19 +202,6 @@ public class Workspace extends AppWorkspaceComponent {
 	
 	// ROW 5
 	row5Box = new VBox();
-        /*varGrid = new GridPane();
-        varGrid.setGridLinesVisible(true);
-        varGrid.setHgap(10);
-        varGrid.setVgap(10);
-        Text nameText = new Text("Name");
-        Text typeText = new Text("Type");
-        Text staticText = new Text("Static");
-        Text accessText = new Text("Access");
-        varGrid.add(nameText, 0, 0);
-        varGrid.add(typeText, 1, 0);
-        varGrid.add(staticText, 2, 0);
-        varGrid.add(accessText, 3, 0);
-        row5Box.getChildren().add(varGrid);*/
         varTable = new TableView();
         nameColumn1 = new TableColumn("Name");
         typeColumn1 = new TableColumn("Type");
@@ -234,29 +231,48 @@ public class Workspace extends AppWorkspaceComponent {
         row6Box.getChildren().add(metLabel);
         addMet = new Button("+");
         delMet = new Button("-");
+        addArgCol = new Button("+Arg Column");
         row6Box.getChildren().add(addMet);
         row6Box.getChildren().add(delMet);
+        row6Box.getChildren().add(addArgCol);
 	
 	// ROW 7
 	row7Box = new HBox();
 	//snapshotButton = gui.initChildButton(row7Box, SNAPSHOT_ICON.toString(), SNAPSHOT_TOOLTIP.toString(), false);
-        metGrid = new GridPane();
-        metGrid.setGridLinesVisible(true);
-        metGrid.setHgap(10);
-        metGrid.setVgap(10);
-        Text nameText1 = new Text("Name");
-        Text returnText1 = new Text("Return");
-        Text staticText1 = new Text("Static");
-        Text abstractText1 = new Text("Abstract");
-        Text accessText1 = new Text("Access");
-        Text argText1 = new Text("Arg1");
-        metGrid.add(nameText1, 0, 0);
-        metGrid.add(returnText1, 1, 0);
-        metGrid.add(staticText1, 2, 0);
-        metGrid.add(abstractText1, 3, 0);
-        metGrid.add(accessText1, 4, 0);
-        metGrid.add(argText1, 5, 0);
-        row7Box.getChildren().add(metGrid);
+        metSP = new ScrollPane();
+        metSP.setMaxSize(500, 800);
+        metTable = new TableView();
+        nameColumn2 = new TableColumn("Name");
+        typeColumn2 = new TableColumn("Return");
+        staticColumn2 = new TableColumn("Static");
+        abstractColumn2 = new TableColumn("Abstract");
+        accessColumn2 = new TableColumn("Access");
+        argColumn2 = new ArrayList();
+        //TableColumn arg = new TableColumn("Arg1");
+        //argColumn2.add(arg);
+        
+        metTable.getColumns().add(nameColumn2);
+        metTable.getColumns().add(typeColumn2);
+        metTable.getColumns().add(staticColumn2);
+        metTable.getColumns().add(abstractColumn2);
+        metTable.getColumns().add(accessColumn2);
+        //metTable.getColumns().add(arg);
+        
+        nameColumn2.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        typeColumn2.setCellValueFactory(
+                new PropertyValueFactory<>("type"));
+        staticColumn2.setCellValueFactory(
+                new PropertyValueFactory<>("static"));
+        abstractColumn2.setCellValueFactory(
+                new PropertyValueFactory<>("abstract"));
+        accessColumn2.setCellValueFactory(
+                new PropertyValueFactory<>("access"));
+        //arg.setCellFactory(value);
+        
+        
+        metSP.setContent(metTable);
+        row7Box.getChildren().add(metSP);
 	
 	// NOW ORGANIZE THE EDIT TOOLBAR
 	editToolbar.getChildren().add(row1Box);
@@ -365,6 +381,26 @@ public class Workspace extends AppWorkspaceComponent {
                 poseEditController.handleEditVarRequest(theVar, this);
             }
         });
+        
+        addArgCol.setOnAction(e -> {
+            handleAddArg();
+        });
+        
+        addMet.setOnAction(e -> {
+            poseEditController.handleAddMetRequest(this);
+        });
+        
+        delMet.setOnAction(e -> {
+            poseEditController.handleRemoveMetRequest(this, metTable.getSelectionModel().getSelectedItem());
+        });
+        
+        metTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                // OPEN UP THE SCHEDULE ITEM EDITOR
+                jdMet theMet = metTable.getSelectionModel().getSelectedItem();
+                poseEditController.handleEditMetRequest(theMet, this);
+            }
+        });
     }
 
     /**
@@ -393,6 +429,7 @@ public class Workspace extends AppWorkspaceComponent {
         varLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         addVar.getStyleClass().add(CLASS_FILE_BUTTON);
         delVar.getStyleClass().add(CLASS_FILE_BUTTON);
+        addArgCol.getStyleClass().add(CLASS_FILE_BUTTON);
 	row5Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
 	row6Box.getStyleClass().add(CLASS_EDIT_TOOLBAR_ROW);
         metLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
@@ -474,4 +511,35 @@ public class Workspace extends AppWorkspaceComponent {
         }
         varTable.setItems(varList);
     }
+
+    public void setMetTable(ArrayList<jdMet> mets) {
+        ObservableList<jdMet> metList =
+        FXCollections.observableArrayList(
+        );
+        for(jdMet met : mets) {
+            metList.add(met);
+        }
+        metTable.setItems(metList);
+    }
+    
+    private void handleAddArg() {
+        String argName = "Arg";
+        int size = argColumn2.size() + 1;
+        argName += size;
+        TableColumn arg = new TableColumn(argName);
+        argColumn2.add(arg);
+        metTable.getColumns().add(arg);
+        
+        arg.setCellValueFactory(new Callback<CellDataFeatures<jdMet, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(CellDataFeatures<jdMet, String> p) {
+            // p.getValue() returns the Person instance for a particular TableView row
+                return p.getValue().getArgPro(size - 1);
+            }
+        });
+    }
+    
+    public int getArgSize() {
+        return argColumn2.size();
+    }
+    
 }

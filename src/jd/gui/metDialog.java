@@ -1,5 +1,6 @@
 package jd.gui;
 
+import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,7 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jd.jdVar;
+import jd.jdMet;
 import static saf.components.AppStyleArbiter.CLASS_HEADING_LABEL;
 import static saf.components.AppStyleArbiter.CLASS_SUBHEADING_LABEL;
 
@@ -24,10 +25,10 @@ import static saf.components.AppStyleArbiter.CLASS_SUBHEADING_LABEL;
  *
  * @author Zhe Lin
  */
-public class varDialog  extends Stage {
+public class metDialog  extends Stage {
     // THIS IS THE OBJECT DATA BEHIND THIS UI
     //ScheduleItem scheduleItem;
-    jdVar var;
+    jdMet met;
     
     // GUI CONTROLS FOR OUR DIALOG
     GridPane gridPane;
@@ -42,9 +43,15 @@ public class varDialog  extends Stage {
     //Static
     Label staticLabel;
     CheckBox staticBox;
+    //Abstract
+    Label abstractLabel;
+    CheckBox abstractBox;
     //Access
     Label accessLabel;
     ComboBox accBox;
+    //Arguments
+    ArrayList<Label> argLabels;
+    ArrayList<TextField> argTFs;    
     //Buttons
     Button completeButton;
     Button cancelButton;
@@ -56,19 +63,20 @@ public class varDialog  extends Stage {
     public static final String COMPLETE = "Complete";
     public static final String CANCEL = "Cancel";
     public static final String NAME_PROMPT = "Name: ";
-    public static final String TYPE_PROMPT = "Type";
+    public static final String TYPE_PROMPT = "Return Type";
     public static final String STATIC_PROMPT = "Static";
+    public static final String ABSTRACT_PROMPT = "Abstract";
     public static final String ACCESS_PROMPT = "Access";
-    public static final String VAR_HEADING = "Variable Details";
-    public static final String ADD_VAR_TITLE = "Add New Variable";
-    public static final String EDIT_VAR_TITLE = "Edit Variable";
+    public static final String MET_HEADING = "Method Details";
+    public static final String ADD_MET_TITLE = "Add New Method";
+    public static final String EDIT_MET_TITLE = "Edit Method";
     /**
      * Initializes this dialog so that it can be used for either adding
      * new schedule items or editing existing ones.
      * 
      * @param primaryStage The owner of this modal dialog.
      */
-    public varDialog(Stage primaryStage) {       
+    public metDialog(Stage primaryStage, int argSize) {       
         // MAKE THIS DIALOG MODAL, MEANING OTHERS WILL WAIT
         // FOR IT WHEN IT IS DISPLAYED
         initModality(Modality.WINDOW_MODAL);
@@ -82,7 +90,7 @@ public class varDialog  extends Stage {
         
         // PUT THE HEADING IN THE GRID, NOTE THAT THE TEXT WILL DEPEND
         // ON WHETHER WE'RE ADDING OR EDITING
-        headingLabel = new Label(VAR_HEADING);
+        headingLabel = new Label(MET_HEADING);
         headingLabel.getStyleClass().add(CLASS_HEADING_LABEL);
     
         // NOW THE NAME 
@@ -90,15 +98,15 @@ public class varDialog  extends Stage {
         nameLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         nameTextField = new TextField();
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            var.setName(newValue);
+            met.setName(newValue);
         });
         
-        // AND THE Type
+        // AND THE TYPE
         typeLabel = new Label(TYPE_PROMPT);
         typeLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         typeTextField = new TextField();
         typeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            var.setType(newValue);
+            met.setType(newValue);
         });
         
         // AND THE STATIC
@@ -107,6 +115,14 @@ public class varDialog  extends Stage {
         staticBox = new CheckBox();
         staticBox.setOnAction(e -> {
             handleStaticChange();
+        });
+        
+        // AND THE ABSTRACT
+        abstractLabel = new Label(ABSTRACT_PROMPT);
+        abstractLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
+        abstractBox = new CheckBox();
+        abstractBox.setOnAction(e -> {
+            handleAbstractChange();
         });
         
         // AND THE ACCESS
@@ -122,9 +138,17 @@ public class varDialog  extends Stage {
         accBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override 
             public void changed(ObservableValue ov, String oldValue, String newValue) {                
-                var.setAccess(newValue);
+                met.setAccess(newValue);
             }    
         });
+        
+        // AND THE ARGUMENTS
+        argLabels = new ArrayList();
+        argTFs = new ArrayList();
+        for(int i = 0; i < argSize; i++) {
+        
+        
+        }
         
         
         // AND FINALLY, THE BUTTONS
@@ -134,24 +158,26 @@ public class varDialog  extends Stage {
         // REGISTER EVENT HANDLERS FOR OUR BUTTONS
         EventHandler completeCancelHandler = (EventHandler<ActionEvent>) (ActionEvent ae) -> {
             Button sourceButton = (Button)ae.getSource();
-            varDialog.this.selection = sourceButton.getText();
-            varDialog.this.hide();
+            metDialog.this.selection = sourceButton.getText();
+            metDialog.this.hide();
         };
         completeButton.setOnAction(completeCancelHandler);
         cancelButton.setOnAction(completeCancelHandler);
 
         // NOW LET'S ARRANGE THEM ALL AT ONCE
         gridPane.add(headingLabel, 0, 0, 2, 1);
-        gridPane.add(nameLabel, 0, 1, 1, 1);
-        gridPane.add(nameTextField, 1, 1, 1, 1);
-        gridPane.add(typeLabel, 0, 2, 1, 1);
-        gridPane.add(typeTextField, 1, 2, 1, 1);
-        gridPane.add(staticLabel, 0, 3, 1, 1);
-        gridPane.add(staticBox, 1, 3, 1, 1);
-        gridPane.add(accessLabel, 0, 4, 1, 1);
-        gridPane.add(accBox, 1, 4, 1, 1);
-        gridPane.add(completeButton, 0, 5, 1, 1);
-        gridPane.add(cancelButton, 1, 5, 1, 1);
+        gridPane.add(completeButton, 0, 1, 1, 1);
+        gridPane.add(cancelButton, 1, 1, 1, 1);
+        gridPane.add(nameLabel, 0, 2, 1, 1);
+        gridPane.add(nameTextField, 1, 2, 1, 1);
+        gridPane.add(typeLabel, 0, 3, 1, 1);
+        gridPane.add(typeTextField, 1, 3, 1, 1);
+        gridPane.add(staticLabel, 0, 4, 1, 1);
+        gridPane.add(staticBox, 1, 4, 1, 1);
+        gridPane.add(abstractLabel, 0, 5, 1, 1);
+        gridPane.add(abstractBox, 1, 5, 1, 1);
+        gridPane.add(accessLabel, 0, 6, 1, 1);
+        gridPane.add(accBox, 1, 6, 1, 1);
 
         // AND PUT THE GRID PANE IN THE WINDOW
         dialogScene = new Scene(gridPane);
@@ -170,8 +196,8 @@ public class varDialog  extends Stage {
         return selection;
     }
     
-    public jdVar getVar() { 
-        return var;
+    public jdMet getMet() { 
+        return met;
     }
     
     /**
@@ -180,33 +206,34 @@ public class varDialog  extends Stage {
      * 
      * @param message Message to appear inside the dialog.
      */
-    public jdVar showAddVarDialog() {
+    public jdMet showAddMetDialog() {
         // SET THE DIALOG TITLE
-        setTitle(ADD_VAR_TITLE);
+        setTitle(ADD_MET_TITLE);
         
-        // RESET THE SCHEDULE ITEM OBJECT WITH DEFAULT VALUES
-        var = new jdVar();
+        // RESET THE METHOD WITH DEFAULT VALUES
+        met = new jdMet();
         
         // LOAD THE UI STUFF
-        nameTextField.setText(var.getName());
-        typeTextField.setText(var.getType());
-        staticBox.setSelected(var.getStatic());
-        accBox.setPromptText(var.getAccess());
-        accBox.setValue(var.getAccess());
+        nameTextField.setText(met.getName());
+        typeTextField.setText(met.getType());
+        staticBox.setSelected(met.getStatic());
+        accBox.setPromptText(met.getAccess());
+        accBox.setValue(met.getAccess());
         
         // AND OPEN IT UP
         this.showAndWait();
         
-        return var;
+        return met;
     }
     
     public void loadGUIData() {
         // LOAD THE UI STUFF
-        nameTextField.setText(var.getName());
-        typeTextField.setText(var.getType());
-        staticBox.setSelected(var.getStatic());
-        accBox.setPromptText(var.getAccess());
-        accBox.setValue(var.getAccess());
+        nameTextField.setText(met.getName());
+        typeTextField.setText(met.getType());
+        staticBox.setSelected(met.getStatic());
+        abstractBox.setSelected(met.getAbstract());
+        accBox.setPromptText(met.getAccess());
+        accBox.setValue(met.getAccess());
         
     }
     
@@ -216,16 +243,17 @@ public class varDialog  extends Stage {
         return selection.equals(COMPLETE);
     }
     
-    public void showEditVarDialog(jdVar itemToEdit) {
+    public void showEditMetDialog(jdMet itemToEdit) {
         // SET THE DIALOG TITLE
-        setTitle(EDIT_VAR_TITLE);
+        setTitle(EDIT_MET_TITLE);
         
-        // LOAD THE VAR INTO OUR LOCAL OBJECT
-        var = new jdVar();
-        var.setName(itemToEdit.getName());
-        var.setType(itemToEdit.getType());
-        var.setStatic(itemToEdit.getStatic());
-        var.setAccess(itemToEdit.getAccess());
+        // LOAD THE MET INTO OUR LOCAL OBJECT
+        met = new jdMet();
+        met.setName(itemToEdit.getName());
+        met.setType(itemToEdit.getType());
+        met.setStatic(itemToEdit.getStatic());
+        met.setAbstract(itemToEdit.getAbstract());
+        met.setAccess(itemToEdit.getAccess());
         
         // AND THEN INTO OUR GUI
         loadGUIData();
@@ -235,7 +263,11 @@ public class varDialog  extends Stage {
     }
 
     private void handleStaticChange() {
-        var.setStatic(staticBox.isSelected());
+        met.setStatic(staticBox.isSelected());
     }
 
+    private void handleAbstractChange() {
+        met.setAbstract(abstractBox.isSelected());
+    }
+        
 }

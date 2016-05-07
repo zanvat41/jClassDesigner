@@ -22,6 +22,7 @@ public class jdVar {
         access = "";
     }
     
+    
     public boolean getStatic() {
         return isStatic;
     }

@@ -193,6 +193,7 @@ public class DataManager implements AppDataComponent {
             ws.reloadPackageText("");
             ws.uncheckParentChoice();
             ws.setVarTable(new ArrayList());
+            ws.setMetTable(new ArrayList());
         }
     }
     
@@ -416,8 +417,108 @@ public class DataManager implements AppDataComponent {
     
     public void addMet(jdMet m, int i) {
         mets.get(i).add(m);
+        
+        // Then shows in the ui
+        VBox selectedPane = (VBox) selectedItem;
+        VBox metPane = (VBox) selectedPane.getChildren().get(2);
+        //VBox namePane = (VBox) selectedPane.getChildren().get(0);
+        String metInfo = "";
+        // First the access
+        if(m.getAccess().equals("public")) {
+            metInfo += "+";
+        } else if(m.getAccess().equals("protected")) {
+            metInfo += "#";
+        } else if(m.getAccess().equals("private")) {
+            metInfo += "-";
+        }
+        // Then the Static
+        if(m.getStatic()) 
+            metInfo += "$";
+        //Then the name
+        metInfo += m.getName();
+        //Then the arguments
+        metInfo += "(";
+        for(int j = 0; j < m.getArgs().size(); j++) {
+            metInfo += "arg";
+            int argNum = j+1;
+            metInfo += argNum;
+            metInfo += " : ";
+            metInfo += m.getArgs().get(j);
+            if(j != m.getArgs().size() - 1)
+                metInfo += ", ";
+        }
+        metInfo += ")";
+        
+        // Then the type
+        if(!m.getType().isEmpty()) {
+            metInfo += " : ";
+            metInfo += m.getType();
+        }
+          
+        //Then the abstract
+        if(m.getAbstract())
+            metInfo += " {abstract}";
+        
+        Text metText = new Text(metInfo);
+        metPane.getChildren().add(metText);  
     }
    
+    // i is the index of the class, j is the index of the variable
+    public void changeMet(jdMet m, int i, int j) {
+        // Change the info in the ui
+        VBox selectedPane = (VBox) selectedItem;
+        VBox metPane = (VBox) selectedPane.getChildren().get(2);
+        String metInfo = "";
+        // First the access
+        if(m.getAccess().equals("public")) {
+            metInfo += "+";
+        } else if(m.getAccess().equals("protected")) {
+            metInfo += "#";
+        } else if(m.getAccess().equals("private")) {
+            metInfo += "-";
+        }
+        // Then the Static
+        if(m.getStatic()) 
+            metInfo += "$";
+        //Then the name
+        metInfo += m.getName();
+        //Then the arguments
+        metInfo += "(";
+        for(int k = 0; k < m.getArgs().size(); k++) {
+            metInfo += "arg";
+            int argNum = k+1;
+            metInfo += argNum;
+            metInfo += " : ";
+            metInfo += m.getArgs().get(k);
+            if(k != m.getArgs().size() - 1)
+                metInfo += ", ";
+        }
+        metInfo += ")";
+        
+        // Then the type
+        if(!m.getType().isEmpty()) {
+            metInfo += " : ";
+            metInfo += m.getType();
+        }
+        
+        //Then the abstract
+        if(m.getAbstract())
+            metInfo += " {abstract}";
+        
+        Text metText = new Text(metInfo);
+        metPane.getChildren().set(j, metText);
+        
+        mets.get(i).set(j, m);
+    }
+    
+    public void delMet(jdMet m, int i) {
+        int index = mets.get(i).indexOf(m);
+        mets.get(i).remove(m);
+        VBox selectedPane = (VBox) selectedItem;
+        VBox metPane = (VBox) selectedPane.getChildren().get(2);
+        metPane.getChildren().remove(index);
+    }
+        
     public void addLine(jdLine l, int i) {
         lines.get(i).add(l);
     }
@@ -442,6 +543,7 @@ public class DataManager implements AppDataComponent {
             ws.checkParentChoice(prts.get(j));
         }
         ws.setVarTable(getVars(i));
+        ws.setMetTable(getMets(i));
     }
     
     public boolean isTest() {

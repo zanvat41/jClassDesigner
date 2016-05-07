@@ -1,0 +1,41 @@
+
+{
+    "panes":[
+        {
+            "name":"aclass",
+            "package":"",
+            "parent":[
+            ],
+            "inDesign":true,
+            "x":787.0,
+            "y":432.0,
+            "tx":-186.0,
+            "ty":-56.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+                {
+                    "name":"var",
+                    "Access":"public",
+                    "type":"String",
+                    "Static":"false"
+                }
+            ],
+            "methods":[
+                {
+                    "name":"getValue",
+                    "Access":"public",
+                    "type":"int",
+                    "Abstract":"true",
+                    "Static":"false",
+                    "args":[
+                    ]
+                }
+            ]
+        }
+    ]
+}
