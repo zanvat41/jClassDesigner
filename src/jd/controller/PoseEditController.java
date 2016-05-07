@@ -628,6 +628,33 @@ public class PoseEditController {
             vb.setPrefWidth(w);
         }
     }
+
+    public void handleRemoveRequest() {
+        // PROMPT THE USER TO SAVE UNSAVED WORK
+        AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
+        yesNoDialog.show("Remove Class/Interface Box", "Are you sure to remove this box?");
+        
+        // AND NOW GET THE USER'S SELECTION
+        String selection = yesNoDialog.getSelection();
+
+        DataManager dm = (DataManager) app.getDataComponent();
+        if(selectedItem != null) {
+            int index = dm.getPanes().indexOf(selectedItem);
+            // IF THE USER SAID YES, THEN REMOVE IT
+            if (selection.equals(AppYesNoCancelDialogSingleton.YES) && index > -1 && index < dm.getPanes().size()) { 
+                //dm.getVars(index).remove(itemToRemove);
+                dm.delPane(index);
+
+                // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+                // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+                // THE SAVE BUTTON IS ENABLED
+                AppFileController afc = app.getGUI().getAFC();
+                afc.markAsEdited(app.getGUI());
+
+                selectedItem = null;
+            }
+        }        
+    }
     
     
 }

@@ -109,7 +109,6 @@ public class DataManager implements AppDataComponent {
         names = new ArrayList();
         packages = new ArrayList();
         parents = new ArrayList();
-        //ipms = new ArrayList();
         aggs = new ArrayList();
         uses = new ArrayList();
         vars = new ArrayList();
@@ -574,5 +573,28 @@ public class DataManager implements AppDataComponent {
     
     public void setTest(boolean b) {
         isTest = b;
+    }
+
+    public void delPane(int i) {
+        String theName =  names.get(i);
+        panes.remove(i);
+        names.remove(i);
+        packages.remove(i);
+        parents.remove(i);
+        aggs.remove(i);
+        uses.remove(i);
+        vars.remove(i);
+        mets.remove(i);
+        lines.remove(i);
+        inDesign.remove(i);
+        
+        // Then remove it from parents list
+        int newSize = names.size();
+        for(int k = 0; k < newSize; k++){
+            removeParent(theName, k);
+        }
+        ws.removeParentChoice(theName);
+        
+        setSelected(null);
     }
 }

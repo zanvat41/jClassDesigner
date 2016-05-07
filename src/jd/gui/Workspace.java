@@ -410,6 +410,14 @@ public class Workspace extends AppWorkspaceComponent {
         gui.resizeButton.setOnAction(e -> {
             poseEditController.handleResizeRequest();
         });
+        
+        
+        gui.removeButton.setOnAction(e -> {
+            poseEditController.handleRemoveRequest();
+        });
+        
+        
+        
     }
 
     /**
