@@ -192,6 +192,7 @@ public class DataManager implements AppDataComponent {
             ws.reloadNameText("");
             ws.reloadPackageText("");
             ws.uncheckParentChoice();
+            ws.setVarTable(new ArrayList());
         }
     }
     
@@ -372,6 +373,7 @@ public class DataManager implements AppDataComponent {
         for(int j = 0; j < prts.size(); j++) {
             ws.checkParentChoice(prts.get(j));
         }
+        ws.setVarTable(getVars(i));
     }
     
     public boolean isTest() {

@@ -1,6 +1,9 @@
 package jd.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
@@ -10,6 +13,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -213,6 +217,15 @@ public class Workspace extends AppWorkspaceComponent {
         varTable.getColumns().add(staticColumn1);
         varTable.getColumns().add(accessColumn1);
         //varTable.setItems(data.getVars(BUTTON_TAG_WIDTH););
+        
+        nameColumn1.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        typeColumn1.setCellValueFactory(
+                new PropertyValueFactory<>("type"));
+        staticColumn1.setCellValueFactory(
+                new PropertyValueFactory<>("static"));
+        accessColumn1.setCellValueFactory(
+                new PropertyValueFactory<>("access"));
         row5Box.getChildren().add(varTable);
 	
 	// ROW 6
@@ -341,6 +354,17 @@ public class Workspace extends AppWorkspaceComponent {
             poseEditController.handleAddVarRequest();
         });
         
+        delVar.setOnAction(e -> {
+            poseEditController.handleRemoveVarRequest(this, varTable.getSelectionModel().getSelectedItem());
+        });
+        
+        varTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                // OPEN UP THE SCHEDULE ITEM EDITOR
+                jdVar theVar = varTable.getSelectionModel().getSelectedItem();
+                poseEditController.handleEditVarRequest(theVar, this);
+            }
+        });
     }
 
     /**
@@ -390,6 +414,7 @@ public class Workspace extends AppWorkspaceComponent {
             //System.out.println(dataManager.getPanes().size());
             parentChoice.getItems().clear();
             //System.out.println(dataManager.getPanes().size());
+            setVarTable(new ArrayList());
         }
     }
     
@@ -438,5 +463,16 @@ public class Workspace extends AppWorkspaceComponent {
                 i = parentChoice.getItems().size();
             }
         }     
+    }
+    
+    public void setVarTable(ArrayList<jdVar> vars) {
+        ObservableList<jdVar> varList =
+        FXCollections.observableArrayList(
+        );
+        for(jdVar var : vars) {
+            varList.add(var);
+            System.out.println(var.getName());
+        }
+        varTable.setItems(varList);
     }
 }

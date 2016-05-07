@@ -8,9 +8,9 @@
             ],
             "inDesign":true,
             "x":734.0,
-            "y":158.0,
+            "y":164.0,
             "tx":0.0,
-            "ty":0.0,
+            "ty":1.0,
             "aggregates":[
             ],
             "uses":[
@@ -19,38 +19,11 @@
             ],
             "vars":[
                 {
-                    "name":"asd",
+                    "name":"a",
                     "Access":"public",
-                    "type":"ff",
-                    "Static":"true"
-                },
-                {
-                    "name":"dsa",
-                    "Access":"protected",
-                    "type":"aaa",
+                    "type":"see",
                     "Static":"false"
                 }
-            ],
-            "methods":[
-            ]
-        },
-        {
-            "name":"sss",
-            "package":"",
-            "parent":[
-            ],
-            "inDesign":false,
-            "x":1040.0,
-            "y":397.0,
-            "tx":0.0,
-            "ty":0.0,
-            "aggregates":[
-            ],
-            "uses":[
-            ],
-            "lines":[
-            ],
-            "vars":[
             ],
             "methods":[
             ]

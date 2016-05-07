@@ -47,6 +47,7 @@ import static saf.settings.AppPropertyType.WORK_FILE_EXT;
 import static saf.settings.AppPropertyType.WORK_FILE_EXT_DESC;
 import static saf.settings.AppStartupConstants.PATH_WORK;
 import saf.ui.AppMessageDialogSingleton;
+import saf.ui.AppYesNoCancelDialogSingleton;
 
 /**
  * This class responds to interactions with other UI pose editing controls.
@@ -501,12 +502,66 @@ public class PoseEditController {
                 // THE SAVE BUTTON IS ENABLED
                 AppFileController afc = app.getGUI().getAFC();
                 afc.markAsEdited(app.getGUI());
+                dm.setSelected(selectedItem);
 
             }
             else {
                 // THE USER MUST HAVE PRESSED CANCEL, SO
                 // WE DO NOTHING
             }
+        }
+    }
+
+    public void handleEditVarRequest(jdVar itemToEdit, Workspace ws) {
+        DataManager dm = (DataManager) app.getDataComponent();
+        int index = dm.getPanes().indexOf(selectedItem);
+        if(index > -1 && index < dm.getPanes().size()){
+            ArrayList<jdVar> list = dm.getVars(index);
+            vid.showEditVarDialog(itemToEdit);
+            
+                    
+            // DID THE USER CONFIRM?
+            if (vid.wasCompleteSelected()) {
+                int i = list.indexOf(itemToEdit);
+                // UPDATE THE SCHEDULE ITEM
+                jdVar var = vid.getVar();
+                list.set(i, var);
+                
+                // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+                // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+                // THE SAVE BUTTON IS ENABLED
+                AppFileController afc = app.getGUI().getAFC();
+                afc.markAsEdited(app.getGUI());
+                dm.setSelected(selectedItem);
+            }
+            else {
+                // THE USER MUST HAVE PRESSED CANCEL, SO
+                // WE DO NOTHING
+            } 
+        }
+    }
+
+    public void handleRemoveVarRequest(Workspace ws, jdVar itemToRemove) {
+        // PROMPT THE USER TO SAVE UNSAVED WORK
+        AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
+        yesNoDialog.show("Remove Variable", "Are you sure to remove this variable?");
+        
+        // AND NOW GET THE USER'S SELECTION
+        String selection = yesNoDialog.getSelection();
+
+        DataManager dm = (DataManager) app.getDataComponent();
+        int index = dm.getPanes().indexOf(selectedItem);
+        
+        // IF THE USER SAID YES, THEN REMOVE IT
+        if (selection.equals(AppYesNoCancelDialogSingleton.YES) && index > -1 && index < dm.getPanes().size()) { 
+            dm.getVars(index).remove(itemToRemove);
+            
+            // THE COURSE IS NOW DIRTY, MEANING IT'S BEEN 
+            // CHANGED SINCE IT WAS LAST SAVED, SO MAKE SURE
+            // THE SAVE BUTTON IS ENABLED
+            AppFileController afc = app.getGUI().getAFC();
+            afc.markAsEdited(app.getGUI());
+            dm.setSelected(selectedItem);
         }
     }
     
