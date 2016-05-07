@@ -406,6 +406,10 @@ public class Workspace extends AppWorkspaceComponent {
                 poseEditController.handleEditMetRequest(theMet, this);
             }
         });
+        
+        gui.resizeButton.setOnAction(e -> {
+            poseEditController.handleResizeRequest();
+        });
     }
 
     /**

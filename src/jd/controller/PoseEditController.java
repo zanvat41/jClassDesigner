@@ -102,113 +102,6 @@ public class PoseEditController {
         //md = new metDialog(psg);
     }
     
-    /*public void processSelectSelectionTool() {
-	// CHANGE THE CURSOR
-	Scene scene = app.getGUI().getPrimaryScene();
-	scene.setCursor(Cursor.DEFAULT);
-	
-	// CHANGE THE STATE
-	dataManager.setState(PoseMakerState.SELECTING_SHAPE);	
-	
-	// ENABLE/DISABLE THE PROPER BUTTONS
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	workspace.reloadWorkspace();
-    }
-    
-    public void processRemoveSelectedShape() {
-	// REMOVE THE SELECTED SHAPE IF THERE IS ONE
-	dataManager.removeSelectedShape();
-	
-	// ENABLE/DISABLE THE PROPER BUTTONS
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	workspace.reloadWorkspace();
-	app.getGUI().updateToolbarControls(false);
-    }
-    
-    public void processSelectRectangleToDraw() {
-	// CHANGE THE CURSOR
-	Scene scene = app.getGUI().getPrimaryScene();
-	scene.setCursor(Cursor.CROSSHAIR);
-	
-	// CHANGE THE STATE
-	dataManager.setState(PoseMakerState.STARTING_RECTANGLE);
-
-	// ENABLE/DISABLE THE PROPER BUTTONS
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	workspace.reloadWorkspace();
-    }
-    
-    public void processSelectEllipseToDraw() {
-	// CHANGE THE CURSOR
-	Scene scene = app.getGUI().getPrimaryScene();
-	scene.setCursor(Cursor.CROSSHAIR);
-	
-	// CHANGE THE STATE
-	dataManager.setState(PoseMakerState.STARTING_ELLIPSE);
-
-	// ENABLE/DISABLE THE PROPER BUTTONS
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	workspace.reloadWorkspace();
-    }
-    
-    public void processMoveSelectedShapeToBack() {
-	dataManager.moveSelectedShapeToBack();
-	app.getGUI().updateToolbarControls(false);
-    }
-    
-    public void processMoveSelectedShapeToFront() {
-	dataManager.moveSelectedShapeToFront();
-	app.getGUI().updateToolbarControls(false);
-    }
-        
-    public void processSelectFillColor() {
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	Color selectedColor = workspace.getFillColorPicker().getValue();
-	if (selectedColor != null) {
-	    dataManager.setCurrentFillColor(selectedColor);
-	    app.getGUI().updateToolbarControls(false);
-	}
-    }
-    
-    public void processSelectOutlineColor() {
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	Color selectedColor = workspace.getOutlineColorPicker().getValue();
-	if (selectedColor != null) {
-	    dataManager.setCurrentOutlineColor(selectedColor);
-	    app.getGUI().updateToolbarControls(false);
-	}    
-    }
-    
-    public void processSelectBackgroundColor() {
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	Color selectedColor = workspace.getBackgroundColorPicker().getValue();
-	if (selectedColor != null) {
-	    dataManager.setBackgroundColor(selectedColor);
-	    app.getGUI().updateToolbarControls(false);
-	}
-    }
-    
-    public void processSelectOutlineThickness() {
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	int outlineThickness = (int)workspace.getOutlineThicknessSlider().getValue();
-	dataManager.setCurrentOutlineThickness(outlineThickness);
-	app.getGUI().updateToolbarControls(false);
-    }
-    
-    public void processSnapshot() {
-	Workspace workspace = (Workspace)app.getWorkspaceComponent();
-	Pane canvas = workspace.getCanvas();
-	WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
-	File file = new File("Pose.png");
-	try {
-	    ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-	}
-	catch(IOException ioe) {
-	    ioe.printStackTrace();
-	}
-    }*/
-
-    
     public void handleAddClassRequest() {
         if(enabled) {                
             BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
@@ -242,6 +135,15 @@ public class PoseEditController {
                     drawPane(bX, bY, true);
                 }
             }); 
+            
+                        
+            canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    // do nothing
+                    int y = 1+1;
+                }
+            });
         }
     }
 
@@ -258,6 +160,14 @@ public class PoseEditController {
                     bX = mouseEvent.getX();
                     bY = mouseEvent.getY();
                     drawEPane(bX, bY, false);
+                }
+            }); 
+            
+            canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    // do nothing
+                    int y = 1+1;
                 }
             }); 
         }
@@ -669,5 +579,55 @@ public class PoseEditController {
             dm.setSelected(selectedItem);
         }
     }
+    
+    public void handleResizeRequest() {
+        //selectedItem.
+        BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+        ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+        Pane canvas = (Pane) SP.getContent();
+        
+        canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                //do nothing
+            }
+        });
+        
+        
+        
+        canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                double eX = mouseEvent.getX();
+                double eY = mouseEvent.getY();
+                if(selectedItem != null) {
+                    VBox vb = (VBox) selectedItem;
+                    double bX = vb.getLayoutX() + vb.getTranslateX();
+                    double bY = vb.getLayoutY() + vb.getTranslateY();
+                    double rbX = bX + vb.getWidth();
+                    double rbY = bY + vb.getHeight();
+                    //if(eX >= rbX - 2 && eX <= rbX + 2 && eY >= rbY - 2 && eY <= rbY + 2) {
+                        //canvas.setCursor(Cursor.NW_RESIZE);
+                        double eW = eX - (bX);
+                        double eH = eY - (bY);
+                        resize(canvas, vb, eW, eH);
+                    //}
+                }
+            }
+        });
+    }
+    
+    private void resize(Pane canvas, VBox vb, double w, double h) {
+        // MARK THE FILE AS EDITED
+        AppFileController afc = app.getGUI().getAFC();
+        afc.markAsEdited(app.getGUI());
+        if(h > 50) {
+            vb.setPrefHeight(h);
+        }
+        if(w > 100) {
+            vb.setPrefWidth(w);
+        }
+    }
+    
     
 }
