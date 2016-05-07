@@ -570,5 +570,8 @@ public class Workspace extends AppWorkspaceComponent {
         }
     }
     
+    public PoseEditController getPEC() {
+        return poseEditController;
+    }
     
 }

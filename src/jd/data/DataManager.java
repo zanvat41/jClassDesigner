@@ -314,6 +314,15 @@ public class DataManager implements AppDataComponent {
         }
     }
     
+    public void removeAgg(String p, int i) {
+        for(int j = 0; j < aggs.get(i).size(); j++) {
+            if(aggs.get(i).get(j).equals(p)) {
+                aggs.get(i).remove(j);
+                j = aggs.get(i).size() + 1;
+            }
+        }
+    }
+    
     public boolean getID(int i) {
         return inDesign.get(i);
     }
@@ -374,7 +383,30 @@ public class DataManager implements AppDataComponent {
         }
                 
         Text varText = new Text(varInfo);
-        varPane.getChildren().add(varText);  
+        varPane.getChildren().add(varText);
+        
+        // add aggregate if needed
+        String vT = v.getType();
+        if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+            //do nothing
+        } else {
+            boolean isExisted = false;
+            for(int j = 0; j < names.size(); j++) {
+                if(names.get(j).equals(vT))
+                    isExisted = true;
+            }
+            if(!isExisted) {
+                // old index is i
+                ws.getPEC().drawEPane(0, 0, false);
+                //int newInex = panes.size() - 1;
+                editName(vT);
+                addAgg(vT, i);
+            }
+        }
+        
+        
+        
     }
     
     // i is the index of the class, j is the index of the variable
@@ -407,6 +439,29 @@ public class DataManager implements AppDataComponent {
         
         
         vars.get(i).set(j, v);
+        
+        // add aggregate if needed
+        String vT = v.getType();
+        if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+            //do nothing
+        } else {
+            boolean isExisted = false;
+            for(int k = 0; k < names.size(); k++) {
+                if(names.get(k).equals(vT))
+                    isExisted = true;
+            }
+            if(!isExisted) {
+                // old index is i
+                ws.getPEC().drawEPane(0, 0, false);
+                //int newInex = panes.size() - 1;
+                editName(vT);
+                addAgg(vT, i);
+            }
+        }
+        
+        
+        
     }
     
     public void delVar(jdVar v, int i) {
@@ -474,7 +529,51 @@ public class DataManager implements AppDataComponent {
             metInfo += " {abstract}";
         
         Text metText = new Text(metInfo);
-        metPane.getChildren().add(metText);  
+        metPane.getChildren().add(metText); 
+        
+        // add aggregate if needed
+        // First check return type
+        String vT = m.getType();
+        if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+            //do nothing
+        } else {
+            boolean isExisted = false;
+            for(int k = 0; k < names.size(); k++) {
+                if(names.get(k).equals(vT))
+                    isExisted = true;
+            }
+            if(!isExisted) {
+                // old index is i
+                ws.getPEC().drawEPane(0, 0, false);
+                //int newInex = panes.size() - 1;
+                editName(vT);
+                addAgg(vT, i);
+            }
+        }
+        // Then the type of arguments
+        ArrayList<String> argList = m.getArgs();
+        for(int kk = 0; kk < argList.size(); kk ++) {
+            String vT1 = argList.get(kk);
+            if(vT1.equals("int") || vT1.equals("double") || vT1.equals("byte") || vT1.equals("short") || vT1.equals("float")
+                    || vT1.equals("char") || vT1.equals("boolean") || vT1.equals("String") || vT1.equals("")) {
+                //do nothing
+            } else {
+                boolean isExisted = false;
+                for(int k = 0; k < names.size(); k++) {
+                    if(names.get(k).equals(vT1))
+                        isExisted = true;
+                }
+                if(!isExisted) {
+                    // old index is i
+                    ws.getPEC().drawEPane(0, 0, false);
+                    //int newInex = panes.size() - 1;
+                    editName(vT1);
+                    addAgg(vT1, i);
+                }
+            }
+        }
+        
     }
    
     // i is the index of the class, j is the index of the variable
@@ -530,6 +629,49 @@ public class DataManager implements AppDataComponent {
         metPane.getChildren().set(j, metText);
         
         mets.get(i).set(j, m);
+        
+        // add aggregate if needed
+        // First check return type
+        String vT = m.getType();
+        if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+            //do nothing
+        } else {
+            boolean isExisted = false;
+            for(int k = 0; k < names.size(); k++) {
+                if(names.get(k).equals(vT))
+                    isExisted = true;
+            }
+            if(!isExisted) {
+                // old index is i
+                ws.getPEC().drawEPane(0, 0, false);
+                //int newInex = panes.size() - 1;
+                editName(vT);
+                addAgg(vT, i);
+            }
+        }
+        // Then the type of arguments
+        ArrayList<String> argList = m.getArgs();
+        for(int kk = 0; kk < argList.size(); kk ++) {
+            String vT1 = argList.get(kk);
+            if(vT1.equals("int") || vT1.equals("double") || vT1.equals("byte") || vT1.equals("short") || vT1.equals("float")
+                    || vT1.equals("char") || vT1.equals("boolean") || vT1.equals("String") || vT1.equals("")) {
+                //do nothing
+            } else {
+                boolean isExisted = false;
+                for(int k = 0; k < names.size(); k++) {
+                    if(names.get(k).equals(vT1))
+                        isExisted = true;
+                }
+                if(!isExisted) {
+                    // old index is i
+                    ws.getPEC().drawEPane(0, 0, false);
+                    //int newInex = panes.size() - 1;
+                    editName(vT1);
+                    addAgg(vT1, i);
+                }
+            }
+        }
     }
     
     public void delMet(jdMet m, int i) {
@@ -592,6 +734,7 @@ public class DataManager implements AppDataComponent {
         int newSize = names.size();
         for(int k = 0; k < newSize; k++){
             removeParent(theName, k);
+            removeAgg(theName, k);
         }
         ws.removeParentChoice(theName);
         

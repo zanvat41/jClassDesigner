@@ -173,7 +173,7 @@ public class PoseEditController {
         }
     }    
         
-    private void drawEPane(double X, double Y, boolean isIF) {
+    public void drawEPane(double X, double Y, boolean isIF) {
         // MARK THE FILE AS EDITED
         AppFileController afc = app.getGUI().getAFC();
         afc.markAsEdited(app.getGUI());
