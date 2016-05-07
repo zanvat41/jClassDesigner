@@ -73,6 +73,8 @@ public class FileManager implements AppFileComponent {
     static final String JSON_USE = "uses";
     static final String JSON_LINE = "lines";
     static final String JSON_ID = "inDesign";
+    static final String JSON_W = "Width";
+    static final String JSON_H = "Height";
     
     static final String DEFAULT_DOCTYPE_DECLARATION = "<!doctype html>\n";
     static final String DEFAULT_ATTRIBUTE_VALUE = "";
@@ -112,7 +114,9 @@ public class FileManager implements AppFileComponent {
 	    double y = pane.getLayoutY();
             double tx = pane.getTranslateX();
             double ty = pane.getTranslateY();
-	    
+	    double w = pane.getPrefWidth();
+            double h = pane.getPrefHeight();
+            
 	    JsonObject paneJson = Json.createObjectBuilder()
                     .add(JSON_NAME, name)
 		    .add(JSON_PACKAGE, Package)
@@ -123,6 +127,8 @@ public class FileManager implements AppFileComponent {
 		    .add(JSON_Y, y)
                     .add(JSON_TX, tx)
                     .add(JSON_TY, ty)
+                    .add(JSON_W, w)
+                    .add(JSON_H, h)
                     .add(JSON_AGGREGATE, buildStrArray(dataManager.getAggs(i)))
                     .add(JSON_USE, buildStrArray(dataManager.getUses(i)))
                     .add(JSON_LINE, buildLineArray(dataManager.getLines(i)))
@@ -337,7 +343,9 @@ public class FileManager implements AppFileComponent {
         vb.setLayoutX(getDataAsDouble(jsonPane, JSON_X));
         vb.setLayoutY(getDataAsDouble(jsonPane, JSON_Y));
         vb.setTranslateX(getDataAsDouble(jsonPane, JSON_TX));
-        vb.setTranslateY(getDataAsDouble(jsonPane, JSON_TY));  
+        vb.setTranslateY(getDataAsDouble(jsonPane, JSON_TY)); 
+        vb.setPrefWidth(getDataAsDouble(jsonPane, JSON_W));
+        vb.setPrefHeight(getDataAsDouble(jsonPane, JSON_H));
         return vb;
     }
     
