@@ -16,6 +16,9 @@
             "aggregates":[
             ],
             "uses":[
+                {
+                    "name":"ArrayList"
+                }
             ],
             "lines":[
             ],
@@ -36,6 +39,16 @@
                     "Static":"false",
                     "args":[
                         "int"
+                    ]
+                },
+                {
+                    "name":"met1",
+                    "Access":"public",
+                    "type":"ArrayList",
+                    "Abstract":"false",
+                    "Static":"false",
+                    "args":[
+                        "String"
                     ]
                 }
             ]
@@ -111,6 +124,52 @@
                     "type":"int",
                     "Static":"false"
                 }
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"ArrayList",
+            "package":"",
+            "parent":[
+            ],
+            "inDesign":false,
+            "x":0.0,
+            "y":0.0,
+            "tx":0.0,
+            "ty":0.0,
+            "Width":100.0,
+            "Height":50.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"",
+            "package":"",
+            "parent":[
+            ],
+            "inDesign":false,
+            "x":0.0,
+            "y":0.0,
+            "tx":0.0,
+            "ty":0.0,
+            "Width":100.0,
+            "Height":50.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
             ],
             "methods":[
             ]

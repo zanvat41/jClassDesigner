@@ -602,7 +602,7 @@ public class FileManager implements AppFileComponent {
 
                     pw.println("{");
 
-                    //Then the arguments
+                    //Then the variables
                     ArrayList<jdVar> varList = dataManager.getVars(i);
                     for(int j = 0; j < varList.size(); j++) {
                         jdVar var = varList.get(j);
@@ -613,7 +613,16 @@ public class FileManager implements AppFileComponent {
                         pw.print("    " + acc +" ");
                         if(st)
                             pw.print("static ");
-                        pw.println(varType + " " + varName + ";");
+                        pw.print(varType + " " + varName + " = ");
+                        if(varType.equals("int") || varType.equals("double") || varType.equals("byte")
+                                || varType.equals("short") || varType.equals("float"))
+                                pw.println("0;" );
+                            else if(varType.equals("char"))
+                                pw.println("'0';" );
+                            else if(varType.equals("boolean"))
+                                pw.println("true;" );
+                            else
+                                pw.println("null;" );
 
                     }
 

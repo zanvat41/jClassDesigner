@@ -5,9 +5,6 @@
             "name":"somehing",
             "package":"",
             "parent":[
-                {
-                    "name":"{interface}ddd"
-                }
             ],
             "inDesign":true,
             "x":630.0,
@@ -39,6 +36,16 @@
                     "Static":"false",
                     "args":[
                         "int"
+                    ]
+                },
+                {
+                    "name":"met1",
+                    "Access":"public",
+                    "type":"ArrayList",
+                    "Abstract":"false",
+                    "Static":"false",
+                    "args":[
+                        "String"
                     ]
                 }
             ]
@@ -114,6 +121,29 @@
                     "type":"int",
                     "Static":"false"
                 }
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"",
+            "package":"",
+            "parent":[
+            ],
+            "inDesign":false,
+            "x":0.0,
+            "y":0.0,
+            "tx":0.0,
+            "ty":0.0,
+            "Width":100.0,
+            "Height":50.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
             ],
             "methods":[
             ]
