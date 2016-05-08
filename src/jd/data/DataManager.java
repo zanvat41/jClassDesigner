@@ -180,6 +180,7 @@ public class DataManager implements AppDataComponent {
         inDesign.add(false);
         if(app.getWorkspaceComponent() != null) {
             ((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
+            //((Workspace)app.getWorkspaceComponent()).addGrid();
         }
     }
 
@@ -200,6 +201,11 @@ public class DataManager implements AppDataComponent {
         vars.add(new ArrayList());
         lines.add(new ArrayList());
     }    
+    
+    public void addGrid1() {
+        panes.add(new Pane());
+    }
+    
     
     public void setSelected(Node n) {
         selectedItem = n;
@@ -909,5 +915,27 @@ public class DataManager implements AppDataComponent {
         ws.removeParentChoice(theName);
         
         setSelected(null);
+    }    
+
+    /*public void swap() {
+        int size = panes.size();
+        if(size > 1) {
+            int last = size - 1;
+            VBox n = new VBox();
+            VBox last
+            names.remove(i);
+            packages.remove(i);
+            parents.remove(i);
+            aggs.remove(i);
+            uses.remove(i);
+            vars.remove(i);
+            mets.remove(i);
+            lines.remove(i);
+            inDesign.remove(i);
+        }
+    }*/
+
+    public void addGrid2() {
+        ws.addGrid();
     }
 }

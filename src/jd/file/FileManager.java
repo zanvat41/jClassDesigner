@@ -104,37 +104,40 @@ public class FileManager implements AppFileComponent {
 	JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 	ObservableList<Node> panes = dataManager.getPanes();
 	for (int i = 0; i < panes.size(); i++) {
-	    VBox pane = (VBox) panes.get(i);
-            String name = dataManager.getName(i);
-            String Package = dataManager.getPackage(i);
-            //ArrayList<String> parents = dataManager.getParent(i);
-            //String ipm = dataManager.getIpm(i);
-            boolean id = dataManager.getID(i);
-	    double x = pane.getLayoutX();
-	    double y = pane.getLayoutY();
-            double tx = pane.getTranslateX();
-            double ty = pane.getTranslateY();
-	    double w = pane.getPrefWidth();
-            double h = pane.getPrefHeight();
-            
-	    JsonObject paneJson = Json.createObjectBuilder()
-                    .add(JSON_NAME, name)
-		    .add(JSON_PACKAGE, Package)
-                    .add(JSON_PARENT, buildStrArray(dataManager.getParents(i)))
-                    //.add(JSON_IMPLEMENT, ipm)
-                    .add(JSON_ID, id)
-                    .add(JSON_X, x)
-		    .add(JSON_Y, y)
-                    .add(JSON_TX, tx)
-                    .add(JSON_TY, ty)
-                    .add(JSON_W, w)
-                    .add(JSON_H, h)
-                    .add(JSON_AGGREGATE, buildStrArray(dataManager.getAggs(i)))
-                    .add(JSON_USE, buildStrArray(dataManager.getUses(i)))
-                    .add(JSON_LINE, buildLineArray(dataManager.getLines(i)))
-		    .add(JSON_VAR, buildVarArray(dataManager.getVars(i)))
-		    .add(JSON_METHOD, buildMetArray(dataManager.getMets(i))).build();
-	    arrayBuilder.add(paneJson);
+	    if(panes.get(i) instanceof VBox){
+                VBox pane = (VBox) panes.get(i);
+                //Node pane = panes.get(i);
+                String name = dataManager.getName(i);
+                String Package = dataManager.getPackage(i);
+                //ArrayList<String> parents = dataManager.getParent(i);
+                //String ipm = dataManager.getIpm(i);
+                boolean id = dataManager.getID(i);
+                double x = pane.getLayoutX();
+                double y = pane.getLayoutY();
+                double tx = pane.getTranslateX();
+                double ty = pane.getTranslateY();
+                double w = pane.getPrefWidth();
+                double h = pane.getPrefHeight();       
+
+                JsonObject paneJson = Json.createObjectBuilder()
+                        .add(JSON_NAME, name)
+                        .add(JSON_PACKAGE, Package)
+                        .add(JSON_PARENT, buildStrArray(dataManager.getParents(i)))
+                        //.add(JSON_IMPLEMENT, ipm)
+                        .add(JSON_ID, id)
+                        .add(JSON_X, x)
+                        .add(JSON_Y, y)
+                        .add(JSON_TX, tx)
+                        .add(JSON_TY, ty)
+                        .add(JSON_W, w)
+                        .add(JSON_H, h)
+                        .add(JSON_AGGREGATE, buildStrArray(dataManager.getAggs(i)))
+                        .add(JSON_USE, buildStrArray(dataManager.getUses(i)))
+                        .add(JSON_LINE, buildLineArray(dataManager.getLines(i)))
+                        .add(JSON_VAR, buildVarArray(dataManager.getVars(i)))
+                        .add(JSON_METHOD, buildMetArray(dataManager.getMets(i))).build();
+                arrayBuilder.add(paneJson);
+            }
 	}
 	JsonArray panesArray = arrayBuilder.build();
 	
@@ -304,6 +307,7 @@ public class FileManager implements AppFileComponent {
 	// CLEAR THE OLD DATA OUT
 	DataManager dataManager = (DataManager)data;
 	dataManager.reset();
+        dataManager.addGrid1();
 	argSize = 0;
         
 	// LOAD THE JSON FILE WITH ALL THE DATA
@@ -317,8 +321,10 @@ public class FileManager implements AppFileComponent {
 	    VBox vb = loadPane(jsonPane);
 	    dataManager.addClassPane(vb);
             // GET THE INFO OF THE PANES
-            getPaneInfo(jsonPane, dataManager, i);
+            getPaneInfo(jsonPane, dataManager, i + 1);
 	}
+        
+        dataManager.addGrid2();
     }
     
     private VBox loadPane(JsonObject jsonPane) {

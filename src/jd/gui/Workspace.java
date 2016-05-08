@@ -331,7 +331,7 @@ public class Workspace extends AppWorkspaceComponent {
         });
         
         gui.selectButton.setOnAction(e -> {
-            poseEditController.handleSelectRequest();
+            poseEditController.handleSelectRequest(gui.snapBox);
         });
         
         gui.codeButton.setOnAction(e -> {
@@ -428,6 +428,9 @@ public class Workspace extends AppWorkspaceComponent {
             poseEditController.handleGridRequest(gui.gridBox);
         });
         
+        gui.snapBox.setOnAction(e -> {
+            poseEditController.handleSnapRequest(gui.snapBox);
+        });
     }
 
     /**
@@ -481,8 +484,10 @@ public class Workspace extends AppWorkspaceComponent {
             //System.out.println(dataManager.getPanes().size());
             setVarTable(new ArrayList());
             setMetTable(new ArrayList());
+            canvas.getChildren().add(GP);
         }
         resetArgCol(fileManager.getArgSize());
+        setUpGrid(canvas.getWidth() / 10, canvas.getHeight() / 10, gui.gridBox.isSelected());
         if(!canvas.getChildren().contains(GP))
             canvas.getChildren().add(GP);
         //System.out.println(canvas.getChildren());
@@ -591,22 +596,35 @@ public class Workspace extends AppWorkspaceComponent {
 
     public void setUpGrid(double numCols, double numRows, boolean vis) {
         GP.setGridLinesVisible(vis);
+        //GP.setVisible(false);
         GP.getColumnConstraints().clear();
         GP.getRowConstraints().clear();
+        //System.out.println(numCols);
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / numCols);
+            //colConst.setPercentWidth(100.0 / numCols);
+            colConst.setPrefWidth(10);
+            colConst.setMaxWidth(10);
+            //System.out.println(100.0/numCols);
             //colConst.setPercentWidth(10);
             GP.getColumnConstraints().add(colConst);
         }
         for (int i = 0; i < numRows; i++) {
             RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / numRows);
+            //rowConst.setPercentHeight(100.0 / numRows);
+            rowConst.setPrefHeight(10);
+            rowConst.setMaxHeight(10);
             //rowConst.setPercentHeight(10);
             GP.getRowConstraints().add(rowConst);         
         }
-        GP.setStyle("-fx-border-color: Black; -fx-background-color: #ffffcc;");
+        GP.setStyle("-fx-border-color: Black; -fx-background-color: transparent;");
         GP.setMinSize(numCols * 10, numRows * 10);
     }
+
+    public void addGrid() {
+        DataManager data = (DataManager)app.getDataComponent();
+        data.getPanes().set(0, GP);
+    }
+    
     
 }

@@ -254,7 +254,7 @@ public class PoseEditController {
         dataManager.setID(dataManager.getPanes().indexOf(selectedItem), true);
     }
     
-    public void handleSelectRequest() {
+    public void handleSelectRequest(CheckBox snapBox) {
         if(enabled) {
             // MARK THE FILE AS EDITED
             AppFileController afc = app.getGUI().getAFC();
@@ -281,6 +281,14 @@ public class PoseEditController {
                 }
             });
         
+            canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    //smoothSnap(snapBox);
+                    handleSnapRequest(snapBox);
+                }
+            });
+            
             // DRAG AND DROP TO RELOCATE THE SHAPE
             canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
                 @Override
@@ -294,6 +302,7 @@ public class PoseEditController {
                             selectedItem.setTranslateX(newTranslateX);
                             selectedItem.setTranslateY(newTranslateY);
                         }
+                        //handleSnapRequest(snapBox);
                     }
                 }
             });
@@ -665,7 +674,30 @@ public class PoseEditController {
         Pane canvas = (Pane) SP.getContent();
         Workspace ws = (Workspace) app.getWorkspaceComponent();
         ws.setUpGrid(canvas.getWidth() / 10, canvas.getHeight() / 10, needGrid);
+        //System.out.println(dataManager.getPanes());
     }
-    
+
+    public void handleSnapRequest(CheckBox snapBox) {
+        boolean needSnap = snapBox.isSelected();
+        int size = dataManager.getPanes().size();
+        if(needSnap) {
+            for(int i = 0; i < size; i++) {
+                if(dataManager.getPanes().get(i) instanceof VBox) {
+                    VBox vb = (VBox) dataManager.getPanes().get(i);
+                    int oldX = (int) Math.floor(vb.getLayoutX() + vb.getTranslateX());
+                    int oldY = (int) Math.floor(vb.getLayoutY() + vb.getTranslateY());
+                    int mX = oldX % 10;
+                    int mY = oldY % 10;
+                    double newX = oldX - mX;
+                    double newY = oldY - mY;
+                    //System.out.println(newX + ", " + newY);
+                    vb.setTranslateX(0);
+                    vb.setTranslateY(0);
+                    vb.setLayoutX(newX);
+                    vb.setLayoutY(newY);
+                }
+            }
+        }
+    }
     
 }
