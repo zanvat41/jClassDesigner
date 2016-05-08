@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,7 @@ import jd.data.DataManager;
 import jd.jdLine;
 import jd.jdMet;
 import jd.jdVar;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 import saf.components.AppDataComponent;
 import saf.components.AppFileComponent;
 
@@ -80,6 +82,10 @@ public class FileManager implements AppFileComponent {
     static final String DEFAULT_ATTRIBUTE_VALUE = "";
     
     int argSize;
+    
+    boolean justLoad = false;
+    
+    String loadPath;
  
     /**
      * This method is for saving user work, which in the case of this
@@ -97,7 +103,9 @@ public class FileManager implements AppFileComponent {
     
     @Override
     public void saveData(AppDataComponent data, String filePath) throws IOException {
-	// GET THE DATA
+	//System.out.println(filePath);
+
+        // GET THE DATA
 	DataManager dataManager = (DataManager)data;
 	
 	// NOW BUILD THE JSON OBJCTS TO SAVE
@@ -307,7 +315,6 @@ public class FileManager implements AppFileComponent {
 	// CLEAR THE OLD DATA OUT
 	DataManager dataManager = (DataManager)data;
 	dataManager.reset();
-        dataManager.addGrid1();
 	argSize = 0;
         
 	// LOAD THE JSON FILE WITH ALL THE DATA
@@ -315,16 +322,21 @@ public class FileManager implements AppFileComponent {
 	
 	// AND NOW LOAD ALL THE PANES
 	JsonArray jsonPaneArray = json.getJsonArray(JSON_PANES);
-        //System.out.println(jsonPaneArray.size());
-	for (int i = 0; i < jsonPaneArray.size(); i++) {
-	    JsonObject jsonPane = jsonPaneArray.getJsonObject(i);
-	    VBox vb = loadPane(jsonPane);
-	    dataManager.addClassPane(vb);
-            // GET THE INFO OF THE PANES
-            getPaneInfo(jsonPane, dataManager, i + 1);
-	}
         
-        dataManager.addGrid2();
+        if(jsonPaneArray.size() > 0){
+            dataManager.addGrid1();
+            for (int i = 0; i < jsonPaneArray.size(); i++) {
+                JsonObject jsonPane = jsonPaneArray.getJsonObject(i);
+                VBox vb = loadPane(jsonPane);
+                dataManager.addClassPane(vb);
+                // GET THE INFO OF THE PANES
+                getPaneInfo(jsonPane, dataManager, i + 1);
+            }
+
+            dataManager.addGrid2();
+            justLoad = true;
+            loadPath = filePath;
+        }
     }
     
     private VBox loadPane(JsonObject jsonPane) {
@@ -368,14 +380,12 @@ public class FileManager implements AppFileComponent {
         dm.getNames().set(i, name);
         String pkg = json.getString(JSON_PACKAGE);
         dm.getPackages().set(i, pkg);
-        //String ipm = json.getString(JSON_IMPLEMENT);
-        //dm.getIpms().set(i, ipm);
         boolean id = json.getBoolean(JSON_ID);
         dm.setID(i, id);
         if(!dm.isTest()) {
             dm.setSelected(dm.getPanes().get(i));
-            dm.editName(name);
-            dm.editPackage(pkg);
+            dm.editName(name, false);
+            dm.editPackage(pkg, false);
         }
         
         // Second the parents
@@ -584,12 +594,8 @@ public class FileManager implements AppFileComponent {
                     }    
 
                     //Check if it implements an interface or not
-                    //if(!ipms.get(i).isEmpty())
-                    //    pw.print("implements " + ipms.get(i) + " ");
                     for(String p : parents) {
-                        //String p1;
                         if(p.contains("{interface}")) {
-                            //p1 = p.replace("{abstract}", "");
                             pw.print("implements " + p + " ");
                         }
                     }  
@@ -651,6 +657,54 @@ public class FileManager implements AppFileComponent {
                 }
             }
         }
+    }
+    
+    /**
+     * This function clears the contents of the file argument.
+     * 
+     * @param filePath The file to clear.
+     * 
+     * @throws IOException Thrown should there be an issue writing
+     * to the file to clear.
+     */
+    public void clearFile(String filePath) throws IOException {
+	PrintWriter out = new PrintWriter(filePath);
+	out.print("");
+	out.close();
+    }
+
+    public void writeEmpty(String filePath) throws FileNotFoundException, IOException {
+        if(justLoad) {
+            InputStream input = null;
+            OutputStream output = null;
+            try {
+                //System.out.println("uphere");
+                input = new FileInputStream(loadPath);
+                output = new FileOutputStream(filePath);
+                byte[] buf = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = input.read(buf)) > 0) {
+                    output.write(buf, 0, bytesRead);
+                }
+            } finally {
+                input.close();
+                output.close();
+            }
+            justLoad = false;
+        } else{
+            //System.out.println("imhere");
+            PrintWriter out = new PrintWriter(filePath);
+            out.print("\n" +
+            "{\n" +
+            "    \"panes\":[\n" +
+            "    ]\n" +
+            "}");
+            out.close();
+        }
+    }
+
+    public void setLoad(boolean b) {
+        justLoad = false;
     }
     
 }

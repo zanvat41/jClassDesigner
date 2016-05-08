@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
@@ -83,6 +85,12 @@ public class PoseEditController {
     metDialog md;
     
     Stage psg;
+    
+    // For undo and redo
+    public static final int MAX_OPS = 100;
+    int ops = 0;
+    static final String OP_PATH = "./temp/";
+    boolean clean = true;
     
     public PoseEditController(AppTemplate initApp, Stage psg) {
 	app = initApp;
@@ -213,6 +221,9 @@ public class PoseEditController {
             ws.reloadNameText("{interface}");
         }
         dataManager.setID(dataManager.getPanes().indexOf(selectedItem), false);
+        
+        // For undo and redo
+        saveOp();
     }    
         
         
@@ -252,6 +263,9 @@ public class PoseEditController {
             ws.reloadNameText("{interface}");
         }
         dataManager.setID(dataManager.getPanes().indexOf(selectedItem), true);
+        
+        // For undo and redo
+        saveOp();
     }
     
     public void handleSelectRequest(CheckBox snapBox) {
@@ -286,6 +300,9 @@ public class PoseEditController {
                 public void handle(MouseEvent mouseEvent) {
                     //smoothSnap(snapBox);
                     handleSnapRequest(snapBox);
+                    
+                    // For undo and redo
+                    saveOp();
                 }
             });
             
@@ -349,13 +366,25 @@ public class PoseEditController {
         afc.markAsEdited(app.getGUI());
         int i = dataManager.getPanes().indexOf(selectedItem);
         if(i > -1 && i < dataManager.getNames().size() && !dataManager.getName(i).equals(name))
-            if(selectedItem instanceof VBox)
-                dataManager.editName(name);
+            if(selectedItem instanceof VBox) {
+                dataManager.editName(name, true);
+                // For undo and redo
+                saveOp();    
+            }
     }
 
     public void handlePackageUpdate(VBox selectedPane, String text) {
-        if(selectedItem instanceof VBox)
-            dataManager.editPackage(text);
+        AppFileController afc = app.getGUI().getAFC();
+        afc.markAsEdited(app.getGUI());
+        int i = dataManager.getPanes().indexOf(selectedItem);
+        if(i > -1 && i < dataManager.getNames().size() && !dataManager.getPackage(i).equals(text)){
+            if(selectedItem instanceof VBox) {
+                dataManager.editPackage(text, true);
+                
+                // For undo and redo
+                saveOp();
+            }
+        }
     }
 
     public void handleCodeRequest() throws IOException {
@@ -414,6 +443,10 @@ public class PoseEditController {
             } else{
                 dataManager.removeParent(pc.getText(), i);
             }
+            
+            // For undo and redo
+            saveOp();
+            
         }
     }
 
@@ -439,6 +472,9 @@ public class PoseEditController {
                 AppFileController afc = app.getGUI().getAFC();
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
+                
+                // For undo and redo
+                saveOp();
 
             }
             else {
@@ -470,6 +506,9 @@ public class PoseEditController {
                 AppFileController afc = app.getGUI().getAFC();
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
+                
+                // For undo and redo
+                saveOp();
             }
             else {
                 // THE USER MUST HAVE PRESSED CANCEL, SO
@@ -500,6 +539,9 @@ public class PoseEditController {
             AppFileController afc = app.getGUI().getAFC();
             afc.markAsEdited(app.getGUI());
             dm.setSelected(selectedItem);
+            
+            // For undo and redo
+            saveOp();
         }
     }
     
@@ -526,6 +568,9 @@ public class PoseEditController {
                 AppFileController afc = app.getGUI().getAFC();
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
+                
+                // For undo and redo
+                saveOp();
 
             }
             else {
@@ -558,6 +603,9 @@ public class PoseEditController {
                 AppFileController afc = app.getGUI().getAFC();
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
+                
+                // For undo and redo
+                saveOp();
             }
             else {
                 // THE USER MUST HAVE PRESSED CANCEL, SO
@@ -588,6 +636,9 @@ public class PoseEditController {
             AppFileController afc = app.getGUI().getAFC();
             afc.markAsEdited(app.getGUI());
             dm.setSelected(selectedItem);
+            
+            // For undo and redo
+            saveOp();
         }
     }
     
@@ -632,11 +683,19 @@ public class PoseEditController {
         // MARK THE FILE AS EDITED
         AppFileController afc = app.getGUI().getAFC();
         afc.markAsEdited(app.getGUI());
+        boolean changed = false;
         if(h > 50) {
             vb.setPrefHeight(h);
+            changed = true;
         }
         if(w > 100) {
             vb.setPrefWidth(w);
+            changed = true;
+        }
+        if(changed) {
+        // For undo and redo
+        saveOp();
+        
         }
     }
 
@@ -663,6 +722,9 @@ public class PoseEditController {
                 afc.markAsEdited(app.getGUI());
 
                 selectedItem = null;
+                
+                // For undo and redo
+                saveOp();
             }
         }        
     }
@@ -697,7 +759,89 @@ public class PoseEditController {
                     vb.setLayoutY(newY);
                 }
             }
+            
+            // For undo and redo
+            saveOp();          
         }
+    }
+
+    private void saveOp() {
+        int opNum = (ops + 1) % MAX_OPS;
+        int opNum1 = (ops + 0) % MAX_OPS;
+        String filePath = OP_PATH + "op" + opNum;
+        String filePath1 = OP_PATH + "op" + opNum1;
+        FileManager fm = (FileManager) app.getFileComponent();
+        if(ops == 0) {
+            try {
+                fm.writeEmpty(filePath1);
+                //fm.saveData(dataManager, filePath1);
+            } catch (FileNotFoundException ex) {
+                PropertiesManager props = PropertiesManager.getPropertiesManager();
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show("ERROR", "Operation Error");
+            } catch (IOException ex) {
+                PropertiesManager props = PropertiesManager.getPropertiesManager();
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show("ERROR", "Operation Error");
+            }
+        }
+        try {
+            fm.saveData(dataManager, filePath);
+            ops ++;
+            //System.out.println(filePath);
+        } catch (IOException ex) {
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
+            AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+            dialog.show("ERROR", "Operation Error");
+        }
+    }
+
+    public void handleUndoRequest() throws IOException {
+        int opNum = (ops - 1) % MAX_OPS;
+        String filePath = OP_PATH + "op" + opNum;
+        File file = new File(filePath);
+        FileManager fm = (FileManager) app.getFileComponent();
+        
+        if (file.length() == 0) {
+            // do nothing
+        } else {
+            // Load file and update ops
+            // Tell the datamanger don't clean up everything
+            clean = false;
+            //fm.loadData(dataManager, filePath);
+            app.getGUI().getAFC().toOpen(filePath);
+            fm.setLoad(false);
+            clean = true;
+            ops --;
+        }
+    }
+
+    public void handleRedoRequest() throws IOException {
+        int opNum = (ops + 1) % MAX_OPS;
+        String filePath = OP_PATH + "op" + opNum;
+        File file = new File(filePath);
+        FileManager fm = (FileManager) app.getFileComponent();
+        
+        if (file.length() == 0) {
+            // do nothing
+        } else {
+            // Load file and update ops
+            // Tell the datamanger don't clean up everything
+            clean = false;
+            //fm.loadData(dataManager, filePath); 
+            app.getGUI().getAFC().toOpen(filePath);
+            fm.setLoad(false);
+            clean = true;
+            ops ++;
+        }
+    }
+
+    public boolean getClean() {
+        return clean;
+    }
+
+    public void resetOp() {
+        ops = 0;
     }
     
 }

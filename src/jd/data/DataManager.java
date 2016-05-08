@@ -1,6 +1,9 @@
 package jd.data;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -18,12 +21,15 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import jd.file.FileManager;
 import jd.gui.Workspace;
 import jd.jdLine;
 import jd.jdMet;
 import jd.jdVar;
+import properties_manager.PropertiesManager;
 import saf.components.AppDataComponent;
 import saf.AppTemplate;
+import saf.ui.AppMessageDialogSingleton;
 
 /**
  * This class serves as the data management component for this application.
@@ -180,8 +186,8 @@ public class DataManager implements AppDataComponent {
         inDesign.add(false);
         if(app.getWorkspaceComponent() != null) {
             ((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
-            //((Workspace)app.getWorkspaceComponent()).addGrid();
         }
+        resetOp();
     }
 
     public void setPanes(ObservableList<Node> initPanes) {
@@ -225,7 +231,7 @@ public class DataManager implements AppDataComponent {
         return selectedItem;
     }
     
-    public void editName(String name) {
+    public void editName(String name, boolean check) {
         int index = panes.indexOf(selectedItem);
         String oldName = names.get(index);
         boolean existed = false;
@@ -235,18 +241,32 @@ public class DataManager implements AppDataComponent {
                     existed = true;
             }
         }
-        if(!existed) {
+        if(check) {
+            if(!existed) {
+                names.set(index, name);
+                VBox selectedPane = (VBox) selectedItem;
+                FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
+                //VBox namePane = (VBox) selectedPane.getChildren().get(0);
+                Text nameText = new Text(names.get(index));
+                namePane.getChildren().clear();
+                namePane.getChildren().add(nameText);
+                ws.removeParentChoice(oldName);
+                ws.addParentChoice(name);
+                updateParents(oldName, name);
+            }    
+        } else {
             names.set(index, name);
             VBox selectedPane = (VBox) selectedItem;
             FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
-            //VBox namePane = (VBox) selectedPane.getChildren().get(0);
             Text nameText = new Text(names.get(index));
             namePane.getChildren().clear();
             namePane.getChildren().add(nameText);
-            ws.removeParentChoice(oldName);
-            ws.addParentChoice(name);
-            updateParents(oldName, name);
-        }        
+            if(!existed) {
+                ws.removeParentChoice(oldName);
+                ws.addParentChoice(name);
+                updateParents(oldName, name);
+            }
+        }
     }
     
     // UPDATES THE PARENT NAMES WHILE A CLASS'S NAME IS BEING EDITED
@@ -269,7 +289,6 @@ public class DataManager implements AppDataComponent {
         names.set(index, name);
         VBox selectedPane = (VBox) selectedItem;
         FlowPane namePane = (FlowPane) selectedPane.getChildren().get(0);
-        //VBox namePane = (VBox) selectedPane.getChildren().get(0);
         Text nameText = new Text(names.get(index));
         namePane.getChildren().clear();
         namePane.getChildren().add(nameText);
@@ -294,7 +313,7 @@ public class DataManager implements AppDataComponent {
     }
     
     
-    public void editPackage(String pname) {
+    public void editPackage(String pname, boolean check) {
         int index = panes.indexOf(selectedItem);
         boolean existed = false;
         for(int i = 0; i < names.size(); i ++) {
@@ -303,8 +322,12 @@ public class DataManager implements AppDataComponent {
                     existed = true;
             }
         }
-        if(!existed)
+        if(check){
+            if(!existed)
+                packages.set(index, pname);
+        } else{
             packages.set(index, pname);
+        }
     }
 
     private void initialPackage(String pname) {
@@ -486,7 +509,7 @@ public class DataManager implements AppDataComponent {
                 // old index is i
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
-                editName(vT);
+                editName(vT, true);
             }
             boolean inList = false;
             for(int mm = 0; mm < aggs.get(i).size(); mm ++) {
@@ -547,7 +570,7 @@ public class DataManager implements AppDataComponent {
                 // old index is i
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
-                editName(vT);
+                editName(vT, true);
             }
             boolean inList = false;
             for(int mm = 0; mm < aggs.get(i).size(); mm ++) {
@@ -696,7 +719,7 @@ public class DataManager implements AppDataComponent {
                 // old index is i
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
-                editName(vT);
+                editName(vT, true);
             }
             boolean inList = false;
             for(int mm = 0; mm < uses.get(i).size(); mm ++) {
@@ -723,7 +746,7 @@ public class DataManager implements AppDataComponent {
                     // old index is i
                     ws.getPEC().drawEPane(0, 0, false);
                     //int newInex = panes.size() - 1;
-                    editName(vT1);
+                    editName(vT1, true);
                 }
                 boolean inList = false;
                 for(int mm = 0; mm < uses.get(i).size(); mm ++) {
@@ -807,7 +830,7 @@ public class DataManager implements AppDataComponent {
                 // old index is i
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
-                editName(vT);
+                editName(vT, true);
             }
             boolean inList = false;
             for(int mm = 0; mm < uses.get(i).size(); mm ++) {
@@ -834,7 +857,7 @@ public class DataManager implements AppDataComponent {
                     // old index is i
                     ws.getPEC().drawEPane(0, 0, false);
                     //int newInex = panes.size() - 1;
-                    editName(vT1);                 
+                    editName(vT1, true);                 
                 }
                 boolean inList = false;
                 for(int mm = 0; mm < uses.get(i).size(); mm ++) {
@@ -936,6 +959,24 @@ public class DataManager implements AppDataComponent {
     }*/
 
     public void addGrid2() {
+        //if(ws != null)
         ws.addGrid();
+    }
+
+    private void resetOp() {
+        if(app.getFileComponent() != null &&  app.getWorkspaceComponent() != null 
+                && ((Workspace)app.getWorkspaceComponent()).getPEC() != null && ((Workspace)app.getWorkspaceComponent()).getPEC().getClean()) {
+            ((Workspace)app.getWorkspaceComponent()).getPEC().resetOp();
+            for(int i = 0; i < ((Workspace)app.getWorkspaceComponent()).getPEC().MAX_OPS; i++){
+                String filePath = "./temp/op" + i;
+                try {
+                    ((FileManager)app.getFileComponent()).clearFile(filePath);
+                } catch (IOException ex) {
+                    PropertiesManager props = PropertiesManager.getPropertiesManager();
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    dialog.show("ERROR", "Operation Error");
+                }
+            }
+        }
     }
 }

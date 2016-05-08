@@ -1,34 +1,5 @@
 
 {
     "panes":[
-        {
-            "name":"dasd",
-            "package":"",
-            "parent":[
-            ],
-            "inDesign":true,
-            "x":290.0,
-            "y":150.0,
-            "tx":190.0,
-            "ty":87.0,
-            "Width":100.0,
-            "Height":50.0,
-            "aggregates":[
-            ],
-            "uses":[
-            ],
-            "lines":[
-            ],
-            "vars":[
-                {
-                    "name":"dd",
-                    "Access":"protected",
-                    "type":"int",
-                    "Static":"false"
-                }
-            ],
-            "methods":[
-            ]
-        }
     ]
 }

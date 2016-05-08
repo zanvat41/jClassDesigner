@@ -2,6 +2,8 @@ package jd.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -431,6 +433,26 @@ public class Workspace extends AppWorkspaceComponent {
         gui.snapBox.setOnAction(e -> {
             poseEditController.handleSnapRequest(gui.snapBox);
         });
+        
+        gui.undoButton.setOnAction(e -> {
+            try {
+                poseEditController.handleUndoRequest();
+            } catch (IOException ex) {
+                PropertiesManager props = PropertiesManager.getPropertiesManager();
+		AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+		dialog.show("ERROR", "Operation Error");
+            }
+        });
+        
+        gui.redoButton.setOnAction(e -> {
+            try {
+                poseEditController.handleRedoRequest();
+            } catch (IOException ex) {
+                PropertiesManager props = PropertiesManager.getPropertiesManager();
+		AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+		dialog.show("ERROR", "Operation Error");
+            }
+        });
     }
 
     /**
@@ -490,9 +512,6 @@ public class Workspace extends AppWorkspaceComponent {
         setUpGrid(canvas.getWidth() / 10, canvas.getHeight() / 10, gui.gridBox.isSelected());
         if(!canvas.getChildren().contains(GP))
             canvas.getChildren().add(GP);
-        //System.out.println(canvas.getChildren());
-        //System.out.println(counter + "bla");
-        //counter ++;
     }
     
     public Pane getCanvas() {
