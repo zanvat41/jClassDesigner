@@ -640,30 +640,84 @@ public class FileManager implements AppFileComponent {
                         String rt = met.getType();
                         ArrayList<String> args = met.getArgs();
                         pw.print("    " + acc + " ");
-                        if(st)
-                            pw.print("static ");
-                        if(ab)
+                        if(ab) {
                             pw.print("abstract ");
-                        pw.print(rt + " " + metName + "(");
-                        for(int k = 0; k < args.size(); k++) {
-                            pw.print(args.get(k) + " arg" + k);
-                            if(k != args.size() - 1)
-                                pw.print(", ");
+                            pw.print(rt + " " + metName + "(");
+                            for(int k = 0; k < args.size(); k++) {
+                                pw.print(args.get(k) + " arg" + k);
+                                if(k != args.size() - 1)
+                                    pw.print(", ");
+                            }
+                            pw.println(");");
+                        } else {
+                            if(st)
+                                pw.print("static ");
+                            pw.print(rt + " " + metName + "(");
+                            for(int k = 0; k < args.size(); k++) {
+                                pw.print(args.get(k) + " arg" + k);
+                                if(k != args.size() - 1)
+                                    pw.print(", ");
+                            }
+                            pw.println(") {");
+                            if(!rt.equals("void") && !rt.isEmpty()){
+                                if(rt.equals("int") || rt.equals("double") || rt.equals("byte") || rt.equals("short") || rt.equals("float"))
+                                    pw.println("        return 0;" );
+                                else if(rt.equals("char"))
+                                    pw.println("        return '0';" );
+                                else if(rt.equals("boolean"))
+                                    pw.println("        return true;" );
+                                else
+                                    pw.println("        return null;" );
+                            }
+                            pw.println("    }");
                         }
-                        pw.println(") {");
-                        if(!rt.equals("void") && !rt.isEmpty()){
-                            if(rt.equals("int") || rt.equals("double") || rt.equals("byte") || rt.equals("short") || rt.equals("float"))
-                                pw.println("        return 0;" );
-                            else if(rt.equals("char"))
-                                pw.println("        return '0';" );
-                            else if(rt.equals("boolean"))
-                                pw.println("        return true;" );
-                            else
-                                pw.println("        return null;" );
-                        }
-                        pw.println("    }");
                     }
 
+                    // And Parent's methods
+                    for(String p : parents) {
+                        int pI = i;
+                        for(int k = 0; k < names.size(); k ++) {
+                            if(names.get(k).equals(p)){
+                                pI = k;          
+                                k = names.size() + 1;
+                            }
+                        }
+                        ArrayList<jdMet> metList1 = dataManager.getMets(pI);
+                        for(int j = 0; j < metList1.size(); j++) {
+                            jdMet met = metList1.get(j);
+                            boolean st = met.getStatic();
+                            boolean ab = met.getAbstract();
+                            String acc = met.getAccess();
+                            String metName = met.getName();
+                            //System.out.println(metName);
+                            String rt = met.getType();
+                            ArrayList<String> args = met.getArgs();
+                            pw.print("    " + acc + " ");
+         
+                            if(st && !ab)
+                                pw.print("static ");
+                            pw.print(rt + " " + metName + "(");
+                            for(int k = 0; k < args.size(); k++) {
+                                pw.print(args.get(k) + " arg" + k);
+                                if(k != args.size() - 1)
+                                    pw.print(", ");
+                            }
+                            pw.println(") {");
+                            if(!rt.equals("void") && !rt.isEmpty()){
+                                if(rt.equals("int") || rt.equals("double") || rt.equals("byte") || rt.equals("short") || rt.equals("float"))
+                                    pw.println("        return 0;" );
+                                else if(rt.equals("char"))
+                                    pw.println("        return '0';" );
+                                else if(rt.equals("boolean"))
+                                    pw.println("        return true;" );
+                                else
+                                    pw.println("        return null;" );
+                            }
+                            pw.println("    }");
+                        }              
+                    }    
+                                                       
+                    
                     pw.println("}");
                     pw.close();
                 }
