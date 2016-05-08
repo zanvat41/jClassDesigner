@@ -2,13 +2,13 @@
 {
     "panes":[
         {
-            "name":"ddd",
-            "package":"ffa",
+            "name":"",
+            "package":"",
             "parent":[
             ],
             "inDesign":true,
-            "x":860.0,
-            "y":380.0,
+            "x":641.0,
+            "y":187.0,
             "tx":0.0,
             "ty":0.0,
             "Width":100.0,
@@ -20,23 +20,8 @@
             "lines":[
             ],
             "vars":[
-                {
-                    "name":"a",
-                    "Access":"public",
-                    "type":"double",
-                    "Static":"false"
-                }
             ],
             "methods":[
-                {
-                    "name":"ddd",
-                    "Access":"",
-                    "type":"",
-                    "Abstract":"false",
-                    "Static":"false",
-                    "args":[
-                    ]
-                }
             ]
         },
         {
@@ -45,8 +30,8 @@
             "parent":[
             ],
             "inDesign":true,
-            "x":630.0,
-            "y":490.0,
+            "x":800.0,
+            "y":339.0,
             "tx":0.0,
             "ty":0.0,
             "Width":100.0,
@@ -60,6 +45,15 @@
             "vars":[
             ],
             "methods":[
+                {
+                    "name":"da",
+                    "Access":"",
+                    "type":"",
+                    "Abstract":"false",
+                    "Static":"false",
+                    "args":[
+                    ]
+                }
             ]
         }
     ]

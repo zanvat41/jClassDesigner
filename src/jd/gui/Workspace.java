@@ -391,9 +391,11 @@ public class Workspace extends AppWorkspaceComponent {
         
         varTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                // OPEN UP THE SCHEDULE ITEM EDITOR
-                jdVar theVar = varTable.getSelectionModel().getSelectedItem();
-                poseEditController.handleEditVarRequest(theVar, this);
+                if(varTable.getSelectionModel().getSelectedItem()!=null){
+                    // OPEN UP THE SCHEDULE ITEM EDITOR
+                    jdVar theVar = varTable.getSelectionModel().getSelectedItem();
+                    poseEditController.handleEditVarRequest(theVar, this);
+                }
             }
         });
         
@@ -411,9 +413,11 @@ public class Workspace extends AppWorkspaceComponent {
         
         metTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                // OPEN UP THE SCHEDULE ITEM EDITOR
-                jdMet theMet = metTable.getSelectionModel().getSelectedItem();
-                poseEditController.handleEditMetRequest(theMet, this);
+                if(metTable.getSelectionModel().getSelectedItem()!=null){
+                    // OPEN UP THE SCHEDULE ITEM EDITOR
+                    jdMet theMet = metTable.getSelectionModel().getSelectedItem();
+                    poseEditController.handleEditMetRequest(theMet, this);
+                }
             }
         });
         
