@@ -16,10 +16,13 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -53,8 +56,8 @@ public class Workspace extends AppWorkspaceComponent {
     static final String CLASS_EDIT_TOOLBAR = "edit_toolbar";
     static final String CLASS_EDIT_TOOLBAR_ROW = "edit_toolbar_row";
     static final String EMPTY_TEXT = "";
-    static final int BUTTON_TAG_WIDTH = 75;
-
+    static final int BUTTON_TAG_WIDTH = 75; 
+    //int counter = 0;
     // HERE'S THE APP
     AppTemplate app;
 
@@ -124,6 +127,7 @@ public class Workspace extends AppWorkspaceComponent {
     // THIS IS WHERE WE'LL RENDER OUR DRAWING
     ScrollPane SP;
     Pane canvas;
+    GridPane GP;
     
     // HERE IS THE CONTROLLER
     PoseEditController poseEditController;    
@@ -290,11 +294,15 @@ public class Workspace extends AppWorkspaceComponent {
         
 	workspace = new BorderPane();
         
-	// WE'LL RENDER OUR STUFF HERE IN THE CANVAS
+	// WE'LL RENDER OUR STUFF HERE IN THE 
+        GP = new GridPane();
 	canvas = new Pane();
         SP = new ScrollPane();
-        //System.out.println(workspace.getMinWidth());
+        setUpGrid(300, 300, false);  
         canvas.setMinSize(3000, 3000);
+        canvas.getChildren().add(GP);
+        //out.println(counter);
+        //counter++;
         SP.setContent(canvas);
                 
 	debugText = new Text();
@@ -416,7 +424,9 @@ public class Workspace extends AppWorkspaceComponent {
             poseEditController.handleRemoveRequest();
         });
         
-        
+        gui.gridBox.setOnAction(e -> {
+            poseEditController.handleGridRequest(gui.gridBox);
+        });
         
     }
 
@@ -473,6 +483,11 @@ public class Workspace extends AppWorkspaceComponent {
             setMetTable(new ArrayList());
         }
         resetArgCol(fileManager.getArgSize());
+        if(!canvas.getChildren().contains(GP))
+            canvas.getChildren().add(GP);
+        //System.out.println(canvas.getChildren());
+        //System.out.println(counter + "bla");
+        //counter ++;
     }
     
     public Pane getCanvas() {
@@ -572,6 +587,26 @@ public class Workspace extends AppWorkspaceComponent {
     
     public PoseEditController getPEC() {
         return poseEditController;
+    }
+
+    public void setUpGrid(double numCols, double numRows, boolean vis) {
+        GP.setGridLinesVisible(vis);
+        GP.getColumnConstraints().clear();
+        GP.getRowConstraints().clear();
+        for (int i = 0; i < numCols; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / numCols);
+            //colConst.setPercentWidth(10);
+            GP.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < numRows; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / numRows);
+            //rowConst.setPercentHeight(10);
+            GP.getRowConstraints().add(rowConst);         
+        }
+        GP.setStyle("-fx-border-color: Black; -fx-background-color: #ffffcc;");
+        GP.setMinSize(numCols * 10, numRows * 10);
     }
     
 }

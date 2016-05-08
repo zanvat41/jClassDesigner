@@ -15,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import jd.gui.Workspace;
@@ -115,6 +116,16 @@ public class DataManager implements AppDataComponent {
         mets = new ArrayList();
         lines = new ArrayList();
         inDesign = new ArrayList();
+        names.add("");
+        packages.add("");
+        parents.add(new ArrayList());
+        aggs.add(new ArrayList());
+        uses.add(new ArrayList());
+        vars.add(new ArrayList());
+        mets.add(new ArrayList());
+        lines.add(new ArrayList());
+        inDesign.add(false);
+        
         
 	// INIT THE COLORS
 	currentFillColor = Color.web(WHITE_HEX);
@@ -152,13 +163,21 @@ public class DataManager implements AppDataComponent {
         names.clear();
         packages.clear();
         parents.clear();
-        //ipms.clear();
         aggs.clear();
         uses.clear();
         vars.clear();
         mets.clear();
         lines.clear();
         inDesign.clear();
+        names.add("");
+        packages.add("");
+        parents.add(new ArrayList());
+        aggs.add(new ArrayList());
+        uses.add(new ArrayList());
+        vars.add(new ArrayList());
+        mets.add(new ArrayList());
+        lines.add(new ArrayList());
+        inDesign.add(false);
         if(app.getWorkspaceComponent() != null) {
             ((Workspace)app.getWorkspaceComponent()).getCanvas().getChildren().clear();
         }
@@ -184,7 +203,7 @@ public class DataManager implements AppDataComponent {
     
     public void setSelected(Node n) {
         selectedItem = n;
-        if(selectedItem != null) {
+        if((selectedItem instanceof VBox)) {
             reloadEditPane();
         } else {
             ws = (Workspace) app.getWorkspaceComponent();
@@ -303,6 +322,30 @@ public class DataManager implements AppDataComponent {
     
     public void addParent(String p, int i) {
         parents.get(i).add(p);
+        // Then the lines
+        /*Line l = new Line();
+        l.setStartX(selectedItem.getLayoutX() + selectedItem.getTranslateX());
+        l.setStartY(selectedItem.getLayoutY() + selectedItem.getTranslateY());
+        int pi = i;
+        for(int k = 0; k < names.size(); k++) {
+            if(names.get(k).equals(p)){
+                pi = k;
+                k = names.size() + 1;
+            }
+        }
+        VBox prt = (VBox) panes.get(pi);
+        l.setEndX(prt.getLayoutX() + prt.getTranslateX());
+        l.setEndY(prt.getLayoutY() + prt.getTranslateY());
+        panes.add(l);
+        names.add("");
+        packages.add("");
+        parents.add(new ArrayList());
+        aggs.add(new ArrayList());
+        uses.add(new ArrayList());
+        vars.add(new ArrayList());
+        mets.add(new ArrayList());
+        lines.add(new ArrayList());
+        inDesign.add(false);*/
     }
     
     public void removeParent(String p, int i) {
@@ -319,6 +362,15 @@ public class DataManager implements AppDataComponent {
             if(aggs.get(i).get(j).equals(p)) {
                 aggs.get(i).remove(j);
                 j = aggs.get(i).size() + 1;
+            }
+        }
+    }
+    
+    public void removeUse(String p, int i) {
+        for(int j = 0; j < uses.get(i).size(); j++) {
+            if(uses.get(i).get(j).equals(p)) {
+                uses.get(i).remove(j);
+                j = uses.get(i).size() + 1;
             }
         }
     }
@@ -351,8 +403,36 @@ public class DataManager implements AppDataComponent {
         return uses.get(i);
     }
     
+    // for load file only
     public void addVar1(jdVar v, int i) {
         vars.get(i).add(v);
+        
+        // Then shows in the ui
+        VBox selectedPane = (VBox) selectedItem;
+        VBox varPane = (VBox) selectedPane.getChildren().get(1);
+        //VBox namePane = (VBox) selectedPane.getChildren().get(0);
+        String varInfo = "";
+        // First the access
+        if(v.getAccess().equals("public")) {
+            varInfo += "+";
+        } else if(v.getAccess().equals("protected")) {
+            varInfo += "#";
+        } else if(v.getAccess().equals("private")) {
+            varInfo += "-";
+        }
+        // Then the Static
+        if(v.getStatic()) 
+            varInfo += "$";
+        //Then the name
+        varInfo += v.getName();
+        // Then the type
+        if(!v.getType().isEmpty()) {
+            varInfo += " : ";
+            varInfo += v.getType();
+        }
+                
+        Text varText = new Text(varInfo);
+        varPane.getChildren().add(varText);
     }
     
     public void addVar(jdVar v, int i) {
@@ -388,7 +468,7 @@ public class DataManager implements AppDataComponent {
         // add aggregate if needed
         String vT = v.getType();
         if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
-                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("")) {
             //do nothing
         } else {
             boolean isExisted = false;
@@ -401,8 +481,14 @@ public class DataManager implements AppDataComponent {
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
                 editName(vT);
-                addAgg(vT, i);
             }
+            boolean inList = false;
+            for(int mm = 0; mm < aggs.get(i).size(); mm ++) {
+                if(aggs.get(i).get(mm).equals(vT))
+                    inList = true;
+            }
+            if(!inList)
+                addAgg(vT, i);
         }
         
         
@@ -443,7 +529,7 @@ public class DataManager implements AppDataComponent {
         // add aggregate if needed
         String vT = v.getType();
         if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
-                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("")) {
             //do nothing
         } else {
             boolean isExisted = false;
@@ -456,8 +542,14 @@ public class DataManager implements AppDataComponent {
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
                 editName(vT);
-                addAgg(vT, i);
             }
+            boolean inList = false;
+            for(int mm = 0; mm < aggs.get(i).size(); mm ++) {
+                if(aggs.get(i).get(mm).equals(vT))
+                    inList = true;
+            }
+            if(!inList)
+                addAgg(vT, i);
         }
         
         
@@ -472,9 +564,60 @@ public class DataManager implements AppDataComponent {
         varPane.getChildren().remove(index);
     }
     
-    
+    // For load file only
     public void addMet1(jdMet m, int i) {
         mets.get(i).add(m);
+        
+        // Then shows in the ui
+        VBox selectedPane = (VBox) selectedItem;
+        VBox metPane = (VBox) selectedPane.getChildren().get(2);
+        //VBox namePane = (VBox) selectedPane.getChildren().get(0);
+        String metInfo = "";
+        // First the access
+        if(m.getAccess().equals("public")) {
+            metInfo += "+";
+        } else if(m.getAccess().equals("protected")) {
+            metInfo += "#";
+        } else if(m.getAccess().equals("private")) {
+            metInfo += "-";
+        }
+        // Then the Static
+        if(m.getStatic()) 
+            metInfo += "$";
+        //Then the name
+        metInfo += m.getName();
+        //Then the arguments
+        metInfo += "(";
+        for(int j = 0; j < m.getArgs().size(); j++) {
+            String argName = (String) m.getArgs().get(j);
+            if(!argName.isEmpty()) {
+                metInfo += "arg";
+                int argNum = j+1;
+                metInfo += argNum;
+                metInfo += " : ";
+                metInfo += argName;
+                if(j != m.getArgs().size() - 1)
+                    metInfo += ", ";
+            }
+        }
+        if(metInfo.endsWith(", ")) {
+            metInfo = metInfo.substring(0, metInfo.length() - 2);
+        }
+        
+        metInfo += ")";
+        
+        // Then the type
+        if(!m.getType().isEmpty()) {
+            metInfo += " : ";
+            metInfo += m.getType();
+        }
+          
+        //Then the abstract
+        if(m.getAbstract())
+            metInfo += " {abstract}";
+        
+        Text metText = new Text(metInfo);
+        metPane.getChildren().add(metText);
     }
     
     public void addMet(jdMet m, int i) {
@@ -535,7 +678,7 @@ public class DataManager implements AppDataComponent {
         // First check return type
         String vT = m.getType();
         if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
-                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("void") || vT.equals("")) {
             //do nothing
         } else {
             boolean isExisted = false;
@@ -548,15 +691,21 @@ public class DataManager implements AppDataComponent {
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
                 editName(vT);
-                addAgg(vT, i);
             }
+            boolean inList = false;
+            for(int mm = 0; mm < uses.get(i).size(); mm ++) {
+                if(uses.get(i).get(mm).equals(vT))
+                    inList = true;
+            }
+            if(!inList)
+                addUse(vT, i);
         }
         // Then the type of arguments
         ArrayList<String> argList = m.getArgs();
         for(int kk = 0; kk < argList.size(); kk ++) {
             String vT1 = argList.get(kk);
             if(vT1.equals("int") || vT1.equals("double") || vT1.equals("byte") || vT1.equals("short") || vT1.equals("float")
-                    || vT1.equals("char") || vT1.equals("boolean") || vT1.equals("String") || vT1.equals("")) {
+                    || vT1.equals("char") || vT1.equals("boolean") || vT1.equals("")) {
                 //do nothing
             } else {
                 boolean isExisted = false;
@@ -569,8 +718,14 @@ public class DataManager implements AppDataComponent {
                     ws.getPEC().drawEPane(0, 0, false);
                     //int newInex = panes.size() - 1;
                     editName(vT1);
-                    addAgg(vT1, i);
                 }
+                boolean inList = false;
+                for(int mm = 0; mm < uses.get(i).size(); mm ++) {
+                    if(uses.get(i).get(mm).equals(vT1))
+                        inList = true;
+                }
+                if(!inList)
+                    addUse(vT1, i);
             }
         }
         
@@ -634,7 +789,7 @@ public class DataManager implements AppDataComponent {
         // First check return type
         String vT = m.getType();
         if(vT.equals("int") || vT.equals("double") || vT.equals("byte") || vT.equals("short") || vT.equals("float")
-                || vT.equals("char") || vT.equals("boolean") || vT.equals("String") || vT.equals("")) {
+                || vT.equals("char") || vT.equals("boolean") || vT.equals("void") || vT.equals("")) {
             //do nothing
         } else {
             boolean isExisted = false;
@@ -647,15 +802,21 @@ public class DataManager implements AppDataComponent {
                 ws.getPEC().drawEPane(0, 0, false);
                 //int newInex = panes.size() - 1;
                 editName(vT);
-                addAgg(vT, i);
             }
+            boolean inList = false;
+            for(int mm = 0; mm < uses.get(i).size(); mm ++) {
+                if(uses.get(i).get(mm).equals(vT))
+                    inList = true;
+            }
+            if(!inList)
+                addUse(vT, i);
         }
         // Then the type of arguments
         ArrayList<String> argList = m.getArgs();
         for(int kk = 0; kk < argList.size(); kk ++) {
             String vT1 = argList.get(kk);
             if(vT1.equals("int") || vT1.equals("double") || vT1.equals("byte") || vT1.equals("short") || vT1.equals("float")
-                    || vT1.equals("char") || vT1.equals("boolean") || vT1.equals("String") || vT1.equals("")) {
+                    || vT1.equals("char") || vT1.equals("boolean") || vT1.equals("")) {
                 //do nothing
             } else {
                 boolean isExisted = false;
@@ -667,9 +828,15 @@ public class DataManager implements AppDataComponent {
                     // old index is i
                     ws.getPEC().drawEPane(0, 0, false);
                     //int newInex = panes.size() - 1;
-                    editName(vT1);
-                    addAgg(vT1, i);
+                    editName(vT1);                 
                 }
+                boolean inList = false;
+                for(int mm = 0; mm < uses.get(i).size(); mm ++) {
+                    if(uses.get(i).get(mm).equals(vT1))
+                        inList = true;
+                }
+                if(!inList)
+                    addUse(vT1, i);
             }
         }
     }
@@ -698,7 +865,9 @@ public class DataManager implements AppDataComponent {
     private void reloadEditPane() {
         int i = panes.indexOf(selectedItem);
         ws = (Workspace) app.getWorkspaceComponent();
+        //System.out.println(names.size() + " " + i);
         ws.reloadNameText(names.get(i));
+        //System.out.println(names.size() + " " + i);
         ws.reloadPackageText(packages.get(i));
         ws.uncheckParentChoice();
         ArrayList<String> prts = getParents(i);
@@ -735,6 +904,7 @@ public class DataManager implements AppDataComponent {
         for(int k = 0; k < newSize; k++){
             removeParent(theName, k);
             removeAgg(theName, k);
+            removeUse(theName, k);
         }
         ws.removeParentChoice(theName);
         

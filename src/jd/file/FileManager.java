@@ -311,6 +311,7 @@ public class FileManager implements AppFileComponent {
 	
 	// AND NOW LOAD ALL THE PANES
 	JsonArray jsonPaneArray = json.getJsonArray(JSON_PANES);
+        //System.out.println(jsonPaneArray.size());
 	for (int i = 0; i < jsonPaneArray.size(); i++) {
 	    JsonObject jsonPane = jsonPaneArray.getJsonObject(i);
 	    VBox vb = loadPane(jsonPane);
@@ -429,7 +430,7 @@ public class FileManager implements AppFileComponent {
                 newVar.setStatic(true);
             else
                 newVar.setStatic(false);
-            dm.addVar(newVar, i);
+            dm.addVar1(newVar, i);
         }
         
         // Finally the methods
@@ -461,7 +462,7 @@ public class FileManager implements AppFileComponent {
             }
             if(jsonArgArray.size() > argSize)
                 argSize = jsonArgArray.size();
-            dm.addMet(newMet, i);
+            dm.addMet1(newMet, i);
         }  
     }
     

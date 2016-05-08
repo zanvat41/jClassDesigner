@@ -13,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.BlurType;
@@ -305,7 +306,7 @@ public class PoseEditController {
         ObservableList<Node> panes = dataManager.getPanes();
         for (Iterator<Node> it = panes.iterator(); it.hasNext();) {
             Node s = it.next();
-            if(s.isPressed()) {
+            if(s.isPressed() && s instanceof VBox) {
                 selectedItem = s;
                 contains = true;
             }
@@ -331,7 +332,6 @@ public class PoseEditController {
         } else {
             dataManager.setSelected(null);
         }
-        //workspace.refreshButtons(selected);
     }
 
     public void handleNameUpdate(String name) {
@@ -340,11 +340,13 @@ public class PoseEditController {
         afc.markAsEdited(app.getGUI());
         int i = dataManager.getPanes().indexOf(selectedItem);
         if(i > -1 && i < dataManager.getNames().size() && !dataManager.getName(i).equals(name))
-            dataManager.editName(name);
+            if(selectedItem instanceof VBox)
+                dataManager.editName(name);
     }
 
     public void handlePackageUpdate(VBox selectedPane, String text) {
-        dataManager.editPackage(text);
+        if(selectedItem instanceof VBox)
+            dataManager.editPackage(text);
     }
 
     public void handleCodeRequest() throws IOException {
@@ -393,7 +395,7 @@ public class PoseEditController {
     }*/
 
     public void handleParentChoice(CheckMenuItem pc) {
-        if (selectedItem != null) {
+        if (selectedItem instanceof VBox) {
             // MARK THE FILE AS EDITED
             AppFileController afc = app.getGUI().getAFC();
             afc.markAsEdited(app.getGUI());
@@ -409,7 +411,7 @@ public class PoseEditController {
     public void handleAddVarRequest() {
         DataManager dm = (DataManager) app.getDataComponent();
         int index = dm.getPanes().indexOf(selectedItem);
-        if(index > -1 && index < dm.getPanes().size()){
+        if(index > -1 && index < dm.getPanes().size() && selectedItem instanceof VBox){
             //ArrayList<jdVar> list = dm.getVars(index);
             vid.showAddVarDialog();
 
@@ -440,7 +442,7 @@ public class PoseEditController {
     public void handleEditVarRequest(jdVar itemToEdit, Workspace ws) {
         DataManager dm = (DataManager) app.getDataComponent();
         int index = dm.getPanes().indexOf(selectedItem);
-        if(index > -1 && index < dm.getPanes().size()){
+        if(index > -1 && index < dm.getPanes().size() && selectedItem instanceof VBox){
             ArrayList<jdVar> list = dm.getVars(index);
             vid.showEditVarDialog(itemToEdit);
             
@@ -496,7 +498,7 @@ public class PoseEditController {
         DataManager dm = (DataManager) app.getDataComponent();
         md = new metDialog(this.psg, ws.getArgSize());
         int index = dm.getPanes().indexOf(selectedItem);
-        if(index > -1 && index < dm.getPanes().size()){
+        if(index > -1 && index < dm.getPanes().size() && selectedItem instanceof VBox){
             //ArrayList<jdVar> list = dm.getVars(index);
             md.showAddMetDialog();
 
@@ -528,7 +530,7 @@ public class PoseEditController {
         DataManager dm = (DataManager) app.getDataComponent();
         md = new metDialog(this.psg, ws.getArgSize());
         int index = dm.getPanes().indexOf(selectedItem);
-        if(index > -1 && index < dm.getPanes().size()){
+        if(index > -1 && index < dm.getPanes().size() && selectedItem instanceof VBox){
             ArrayList<jdMet> list = dm.getMets(index);
             md.showEditMetDialog(itemToEdit);
             
@@ -600,7 +602,7 @@ public class PoseEditController {
             public void handle(MouseEvent mouseEvent) {
                 double eX = mouseEvent.getX();
                 double eY = mouseEvent.getY();
-                if(selectedItem != null) {
+                if(selectedItem instanceof VBox) {
                     VBox vb = (VBox) selectedItem;
                     double bX = vb.getLayoutX() + vb.getTranslateX();
                     double bY = vb.getLayoutY() + vb.getTranslateY();
@@ -609,7 +611,7 @@ public class PoseEditController {
                     //if(eX >= rbX - 2 && eX <= rbX + 2 && eY >= rbY - 2 && eY <= rbY + 2) {
                         //canvas.setCursor(Cursor.NW_RESIZE);
                         double eW = eX - (bX);
-                        double eH = eY - (bY);
+                        double eH = eY - (bY);                        
                         resize(canvas, vb, eW, eH);
                     //}
                 }
@@ -638,7 +640,7 @@ public class PoseEditController {
         String selection = yesNoDialog.getSelection();
 
         DataManager dm = (DataManager) app.getDataComponent();
-        if(selectedItem != null) {
+        if(selectedItem instanceof VBox) {
             int index = dm.getPanes().indexOf(selectedItem);
             // IF THE USER SAID YES, THEN REMOVE IT
             if (selection.equals(AppYesNoCancelDialogSingleton.YES) && index > -1 && index < dm.getPanes().size()) { 
@@ -654,6 +656,15 @@ public class PoseEditController {
                 selectedItem = null;
             }
         }        
+    }
+
+    public void handleGridRequest(CheckBox gb) {
+        boolean needGrid = gb.isSelected();
+        BorderPane jdWorkspace = (BorderPane) app.getGUI().getAppPane().getCenter();
+        ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
+        Pane canvas = (Pane) SP.getContent();
+        Workspace ws = (Workspace) app.getWorkspaceComponent();
+        ws.setUpGrid(canvas.getWidth() / 10, canvas.getHeight() / 10, needGrid);
     }
     
     
