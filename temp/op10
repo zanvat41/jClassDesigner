@@ -10,15 +10,15 @@
             "x":630.0,
             "y":220.0,
             "tx":-430.0,
-            "ty":129.0,
+            "ty":131.0,
             "Width":365.0,
             "Height":286.0,
             "aggregates":[
+                {
+                    "name":"shitty"
+                }
             ],
             "uses":[
-                {
-                    "name":"ArrayList"
-                },
                 {
                     "name":"String"
                 }
@@ -30,6 +30,12 @@
                     "name":"i",
                     "Access":"public",
                     "type":"int",
+                    "Static":"false"
+                },
+                {
+                    "name":"st",
+                    "Access":"public",
+                    "type":"shitty",
                     "Static":"false"
                 }
             ],
@@ -57,7 +63,7 @@
             ]
         },
         {
-            "name":"a",
+            "name":"shitty",
             "package":"",
             "parent":[
             ],
@@ -65,7 +71,7 @@
             "x":460.0,
             "y":100.0,
             "tx":197.0,
-            "ty":162.0,
+            "ty":163.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
@@ -75,6 +81,12 @@
             "lines":[
             ],
             "vars":[
+                {
+                    "name":"llist",
+                    "Access":"public",
+                    "type":"ArrayList",
+                    "Static":"false"
+                }
             ],
             "methods":[
             ]
@@ -132,38 +144,15 @@
             ]
         },
         {
-            "name":"ArrayList",
+            "name":"String",
             "package":"java.util",
             "parent":[
             ],
             "inDesign":false,
             "x":0.0,
             "y":0.0,
-            "tx":55.0,
-            "ty":153.0,
-            "Width":100.0,
-            "Height":50.0,
-            "aggregates":[
-            ],
-            "uses":[
-            ],
-            "lines":[
-            ],
-            "vars":[
-            ],
-            "methods":[
-            ]
-        },
-        {
-            "name":"String",
-            "package":"",
-            "parent":[
-            ],
-            "inDesign":false,
-            "x":0.0,
-            "y":0.0,
-            "tx":235.0,
-            "ty":62.0,
+            "tx":234.0,
+            "ty":63.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[

@@ -595,8 +595,10 @@ public class FileManager implements AppFileComponent {
 
                     //Check if it implements an interface or not
                     for(String p : parents) {
+                        String p1;
                         if(p.contains("{interface}")) {
-                            pw.print("implements " + p + " ");
+                            p1 = p.replace("{interface}", "");
+                            pw.print("implements " + p1 + " ");
                         }
                     }  
 
