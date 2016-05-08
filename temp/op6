@@ -2,50 +2,15 @@
 {
     "panes":[
         {
-            "name":"b",
-            "package":"",
-            "parent":[
-                {
-                    "name":"c{abstract}"
-                }
-            ],
-            "inDesign":true,
-            "x":700.0,
-            "y":210.0,
-            "tx":101.0,
-            "ty":81.0,
-            "Width":104.0,
-            "Height":53.0,
-            "aggregates":[
-            ],
-            "uses":[
-            ],
-            "lines":[
-            ],
-            "vars":[
-            ],
-            "methods":[
-                {
-                    "name":"met",
-                    "Access":"public",
-                    "type":"void",
-                    "Abstract":"false",
-                    "Static":"true",
-                    "args":[
-                    ]
-                }
-            ]
-        },
-        {
-            "name":"c{abstract}",
+            "name":"",
             "package":"",
             "parent":[
             ],
             "inDesign":true,
-            "x":600.0,
-            "y":430.0,
-            "tx":52.0,
-            "ty":156.0,
+            "x":599.0,
+            "y":181.0,
+            "tx":0.0,
+            "ty":0.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
@@ -57,27 +22,41 @@
             "vars":[
             ],
             "methods":[
-                {
-                    "name":"sss",
-                    "Access":"public",
-                    "type":"String",
-                    "Abstract":"true",
-                    "Static":"false",
-                    "args":[
-                    ]
-                }
             ]
         },
         {
-            "name":"{interface}anint",
+            "name":"",
             "package":"",
             "parent":[
             ],
             "inDesign":true,
-            "x":1210.0,
-            "y":344.0,
-            "tx":0.0,
-            "ty":0.0,
+            "x":519.0,
+            "y":488.0,
+            "tx":81.0,
+            "ty":-35.0,
+            "Width":100.0,
+            "Height":50.0,
+            "aggregates":[
+            ],
+            "uses":[
+            ],
+            "lines":[
+            ],
+            "vars":[
+            ],
+            "methods":[
+            ]
+        },
+        {
+            "name":"",
+            "package":"",
+            "parent":[
+            ],
+            "inDesign":true,
+            "x":1006.0,
+            "y":416.0,
+            "tx":-143.0,
+            "ty":15.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[

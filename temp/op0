@@ -2,20 +2,17 @@
 {
     "panes":[
         {
-            "name":"b",
-            "package":"",
+            "name":"ddd",
+            "package":"ffa",
             "parent":[
-                {
-                    "name":"c{abstract}"
-                }
             ],
             "inDesign":true,
-            "x":700.0,
-            "y":210.0,
-            "tx":101.0,
-            "ty":81.0,
-            "Width":104.0,
-            "Height":53.0,
+            "x":860.0,
+            "y":380.0,
+            "tx":0.0,
+            "ty":0.0,
+            "Width":100.0,
+            "Height":50.0,
             "aggregates":[
             ],
             "uses":[
@@ -23,29 +20,35 @@
             "lines":[
             ],
             "vars":[
+                {
+                    "name":"a",
+                    "Access":"public",
+                    "type":"double",
+                    "Static":"false"
+                }
             ],
             "methods":[
                 {
-                    "name":"met",
-                    "Access":"public",
-                    "type":"void",
+                    "name":"ddd",
+                    "Access":"",
+                    "type":"",
                     "Abstract":"false",
-                    "Static":"true",
+                    "Static":"false",
                     "args":[
                     ]
                 }
             ]
         },
         {
-            "name":"c{abstract}",
+            "name":"",
             "package":"",
             "parent":[
             ],
             "inDesign":true,
-            "x":600.0,
-            "y":430.0,
-            "tx":52.0,
-            "ty":156.0,
+            "x":630.0,
+            "y":490.0,
+            "tx":0.0,
+            "ty":0.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
@@ -57,15 +60,6 @@
             "vars":[
             ],
             "methods":[
-                {
-                    "name":"sss",
-                    "Access":"public",
-                    "type":"String",
-                    "Abstract":"true",
-                    "Static":"false",
-                    "args":[
-                    ]
-                }
             ]
         }
     ]
