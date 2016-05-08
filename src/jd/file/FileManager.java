@@ -334,6 +334,7 @@ public class FileManager implements AppFileComponent {
             }
 
             dataManager.addGrid2();
+            dataManager.drawLineBack();
             justLoad = true;
             loadPath = filePath;
         }
@@ -393,7 +394,7 @@ public class FileManager implements AppFileComponent {
         for(int j = 0; j < jsonPrtArray.size(); j++) {
             JsonObject jsonPrt = jsonPrtArray.getJsonObject(j);
             String prtName = jsonPrt.getString(JSON_NAME);
-            dm.addParent(prtName, i);
+            dm.addParent1(prtName, i);
         }
         
 
@@ -403,7 +404,7 @@ public class FileManager implements AppFileComponent {
         for(int j = 0; j < jsonAggArray.size(); j++) {
             JsonObject jsonAgg = jsonAggArray.getJsonObject(j);
             String aggName = jsonAgg.getString(JSON_NAME);
-            dm.addAgg(aggName, i);
+            dm.addAgg1(aggName, i);
         }
         
         //Then the uses
@@ -411,7 +412,7 @@ public class FileManager implements AppFileComponent {
         for(int j = 0; j < jsonUseArray.size(); j++) {
             JsonObject jsonUse = jsonUseArray.getJsonObject(j);
             String useName = jsonUse.getString(JSON_NAME);
-            dm.addUse(useName, i);
+            dm.addUse1(useName, i);
         }
         
         //Then the lines

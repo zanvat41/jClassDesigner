@@ -101,9 +101,9 @@ public class PoseEditController {
 	dropShadowEffect.setOffsetX(0.0f);
 	dropShadowEffect.setOffsetY(0.0f);
 	dropShadowEffect.setSpread(1.0);
-	dropShadowEffect.setColor(Color.YELLOW);
+	dropShadowEffect.setColor(Color.BROWN);
 	dropShadowEffect.setBlurType(BlurType.GAUSSIAN);
-	dropShadowEffect.setRadius(15);
+	dropShadowEffect.setRadius(5);
 	highlightedEffect = dropShadowEffect;
         this.psg = psg;
         
@@ -319,7 +319,6 @@ public class PoseEditController {
                             selectedItem.setTranslateX(newTranslateX);
                             selectedItem.setTranslateY(newTranslateY);
                         }
-                        //handleSnapRequest(snapBox);
                     }
                 }
             });
@@ -443,6 +442,9 @@ public class PoseEditController {
             } else{
                 dataManager.removeParent(pc.getText(), i);
             }
+            
+            dataManager.clearLines();
+            dataManager.drawLineBack();
             
             // For undo and redo
             saveOp();
@@ -723,6 +725,9 @@ public class PoseEditController {
 
                 selectedItem = null;
                 
+                dataManager.clearLines();
+                dataManager.drawLineBack();
+                
                 // For undo and redo
                 saveOp();
             }
@@ -763,6 +768,8 @@ public class PoseEditController {
             // For undo and redo
             saveOp();          
         }
+        dataManager.clearLines();
+        dataManager.drawLineBack();
     }
 
     private void saveOp() {

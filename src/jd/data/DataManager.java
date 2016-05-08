@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BlurType;
@@ -14,13 +15,17 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import jd.file.FileManager;
 import jd.gui.Workspace;
 import jd.jdLine;
@@ -352,29 +357,156 @@ public class DataManager implements AppDataComponent {
     public void addParent(String p, int i) {
         parents.get(i).add(p);
         // Then the lines
-        /*Line l = new Line();
-        l.setStartX(selectedItem.getLayoutX() + selectedItem.getTranslateX());
-        l.setStartY(selectedItem.getLayoutY() + selectedItem.getTranslateY());
-        int pi = i;
-        for(int k = 0; k < names.size(); k++) {
-            if(names.get(k).equals(p)){
-                pi = k;
-                k = names.size() + 1;
+        newLine(p, i, "p");
+    }
+    
+    public void addParent1(String p, int i) {
+        parents.get(i).add(p);
+    }
+    
+    public void newLine(String p, int i, String type) {
+        
+        if(type.equals("p")) {
+            Line l = new Line();
+            l.setStartX(panes.get(i).getLayoutX() + panes.get(i).getTranslateX() + 45);
+            l.setStartY(panes.get(i).getLayoutY() + panes.get(i).getTranslateY());
+            int pi = i;
+            // Get the index of the other pane
+            for(int k = 0; k < names.size(); k++) {
+                if(names.get(k).equals(p)){
+                    pi = k;
+                    k = names.size() + 1;
+                }
             }
+            VBox prt = (VBox) panes.get(pi);
+            l.setEndX(prt.getLayoutX() + prt.getTranslateX());
+            l.setEndY(prt.getLayoutY() + prt.getTranslateY() + 45);
+
+
+            panes.add(l);
+            names.add("");
+            packages.add("");
+            parents.add(new ArrayList());
+            aggs.add(new ArrayList());
+            uses.add(new ArrayList());
+            vars.add(new ArrayList());
+            mets.add(new ArrayList());
+            lines.add(new ArrayList());
+            inDesign.add(false);
+               
+            Polygon triangle = new Polygon(new double[] { 5, 0, 0, 10, 10, 10});
+
+            triangle.setStroke(Color.FORESTGREEN);
+            triangle.setStrokeWidth(2);
+            triangle.setFill(Color.GRAY);
+            triangle.setLayoutX(prt.getLayoutX() + prt.getTranslateX());
+            triangle.setLayoutY(prt.getLayoutY() + prt.getTranslateY() + 45);
+            
+            panes.add(triangle);
+            names.add("");
+            packages.add("");
+            parents.add(new ArrayList());
+            aggs.add(new ArrayList());
+            uses.add(new ArrayList());
+            vars.add(new ArrayList());
+            mets.add(new ArrayList());
+            lines.add(new ArrayList());
+            inDesign.add(false);
+        } else if(type.equals("a")) {
+            Line l = new Line();
+            l.setStartX(panes.get(i).getLayoutX() + panes.get(i).getTranslateX() + 30);
+            l.setStartY(panes.get(i).getLayoutY() + panes.get(i).getTranslateY());
+            int pi = i;
+            // Get the index of the other pane
+            for(int k = 0; k < names.size(); k++) {
+                if(names.get(k).equals(p)){
+                    pi = k;
+                    k = names.size() + 1;
+                }
+            }
+            VBox prt = (VBox) panes.get(pi);
+            l.setEndX(prt.getLayoutX() + prt.getTranslateX());
+            l.setEndY(prt.getLayoutY() + prt.getTranslateY() + 30);
+
+
+            panes.add(l);
+            names.add("");
+            packages.add("");
+            parents.add(new ArrayList());
+            aggs.add(new ArrayList());
+            uses.add(new ArrayList());
+            vars.add(new ArrayList());
+            mets.add(new ArrayList());
+            lines.add(new ArrayList());
+            inDesign.add(false);
+            
+            
+            Rectangle rect = new Rectangle(10,10, Color.GRAY);
+            rect.getTransforms().add(new Rotate(45,0,0));
+
+            rect.setLayoutX(panes.get(i).getLayoutX() + panes.get(i).getTranslateX() + 30);
+            rect.setLayoutY(panes.get(i).getLayoutY() + panes.get(i).getTranslateY());
+            
+            panes.add(rect);
+            names.add("");
+            packages.add("");
+            parents.add(new ArrayList());
+            aggs.add(new ArrayList());
+            uses.add(new ArrayList());
+            vars.add(new ArrayList());
+            mets.add(new ArrayList());
+            lines.add(new ArrayList());
+            inDesign.add(false);
+            
+        
+        } else if(type.equals("u")) {
+            Line l = new Line();
+            l.setStartX(panes.get(i).getLayoutX() + panes.get(i).getTranslateX() + 15);
+            l.setStartY(panes.get(i).getLayoutY() + panes.get(i).getTranslateY());
+            int pi = i;
+            // Get the index of the other pane
+            for(int k = 0; k < names.size(); k++) {
+                if(names.get(k).equals(p)){
+                    pi = k;
+                    k = names.size() + 1;
+                }
+            }
+            VBox prt = (VBox) panes.get(pi);
+            l.setEndX(prt.getLayoutX() + prt.getTranslateX());
+            l.setEndY(prt.getLayoutY() + prt.getTranslateY() + 15);
+
+
+            panes.add(l);
+            names.add("");
+            packages.add("");
+            parents.add(new ArrayList());
+            aggs.add(new ArrayList());
+            uses.add(new ArrayList());
+            vars.add(new ArrayList());
+            mets.add(new ArrayList());
+            lines.add(new ArrayList());
+            inDesign.add(false);
+            
+            
+            Rectangle rect = new Rectangle(10,10, Color.RED);
+            rect.getTransforms().add(new Rotate(45,0,0));
+
+            rect.setLayoutX(prt.getLayoutX() + prt.getTranslateX());
+            rect.setLayoutY(prt.getLayoutY() + prt.getTranslateY() + 15);
+            
+            panes.add(rect);
+            names.add("");
+            packages.add("");
+            parents.add(new ArrayList());
+            aggs.add(new ArrayList());
+            uses.add(new ArrayList());
+            vars.add(new ArrayList());
+            mets.add(new ArrayList());
+            lines.add(new ArrayList());
+            inDesign.add(false);
+        
         }
-        VBox prt = (VBox) panes.get(pi);
-        l.setEndX(prt.getLayoutX() + prt.getTranslateX());
-        l.setEndY(prt.getLayoutY() + prt.getTranslateY());
-        panes.add(l);
-        names.add("");
-        packages.add("");
-        parents.add(new ArrayList());
-        aggs.add(new ArrayList());
-        uses.add(new ArrayList());
-        vars.add(new ArrayList());
-        mets.add(new ArrayList());
-        lines.add(new ArrayList());
-        inDesign.add(false);*/
+        
     }
     
     public void removeParent(String p, int i) {
@@ -884,11 +1016,24 @@ public class DataManager implements AppDataComponent {
     
     public void addAgg(String a, int i) {
         aggs.get(i).add(a);
+        // Then the line
+        newLine(a, i, "a");
+    }
+    
+    public void addAgg1(String a, int i) {
+        aggs.get(i).add(a);
     }
     
     
     public void addUse(String u, int i) {
         uses.get(i).add(u);
+        // Then the line
+        newLine(u, i, "u");
+    }
+    
+    public void addUse1(String u, int i) {
+        uses.get(i).add(u);
+
     }
     
     private void reloadEditPane() {
@@ -940,24 +1085,6 @@ public class DataManager implements AppDataComponent {
         setSelected(null);
     }    
 
-    /*public void swap() {
-        int size = panes.size();
-        if(size > 1) {
-            int last = size - 1;
-            VBox n = new VBox();
-            VBox last
-            names.remove(i);
-            packages.remove(i);
-            parents.remove(i);
-            aggs.remove(i);
-            uses.remove(i);
-            vars.remove(i);
-            mets.remove(i);
-            lines.remove(i);
-            inDesign.remove(i);
-        }
-    }*/
-
     public void addGrid2() {
         //if(ws != null)
         ws.addGrid();
@@ -977,6 +1104,54 @@ public class DataManager implements AppDataComponent {
                     dialog.show("ERROR", "Operation Error");
                 }
             }
+        }
+    }
+
+    public void drawLineBack() {
+        int size = panes.size();
+
+        for(int i = 0; i < size; i++) {
+            if(panes.get(i) instanceof VBox){
+                //check parent list of every node
+                ArrayList<String> plist = parents.get(i);
+                for(int j = 0; j < plist.size(); j ++) {
+                    newLine(plist.get(j), i, "p");
+                }
+                
+                // check the agg list
+                ArrayList<String> alist = aggs.get(i);
+                for(int j = 0; j < alist.size(); j ++) {
+                    newLine(alist.get(j), i, "a");
+                }
+                
+                // check the use list
+                ArrayList<String> ulist = uses.get(i);
+                for(int j = 0; j < ulist.size(); j ++) {
+                    newLine(ulist.get(j), i, "u");
+                }
+            }
+        }
+    }
+
+    public void clearLines() {
+        int size = panes.size();
+        for(int i = size - 1;  i > -1; i--) {
+            if(panes.get(i) instanceof VBox) {
+                // do nothing
+            } else if(panes.get(i) instanceof GridPane) {
+                // do nothing
+            } else {
+                panes.remove(i);
+                names.remove(i);
+                packages.remove(i);
+                parents.remove(i);
+                aggs.remove(i);
+                uses.remove(i);
+                vars.remove(i);
+                mets.remove(i);
+                lines.remove(i);
+                inDesign.remove(i);
+           }
         }
     }
 }

@@ -2,15 +2,18 @@
 {
     "panes":[
         {
-            "name":"",
+            "name":"ddd",
             "package":"",
             "parent":[
+                {
+                    "name":"aaa"
+                }
             ],
             "inDesign":true,
-            "x":574.0,
-            "y":186.0,
-            "tx":0.0,
-            "ty":0.0,
+            "x":646.0,
+            "y":216.0,
+            "tx":70.0,
+            "ty":67.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
@@ -25,15 +28,15 @@
             ]
         },
         {
-            "name":"",
+            "name":"aaa",
             "package":"",
             "parent":[
             ],
             "inDesign":true,
-            "x":609.0,
-            "y":437.0,
-            "tx":0.0,
-            "ty":0.0,
+            "x":808.0,
+            "y":487.0,
+            "tx":37.0,
+            "ty":-200.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
