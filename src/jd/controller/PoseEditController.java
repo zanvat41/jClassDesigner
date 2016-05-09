@@ -792,8 +792,10 @@ public class PoseEditController {
         resizeAll();
         int opNum = (ops + 1) % MAX_OPS;
         int opNum1 = (ops + 0) % MAX_OPS;
+        int opNum2 = (ops + 2) % MAX_OPS;
         String filePath = OP_PATH + "op" + opNum;
         String filePath1 = OP_PATH + "op" + opNum1;
+        String filePath2 = OP_PATH + "op" + opNum2;
         FileManager fm = (FileManager) app.getFileComponent();
         if(ops == 0) {
             try {
@@ -811,6 +813,7 @@ public class PoseEditController {
         }
         try {
             fm.saveData(dataManager, filePath);
+            fm.clearFile(filePath2);
             ops ++;
             //System.out.println(filePath);
         } catch (IOException ex) {
