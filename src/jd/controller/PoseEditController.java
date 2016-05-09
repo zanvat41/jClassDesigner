@@ -92,6 +92,9 @@ public class PoseEditController {
     static final String OP_PATH = "./temp/";
     boolean clean = true;
     
+    private double scale = 1;
+    
+    
     public PoseEditController(AppTemplate initApp, Stage psg) {
 	app = initApp;
 	dataManager = (DataManager)app.getDataComponent();
@@ -186,6 +189,7 @@ public class PoseEditController {
         // MARK THE FILE AS EDITED
         AppFileController afc = app.getGUI().getAFC();
         afc.markAsEdited(app.getGUI());
+        resizeAll();
         VBox vb = new VBox();
         vb.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.setPrefSize(100, 50);
@@ -231,6 +235,7 @@ public class PoseEditController {
         // MARK THE FILE AS EDITED
         AppFileController afc = app.getGUI().getAFC();
         afc.markAsEdited(app.getGUI());
+        resizeAll();
         VBox vb = new VBox();
         vb.setStyle("-fx-border-color: Black; -fx-background-color: White;");
         vb.setPrefSize(100, 50);
@@ -278,7 +283,8 @@ public class PoseEditController {
             ScrollPane SP = (ScrollPane) jdWorkspace.getCenter();
             Pane canvas = (Pane) SP.getContent();
 
-        
+            resizeAll();
+            
             // THEN SELECT THE SHAPE
             canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
@@ -436,6 +442,7 @@ public class PoseEditController {
             // MARK THE FILE AS EDITED
             AppFileController afc = app.getGUI().getAFC();
             afc.markAsEdited(app.getGUI());
+            resizeAll();
             int i = dataManager.getPanes().indexOf(selectedItem);
             if(pc.isSelected()) {
                 dataManager.addParent(pc.getText(), i);
@@ -475,6 +482,8 @@ public class PoseEditController {
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
                 
+                resizeAll();
+                
                 // For undo and redo
                 saveOp();
 
@@ -509,6 +518,8 @@ public class PoseEditController {
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
                 
+                resizeAll();
+                
                 // For undo and redo
                 saveOp();
             }
@@ -542,6 +553,8 @@ public class PoseEditController {
             afc.markAsEdited(app.getGUI());
             dm.setSelected(selectedItem);
             
+            resizeAll();
+            
             // For undo and redo
             saveOp();
         }
@@ -570,6 +583,8 @@ public class PoseEditController {
                 AppFileController afc = app.getGUI().getAFC();
                 afc.markAsEdited(app.getGUI());
                 dm.setSelected(selectedItem);
+                
+                resizeAll();
                 
                 // For undo and redo
                 saveOp();
@@ -748,13 +763,14 @@ public class PoseEditController {
         boolean needSnap = snapBox.isSelected();
         int size = dataManager.getPanes().size();
         if(needSnap) {
+            resizeAll();
             for(int i = 0; i < size; i++) {
                 if(dataManager.getPanes().get(i) instanceof VBox) {
                     VBox vb = (VBox) dataManager.getPanes().get(i);
                     int oldX = (int) Math.floor(vb.getLayoutX() + vb.getTranslateX());
                     int oldY = (int) Math.floor(vb.getLayoutY() + vb.getTranslateY());
-                    int mX = oldX % 10;
-                    int mY = oldY % 10;
+                    int mX = (int) (oldX % (10 * scale));
+                    int mY = (int) (oldY % (10 * scale));
                     double newX = oldX - mX;
                     double newY = oldY - mY;
                     //System.out.println(newX + ", " + newY);
@@ -773,6 +789,7 @@ public class PoseEditController {
     }
 
     private void saveOp() {
+        resizeAll();
         int opNum = (ops + 1) % MAX_OPS;
         int opNum1 = (ops + 0) % MAX_OPS;
         String filePath = OP_PATH + "op" + opNum;
@@ -820,6 +837,8 @@ public class PoseEditController {
             fm.setLoad(false);
             clean = true;
             ops --;
+            AppFileController afc = app.getGUI().getAFC();
+            afc.markAsEdited(app.getGUI());
         }
     }
 
@@ -840,6 +859,8 @@ public class PoseEditController {
             fm.setLoad(false);
             clean = true;
             ops ++;
+            AppFileController afc = app.getGUI().getAFC();
+            afc.markAsEdited(app.getGUI());
         }
     }
 
@@ -850,5 +871,31 @@ public class PoseEditController {
     public void resetOp() {
         ops = 0;
     }
-    
+
+    public void handleZoomIn() {
+        for(Node n: dataManager.getPanes()){
+            //System.out.println((n.getScaleX() * 2) + ","  );
+            n.setScaleX(n.getScaleX() * 2);
+            n.setScaleY(n.getScaleY() * 2);
+            scale = scale * 2;
+        }
+    }
+
+    public void handleZoomOut() {
+        for(Node n: dataManager.getPanes()){
+            n.setScaleX(n.getScaleX() * 1/2);
+            n.setScaleY(n.getScaleY() * 1/2);
+            scale = scale / 2;
+        }
+    }
+
+    private void resizeAll() {
+        if(scale != 1) {
+            for(Node n: dataManager.getPanes()){
+                n.setScaleX(1);
+                n.setScaleY(1);
+                scale = 1 ;
+            }
+        }
+    }
 }

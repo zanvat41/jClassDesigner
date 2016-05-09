@@ -2,15 +2,18 @@
 {
     "panes":[
         {
-            "name":"",
+            "name":"das",
             "package":"",
             "parent":[
+                {
+                    "name":"sdf"
+                }
             ],
             "inDesign":true,
-            "x":641.0,
-            "y":187.0,
-            "tx":0.0,
-            "ty":0.0,
+            "x":646.0,
+            "y":192.0,
+            "tx":-236.0,
+            "ty":313.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
@@ -25,15 +28,15 @@
             ]
         },
         {
-            "name":"",
+            "name":"sdf",
             "package":"",
             "parent":[
             ],
             "inDesign":true,
-            "x":800.0,
-            "y":339.0,
-            "tx":0.0,
-            "ty":0.0,
+            "x":755.0,
+            "y":403.0,
+            "tx":214.0,
+            "ty":43.0,
             "Width":100.0,
             "Height":50.0,
             "aggregates":[
@@ -43,23 +46,8 @@
             "lines":[
             ],
             "vars":[
-                {
-                    "name":"asd",
-                    "Access":"public",
-                    "type":"int",
-                    "Static":"false"
-                }
             ],
             "methods":[
-                {
-                    "name":"da",
-                    "Access":"",
-                    "type":"",
-                    "Abstract":"false",
-                    "Static":"false",
-                    "args":[
-                    ]
-                }
             ]
         }
     ]
